@@ -1,0 +1,243 @@
+#top_div {
+  min-height: 150px;
+  width: 100%;
+  border: solid 1px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  box-shadow: 5px 5px lightgray;
+  margin: 5px;
+  padding: 5px;
+}
+#left_div {
+  min-height: 500px;
+  width: 15%;
+
+  float: left;
+  height: 150px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 5px 5px lightgray;
+  margin: 5px;
+  padding: 5px;
+}
+#center_div {
+  min-height: 500px;
+  width: 65%;
+  float: left;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 5px 5px lightgray;
+  margin: 10px;
+  padding: 5px;
+}
+#right_div {
+  min-height: 500px;
+  width: 15%;
+  float: left;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 5px 5px lightgray;
+  margin: 5px;
+  padding: 5px;
+}
+#bottom_div {
+  min-height: 100px;
+  width: 100%;
+  clear: both;
+  border: solid 1px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  box-shadow: 5px 5px lightgray;
+  margin: 10px;
+}
+
+#signoutbutton {
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  opacity: 0.75;
+}
+.iconbutton {
+  height: 30px;
+  opacity: 1;
+}
+.iconbutton:hover {
+  height: 40px;
+  opacity: 1;
+}
+
+.cateOrder {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.itemOrder {
+  font-style: italic;
+  color: #ffd700;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 15px;
+  color: #ffd700;
+}
+
+a {
+  text-decoration: none;
+  color: #ffd700;
+}
+
+a:hover {
+  color: #ffb700;
+}
+
+.isconing {
+  height: 20px;
+}
+
+#signoutbutton {
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  opacity: 0.75;
+}
+.iconbutton {
+  height: 30px;
+  opacity: 1;
+}
+.iconbutton:hover {
+  height: 40px;
+  opacity: 1;
+}
+
+#w_update {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+
+#w_update_hh {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+body {
+  background: #f8f9fa;
+  color: #333333;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin-top: 50px;
+  padding: 20px;
+  background: rgb(247, 202, 0);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgb(247, 202, 0);
+}
+
+.title {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+  width: 100%;
+  padding: 8px 15px;
+  margin-bottom: 10px;
+  border: 1px solid rgb(247, 202, 0);
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
+button {
+  background: #2ecc71;
+  border: none;
+  color: #333333;
+}
+
+button:hover {
+  background: #27ae60;
+}
+
+.footer {
+  color: #134e5e;
+}
+
+/* Cập nhật style cho signup link */
+.signup-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.signup-link a {
+  color: rgb(247, 202, 0);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  color: rgb(222, 180, 0);
+  text-decoration: underline;
+}
+
+/* Đảm bảo tất cả các text có màu vàng trong menu */
+.left-menu,
+.left-menu a,
+.left-menu .cateOrder,
+.left-menu .itemOrder,
+.left-menu ul,
+.left-menu li {
+  color: rgb(247, 202, 0);
+}
+
+.left-menu a:hover {
+  color: rgb(222, 180, 0);
+}
