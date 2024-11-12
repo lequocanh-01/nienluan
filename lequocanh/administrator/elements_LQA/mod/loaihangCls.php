@@ -9,7 +9,6 @@ if (file_exists($s)) {
     }
 }
 require_once $f;
-
 class loaihang extends Database
 {
     public function LoaihangGetAll()
@@ -19,14 +18,13 @@ class loaihang extends Database
         $getAll = $this->connect->prepare($sql);
         $getAll->setFetchMode(PDO::FETCH_OBJ);
         $getAll->execute();
+
         return $getAll->fetchAll();
     }
     public function LoaihangAdd($tenloaihang, $hinhanh, $mota)
     {
-        $sql = "INSERT INTO loaihang (tenloaihang, hinhanh,mota) VALUES (?,?,?)";
+        $sql = "INSERT INTO loaihang (tenloaihang, hinhanh, mota) VALUES (?,?,?)";
         $data = array($tenloaihang, $hinhanh, $mota);
-
-
         $add = $this->connect->prepare($sql);
         $add->execute($data);
         return $add->rowCount();
@@ -35,25 +33,30 @@ class loaihang extends Database
     {
         $sql = "DELETE from loaihang where idloaihang = ?";
         $data = array($idloaihang);
+
         $del = $this->connect->prepare($sql);
         $del->execute($data);
         return $del->rowCount();
     }
     public function LoaihangUpdate($tenloaihang, $hinhanh, $mota, $idloaihang)
     {
-        $sql = "UPDATE  loaihang set tenloaihang = ? , hinhanh = ? , mota = ?  where idloaihang = ?";
+        $sql = "UPDATE loaihang set tenloaihang=?, hinhanh=?, mota=? WHERE idloaihang =?";
         $data = array($tenloaihang, $hinhanh, $mota, $idloaihang);
-        $upadate = $this->connect->prepare($sql);
-        $upadate->execute($data);
-        return $upadate->rowCount();
+
+        $update = $this->connect->prepare($sql);
+        $update->execute($data);
+        return $update->rowCount();
     }
-    public function LoaihangGetById($idloaihang)
+    public function LoaihangGetbyId($idloaihang)
     {
-        $sql = 'select * from loaihang where idloaihang = ?';
-        $data =  array($idloaihang);
+        $sql = 'select * from loaihang where idloaihang=?';
+        $data = array($idloaihang);
+
+
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
         $getOne->execute($data);
+
         return $getOne->fetch();
     }
 }

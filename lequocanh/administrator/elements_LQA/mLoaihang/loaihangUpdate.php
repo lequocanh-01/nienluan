@@ -1,41 +1,43 @@
-<h2 align="center">Cập nhật loại hàng</h2>
+<div align="center">Cập nhật loại hàng</div>
 <hr>
 <?php
 require '../../elements_LQA/mod/loaihangCls.php';
 $idloaihang = $_REQUEST['idloaihang'];
-$loaihang = new loaihang();
-$getloaihang = $loaihang->loaihangGetbyId($idloaihang);
+echo $idloaihang;
+
+$lhobj = new loaihang();
+$getLhUpdate = $lhobj->LoaihangGetbyId($idloaihang);
+// echo $getUserUpdate->hoten;
+
 ?>
-<div class="title_mod">
-    <img class="iconimg" src="./img_LQA/Update2.png" />Cập nhật loại hàng
-</div>
-<div class="content_mod">
-    <form name="updateloaihang" id="formupdate" method="post" enctype="multipart/form-data" action="./elements_LQA/mLoaihang/loaihangAct.php?reqact=updateloaihang">
-        <input type="hidden" name="idloaihang" value="<?php echo htmlspecialchars($idloaihang); ?>" />
-        <input type="hidden" name="hinhanh" value="<?php echo htmlspecialchars($getloaihang->hinhanh); ?>" />
+
+<div>
+    <form name="updateloaihang" id="formupdatelh" method="post" action='./elements_LQA/mloaihang/loaihangAct.php?reqact=updateloaihang' enctype="multipart/form-data">
+        <input type="hidden" name="idloaihang" value="<?php echo $getLhUpdate->idloaihang;  ?>" />
+        <input type="hidden" name="hinhanh" value="<?php echo $getLhUpdate->hinhanh;  ?>" />
         <table>
             <tr>
-                <td>Tên Loại hàng:</td>
-                <td><input type="text" name="tenloaihang" value="<?php echo htmlspecialchars($getloaihang->tenloaihang); ?>" /></td>
+                <td>Tên loại hàng</td>
+                <td><input type="text" name="tenloaihang" value="<?php echo $getLhUpdate->tenloaihang;
+                                                                    ?>" /></td>
             </tr>
             <tr>
-                <td>Mô tả:</td>
-                <td><input type="text" name="mota" value="<?php echo htmlspecialchars($getloaihang->mota); ?>" /></td>
+                <td>Mô tả</td>
+                <td><input type="text" size="50" name="mota" value="<?php echo $getLhUpdate->mota;
+                                                                    ?>" /></td>
             </tr>
             <tr>
-                <td>Hình ảnh:</td>
+                <td>Hình ảnh</td>
                 <td>
-                    <?php if (!empty($getloaihang->hinhanh)): ?>
-                        <img width="100px" class="imgtable" src="data:image/png;base64,<?php echo htmlspecialchars($getloaihang->hinhanh); ?>" />
-                    <?php endif; ?>
-                    <br>
-                    <input type="file" name="fileimage" />
-
+                    
+                    <img width="150px" src="data:image/png;base64,<?php echo $getLhUpdate->hinhanh ?>"><br>
+                    <input type="file" name="fileimage">
                 </td>
             </tr>
+
             <tr>
-                <td><input type="submit" id="btnsubmit" value="Update" /></td>
-                <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
+                <td><input type="submit" id="btnsubmit" value="Update" size="50" /></td>
+                <td><b id="noteForm"></b></td>
             </tr>
         </table>
     </form>

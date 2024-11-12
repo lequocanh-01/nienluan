@@ -1,86 +1,110 @@
-<div class="container mt-4">
-    <h2 class="mb-4">Quản lý hàng hóa</h2>
-    <hr>
-    <h3 class="mb-3">Thêm hàng hóa mới</h3>
-    <form name="newhanghoa" id="formhh" method="post" action='./elements_LQA/mhanghoa/hanghoaAct.php?reqact=addnew'
-        enctype="multipart/form-data" class="mb-4">
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label for="tenhanghoa" class="form-label">Tên hàng hóa:</label>
-                <input type="text" class="form-control" id="tenhanghoa" name="tenhanghoa" required>
-            </div>
-            <div class="col-md-6">
-                <label for="giathamkhao" class="form-label">Giá tham khảo:</label>
-                <input type="number" class="form-control" id="giathamkhao" name="giathamkhao" required>
-            </div>
-            <div class="col-md-6">
-                <label for="soluong" class="form-label">Số lượng:</label>
-                <input type="number" class="form-control" id="soluong" name="soluong" value="1" min="1">
-            </div>
-            <div class="col-md-12">
-                <label for="mota" class="form-label">Mô tả:</label>
-                <textarea class="form-control" id="mota" name="mota" rows="3"></textarea>
-            </div>
-            <div class="col-md-6">
-                <label for="idloaihang" class="form-label">Loại hàng:</label>
-                <select class="form-select" id="idloaihang" name="idloaihang" required>
+<div>Quản lý hàng hóa</div>
+<hr>
+<div>Thêm hàng hóa</div>
+<?php
+require './elements_LQA/mod/loaihangCls.php';
+$lhobj = new loaihang();
+$list_lh = $lhobj->LoaihangGetAll();
+$l = count($list_lh);
+?>
+<div>
+    <form name="newhanghoa" id="formaddhanghoa" method="post" action='./elements_LQA/mhanghoa/hanghoaAct.php?reqact=addnew' enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>Tên hàng hóa</td>
+                <td><input type="text" name="tenhanghoa" /></td>
+            </tr>
+            <tr>
+                <td>Giá tham khảo</td>
+                <td><input type="number" name="giathamkhao" /></td>
+            </tr>
+            <tr>
+                <td>Mô tả</td>
+                <td><input type="text" name="mota" /></td>
+            </tr>
+            <tr>
+                <td>Hình ảnh</td>
+                <td><input type="file" name="fileimage"></td>
+            </tr>
+            <tr>
+                <td>Chọn loại hàng:</td>
+                <td>
                     <?php
-                    require_once './elements_LQA/mod/loaihangCls.php';
-                    $loaihang = new loaihang();
-                    $list_loaihang = $loaihang->LoaihangGetAll();
-                    foreach ($list_loaihang as $loai) {
-                        echo '<option value="' . $loai->idloaihang . '">' . $loai->tenloaihang . '</option>';
+                    foreach ($list_lh as $l) {
+                    ?>
+                        <input type="radio" name="idloaihang" value="<?php echo $l->idloaihang; ?>">
+                        <img class="iconbutton" src="data:image/png;base64,<?php echo $l->hinhanh; ?>">
+                        <br>
+                    <?php
                     }
                     ?>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="hinhanh" class="form-label">Hình ảnh:</label>
-                <input type="file" class="form-control" id="hinhanh" name="hinhanh">
-            </div>
-            <div class="col-12">
-                <button type="submit" id="btnsubmit" class="btn btn-primary">Thêm mới</button>
-                <button type="reset" class="btn btn-secondary">Làm lại</button>
-            </div>
-        </div>
-    </form>
-
-    <hr />
-    <h3 class="mb-3">Danh sách hàng hóa</h3>
-    <div class="table-responsive">
-        <table class="table table-hover table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Tên hàng hóa</th>
-                    <th>Giá tham khảo</th>
-                    <th>Mô tả</th>
-                    <th>Loại hàng</th>
-                    <th>Số lượng</th>
-                    <th>Hình ảnh</th>
-                    <th>Chức năng</th>
-                    <th>Mua</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                require_once './elements_LQA/mod/hanghoaCls.php';
-                $hanghoa = new hanghoa();
-                $list_hanghoa = $hanghoa->HanghoaGetAll();
-                foreach ($list_hanghoa as $hang) {
-                    echo '<tr>';
-                    echo '<td>' . htmlspecialchars($hang->idhanghoa) . '</td>';
-                    echo '<td>' . htmlspecialchars($hang->tenhanghoa) . '</td>';
-                
-                    echo '<td>' . htmlspecialchars($hang->mota) . '</td>';
-                    echo '<td>' . htmlspecialchars($hang->idloaihang) . '</td>';
-                    echo '<td><img src="data:image/png;base64,' . htmlspecialchars($hang->hinhanh) . '" alt="' . htmlspecialchars($hang->tenhanghoa) . '" class="img-fluid" style="width: 50px; height: 50px;"></td>';
-                    echo '<td><a href="./index.php?reqHanghoa=' . htmlspecialchars($hang->idhanghoa) . '" class="btn btn-primary">Xem chi tiết</a></td>';
-                    echo '<td><a href="./purchase.php?productId=' . htmlspecialchars($hang->idhanghoa) . '" class="btn btn-success">Mua</a></td>';
-                    echo '</tr>';
-                }
-                ?>
-            </tbody>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="submit" id="btnsubmit" value="Tạo mới" /></td>
+                <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
+            </tr>
         </table>
+    </form>
+    <hr />
+    <?php
+    require './elements_LQA/mod/hanghoaCls.php';
+    $lhobj = new hanghoa();
+    $list_lh = $lhobj->HanghoaGetAll();
+    $l = count($list_lh);
+    ?>
+    <div class="title_hanghoa">Danh sách hàng hóa</div>
+    <div class="content_hanghoa">
+        Trong bảng có: <b><?php echo $l; ?></b>
+
+        <table border="solid">
+            <thead>
+                <th>ID</th>
+                <th>Tên loại hàng</th>
+                <th>Gía tham khảo</th>
+                <th>Mô tả</th>
+                <th>Hình ảnh</th>
+                <th>Chức năng</th>
+            </thead>
+            <?php
+            if ($l > 0) {
+                foreach ($list_lh as $u) {
+            ?>
+                    <tr>
+                        <td><?php echo $u->idhanghoa; ?></td>
+                        <td><?php echo $u->tenhanghoa; ?></td>
+                        <td><?php echo $u->giathamkhao; ?></td>
+                        <td><?php echo $u->mota; ?></td>
+                        <td align="center">
+
+                            <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
+                        </td>
+                        <td align="center">
+                            <?php
+                            if (isset($_SESSION['ADMIN'])) {
+                            ?>
+                                <a href="./elements_LQA/mhanghoa/hanghoaAct.php?reqact=deletehanghoa&idhanghoa=<?php echo $u->idhanghoa; ?>">
+                                    <img src="./img_LQA/delete.png" class="iconimg">
+                                </a>
+                            <?php
+                            } else {
+                            ?>
+                                <img src="./img_LQA/delete.png" class="iconimg">
+                            <?php
+                            }
+                            ?>
+                            <img height="25px" src="./img_LQA/updateicon.png" class="w_update_btn_open_hh" value="<?php echo $u->idhanghoa; ?>">
+                        </td>
+                    </tr>
+            <?php
+                }
+            }
+            ?>
+        </table>
+    </div>
+
+    <div id="w_update_hh">
+        <div id="w_update_form_hh"></div>
+        <input type="button" value="close" id="w_close_btn_hh">
     </div>
 </div>

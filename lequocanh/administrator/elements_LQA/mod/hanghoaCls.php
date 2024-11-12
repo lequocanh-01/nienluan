@@ -13,8 +13,7 @@ class hanghoa extends Database
 {
     public function HanghoaGetAll()
     {
-        // Remove 'soluong' from the query if it's not in the database
-        $sql = 'SELECT idhanghoa, tenhanghoa, giathamkhao, mota, hinhanh, idloaihang FROM hanghoa'; 
+        $sql = 'select * from hanghoa';
 
         $getAll = $this->connect->prepare($sql);
         $getAll->setFetchMode(PDO::FETCH_OBJ);
@@ -50,11 +49,14 @@ class hanghoa extends Database
     }
     public function HanghoaGetbyId($idhanghoa)
     {
-        $sql = 'SELECT * FROM hanghoa WHERE idhanghoa = ?';
+        $sql = 'select * from hanghoa where idhanghoa=?';
         $data = array($idhanghoa);
+
+
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
         $getOne->execute($data);
+
         return $getOne->fetch();
     }
 
@@ -69,13 +71,5 @@ class hanghoa extends Database
         $getOne->execute($data);
 
         return $getOne->fetchAll();
-    }
-
-    public function searchHanghoa($query) {
-        $query = "%" . $query . "%"; // Thêm ký tự đại diện cho tìm kiếm
-        $sql = "SELECT * FROM hanghoa WHERE tenhanghoa LIKE ?";
-        $stmt = $this->connect->prepare($sql);
-        $stmt->execute([$query]);
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }
