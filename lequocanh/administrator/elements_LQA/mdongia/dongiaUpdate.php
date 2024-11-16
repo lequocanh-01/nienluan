@@ -4,18 +4,15 @@
 require '../../elements_LQA/mod/dongiaCls.php';
 
 $idDonGia = $_REQUEST['idDonGia'];
-echo $idDonGia;
 $dongiaObj = new Dongia();
-
 $getLhUpdate = $dongiaObj->DongiaGetbyId($idDonGia);
 ?>
 
 <div>
-    <form name="updatedongia" method="post" action='./elementS_LQA/mdongia/dongiaAct.php?reqact=updatedongia' enctype="multipart/form-data">
+    <form name="updatedongia" method="post" action='./elements_LQA/mdongia/dongiaAct.php?reqact=updatedongia' enctype="multipart/form-data">
         <input type="hidden" name="idDonGia" value="<?php echo  $getLhUpdate->idDonGia ?>">
 
         <table>
-
             <tr>
                 <td>ID hàng hóa:</td>
                 <td><input type="text" name="idHangHoa" value="<?php echo $getLhUpdate->idHangHoa; ?>" /></td>

@@ -44,6 +44,12 @@ if (isset($_GET['reqact'])) {
 
             $dongiaObj = new Dongia();
             $kq = $dongiaObj->DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu);
+            
+            if ($kq) {
+                $hanghoaObj = new Hanghoa();
+                $hanghoaObj->HanghoaUpdatePrice($idHangHoa, $giaBan);
+            }
+            
             header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
             break;
 
