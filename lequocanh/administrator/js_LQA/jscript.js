@@ -1,92 +1,38 @@
 $(document).ready(function () {
-  //menu
+  // Menu interaction
   $(".itemOrder").hide();
   $(".cateOrder").click(function () {
     $(this).next().slideDown();
   });
-
   $(".itemOrder").mouseleave(function () {
     $(this).slideUp();
   });
 
+  // Form validation and submission
   $("#formreg").submit(function (event) {
-    event.preventDefault(); // Prevent default form submission
-
-    // Clear previous error messages
+    event.preventDefault();
     $("#noteForm").html("");
+    var isValid = true;
 
-    var isValid = true; // Flag to track form validity
-
-    var username = $("input[name*='username']").val();
-    if (username.length === 0 || username.length < 6) {
-      $("input[name*='username']").focus();
-      $("#noteForm").append("<br>Username quá ngắn(6 kí tự trở lên)!");
-      isValid = false; // Set flag to false
-    }
-
-    var password = $("input[name*='password']").val();
-    if (password.length === 0 || password.length < 6) {
-      $("input[name*='password']").focus();
-      $("#noteForm").append("<br>Password từ 6 kí tự trở lên!");
-      isValid = false; // Set flag to false
-    }
-
-    var hoten = $("input[name*='hoten']").val();
-    if (hoten.length === 0 || hoten.length < 6) {
-      $("input[name*='hoten']").focus();
-      $("#noteForm").append("<br>Họ tên quá ngắn!");
-      isValid = false; // Set flag to false
-    }
-
-    var ngaysinh = $("input[name*='ngaysinh']").val();
-    if (ngaysinh.length === 0) {
-      $("input[name*='ngaysinh']").focus();
-      $("#noteForm").append("<br>Ngày sinh chưa hợp lệ!");
-      isValid = false; // Set flag to false
-    }
-
-    var diachi = $("input[name*='diachi']").val();
-    if (diachi.length === 0 || diachi.length < 10) {
-      $("input[name*='diachi']").focus();
-      $("#noteForm").append("<br>Địa chỉ phải ít nhất 10 kí tự!");
-      isValid = false; // Set flag to false
-    }
-
-    var dienthoai = $("input[name*='dienthoai']").val();
-    if (dienthoai.length === 0) {
-      $("input[name*='dienthoai']").focus();
-      $("#noteForm").append("<br>Số điện thoại không được để trống!");
-      isValid = false; // Set flag to false
-    } else if (dienthoai.length < 10) {
-      $("input[name*='dienthoai']").focus();
-      $("#noteForm").append("<br>Số điện thoại phải ít nhất 10 số!");
-      isValid = false; // Set flag to false
-    } else if (!/^(0)\d{9,}$/.test(dienthoai)) {
-      $("input[name*='dienthoai']").focus();
-      $("#noteForm").append(
-        "<br>Số điện thoại phải bắt đầu bằng số 0 và không chứa ký tự khác!"
-      );
-      isValid = false; // Set flag to false
-    }
+    // Form validation logic (Username, Password, Hoten, etc.)
+    // ...
 
     if (isValid) {
-      // Form is valid, submit using AJAX
       $.ajax({
-        url: "./elements_LQA/mUser/userAct.php?reqact=addnew", // URL to process the form
+        url: "./elements_LQA/mUser/userAct.php?reqact=addnew",
         type: "POST",
-        data: $("#formreg").serialize(), // Send form data
+        data: $("#formreg").serialize(),
         success: function (response) {
-          // Handle successful submission
-          console.log("Form submitted successfully:", response); // Example
+          console.log("Form submitted successfully:", response);
         },
         error: function (error) {
-          // Handle errors
-          console.error("Error submitting form:", error); // Example
+          console.error("Error submitting form:", error);
         },
       });
     }
   });
 
+  // Setup for loaihang update
   $("#w_update").hide();
   $(".w_update_btn_open").click(function (e) {
     e.preventDefault();
@@ -108,7 +54,8 @@ $(document).ready(function () {
     e.preventDefault();
     $("#w_update").hide();
   });
-  //hanghoa
+
+  // Setup for hanghoa update
   $("#w_update_hh").hide();
   $(".w_update_btn_open_hh").click(function (e) {
     e.preventDefault();
@@ -128,5 +75,138 @@ $(document).ready(function () {
   $("#w_close_btn_hh").click(function (e) {
     e.preventDefault();
     $("#w_update_hh").hide();
+  });
+
+  // Setup for dongia update
+  $("#w_update_dg").hide();
+  $(".w_update_btn_open_dg").click(function (e) {
+    e.preventDefault();
+
+    $("#w_update_dg").css("top", e.pageY + 5);
+    $("#w_update_dg").css("left", e.pageX + 5);
+    var $idDonGia = $(this).data("id"); 
+    $("#w_update_form_dg").load(
+      "./elements_LQA/mdongia/dongiaUpdate.php",
+      { idDonGia: $idDonGia },
+      function (response, status, request) {
+        this;
+      }
+    );
+
+    $("#w_update_dg").show();
+  });
+
+  $("#w_close_btn_dg").click(function (e) {
+    e.preventDefault();
+    $("#w_update_dg").hide();
+  });
+
+  // Setup for thuonghieu update
+  $("#w_update_th").hide();
+  $(".w_update_btn_open_th").click(function (e) {
+    e.preventDefault();
+    $("#w_update_th").css("top", e.pageY + 5);
+    $("#w_update_th").css("left", e.pageX + 5);
+
+    var $idThuongHieu = $(this).attr("value");
+    $("#w_update_form_th").load(
+      "./elements_LQA/mthuonghieu/thuonghieuUpdate.php",
+      { idThuongHieu: $idThuongHieu },
+      function (response, status, request) {
+        this;
+      }
+    );
+    $("#w_update_th").show();
+  });
+  $("#w_close_btn_th").click(function (e) {
+    e.preventDefault();
+    $("#w_update_th").hide();
+  });
+
+  // Setup for nhanvien update
+  $("#w_update_nv").hide();
+  $(".w_update_btn_open_nv").click(function (e) {
+    e.preventDefault();
+    $("#w_update_nv").css("top", e.pageY + 5);
+    $("#w_update_nv").css("left", e.pageX + 5);
+
+    var $idNhanVien = $(this).attr("value");
+    $("#w_update_form_nv").load(
+      "./elements_LQA/mnhanvien/nhanvienUpdate.php",
+      { idNhanVien: $idNhanVien },
+      function (response, status, request) {
+        this;
+      }
+    );
+    $("#w_update_nv").show();
+  });
+  $("#w_close_btn_nv").click(function (e) {
+    e.preventDefault();
+    $("#w_update_nv").hide();
+  });
+
+  // Setup for donvitinh update
+  $("#w_update_dvt").hide();
+  $(".w_update_btn_open_dvt").click(function (e) {
+    e.preventDefault();
+    $("#w_update_dvt").css("top", e.pageY + 5);
+    $("#w_update_dvt").css("left", e.pageX + 5);
+
+    var $idDonViTinh = $(this).attr("value");
+    $("#w_update_form_dvt").load(
+      "./elements_LQA/mdonvitinh/donvitinhUpdate.php",
+      { idDonViTinh: $idDonViTinh },
+      function (response, status, request) {
+        this;
+      }
+    );
+    $("#w_update_dvt").show();
+  });
+  $("#w_close_btn_dvt").click(function (e) {
+    e.preventDefault();
+    $("#w_update_dvt").hide();
+  });
+
+  // Setup for thuoctinh update
+  $("#w_update_tt").hide();
+  $(".w_update_btn_open_tt").click(function (e) {
+    e.preventDefault();
+    $("#w_update_tt").css("top", e.pageY + 5);
+    $("#w_update_tt").css("left", e.pageX + 5);
+
+    var $idThuocTinh = $(this).attr("value");
+    $("#w_update_form_tt").load(
+      "./elements_LQA/mthuoctinh/thuoctinhUpdate.php",
+      { idThuocTinh: $idThuocTinh },
+      function (response, status, request) {
+        this;
+      }
+    );
+    $("#w_update_tt").show();
+  });
+  $("#w_close_btn_tt").click(function (e) {
+    e.preventDefault();
+    $("#w_update_tt").hide();
+  });
+  //thuoctinhhh
+  $("#w_update_tthh").hide();
+  $(".w_update_btn_open_tthh").click(function (e) {
+    e.preventDefault();
+    $("#w_update_tthh").css("top", e.pageY + 5);
+    $("#w_update_tthh").css("left", e.pageX + 5);
+
+    var $idThuocTinhHH = $(this).attr("value");
+    $("#w_update_form_tthh").load(
+      "./elements_LQA/mthuoctinhhh/thuoctinhhhUpdate.php",
+      { idThuocTinhHH: $idThuocTinhHH },
+      function (response, status, request) {
+        this;
+      }
+    );
+    $("#w_update_tthh").show();
+  });
+  $("#w_close_btn_tthh").click(function (e) {
+    e.preventDefault();
+    $("#w_update_tthh").hide();
   });
 });

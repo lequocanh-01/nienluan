@@ -2,16 +2,23 @@
     <div>
         <a href="index.php"> Menu </a>
     </div>
-    <div class="cateOrder">
+    <div class="">
         <a href="#">Quản lý</a>
     </div>
-    <div class="itemOrder">
+    <div class="">
         <ul>
             <li><a href="index.php?req=userview">Tài khoản</a></li>
             <li><a href="index.php?req=loaihangview">Loại hàng</a></li>
             <li><a href="index.php?req=hanghoaview">Hàng hóa</a></li>
+            <li><a href="index.php?req=thuoctinhhhview">Thuộc tính hàng hóa</a></li>
+            <li><a href="index.php?req=thuoctinhview">Thuộc tính</a></li>
+            <li><a href="index.php?req=dongiaview">Đơn giá</a></li>
+            <li><a href="index.php?req=thuonghieuview">Thương hiệu</a></li>
+            <li><a href="index.php?req=donvitinhview">Đơn vị tính</a></li>
+            <li><a href="index.php?req=nhanvienview">Nhân viên</a></li>
+           
+           
             <li><a href="../index.php">Trang mua hàng</a></li>
-            <li><a href="elements_LQA/quantityView.php">Số lượng hàng hóa</a></li>
         </ul>
     </div>
     <div class="cateOrder">

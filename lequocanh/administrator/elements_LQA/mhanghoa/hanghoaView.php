@@ -93,7 +93,7 @@ $l = count($list_lh);
                             <?php
                             }
                             ?>
-                            <img height="25px" src="./img_LQA/updateicon.png" class="w_update_btn_open_hh" value="<?php echo $u->idhanghoa; ?>">
+                            <img src="./img_LQA/Update.png" class="w_update_btn_open_hh" value="<?php echo $u->idhanghoa; ?>">
                         </td>
                     </tr>
             <?php

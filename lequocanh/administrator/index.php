@@ -27,15 +27,18 @@ session_start();
         require './elements_LQA/top.php'
         ?>
     </div>
-    <div id="left_div">
-        <?php
-        require './elements_LQA/left.php'
-        ?>
-    </div>
-    <div id="center_div">
-        <?php
-        require './elements_LQA/center.php';
-        ?>
+    <div class="row">
+        <div id="left_div">
+            <?php
+            require './elements_LQA/left.php'
+            ?>
+        </div>
+        <div id="center_div">
+            <?php
+            require './elements_LQA/center.php';
+            ?>
+        </div>
+
     </div>
     <div id="right_div"></div>
     <div id="bottom_div"></div>
@@ -44,6 +47,7 @@ session_start();
             <img src="./img_LQA/Logout.png" class="iconbutton">
         </a>
     </div>
+
 </body>
 
 </html>

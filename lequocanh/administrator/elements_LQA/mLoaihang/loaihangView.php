@@ -69,7 +69,7 @@
                             <?php
                             }
                             ?>
-                            <img height="25px" src="./img_LQA/updateicon.png" class="w_update_btn_open" value="<?php echo $u->idloaihang; ?>">
+                            <img  src="./img_LQA/Update.png" class="w_update_btn_open" value="<?php echo $u->idloaihang; ?>">
                         </td>
                     </tr>
             <?php

@@ -14,6 +14,24 @@ if (isset($_GET['req'])) {
         case 'hanghoaview':
             require './elements_LQA/mhanghoa/hanghoaView.php';
             break;
+        case 'dongiaview': // Đảm bảo rằng trường hợp này được xử lý
+            require './elements_LQA/mdongia/dongiaView.php';
+            break;
+        case 'thuonghieuview':
+            require './elements_LQA/mthuonghieu/thuonghieuView.php';
+            break;
+        case 'donvitinhview':
+            require './elements_LQA/mdonvitinh/donvitinhView.php';
+            break;
+        case 'nhanvienview':
+            require './elements_LQA/mnhanvien/nhanvienView.php';
+            break;
+        case 'thuoctinhview':
+            require './elements_LQA/mthuoctinh/thuoctinhView.php';
+            break;
+        case 'thuoctinhhhview':
+            require './elements_LQA/mthuoctinhhh/thuoctinhhhView.php';
+            break;
     }
 } else {
     require './elements_LQA/default.php';

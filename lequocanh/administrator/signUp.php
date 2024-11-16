@@ -5,7 +5,7 @@
     <title>Đăng ký</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylecss_LQA/mycss.css">
 </head>
 
@@ -16,8 +16,8 @@
             <form name="newuser" id="formreg" method="post" action='./elements_LQA/mUser/userAct.php?reqact=addnew' novalidate>
                 <div class="mb-3">
                     <label for="username" class="form-label">Tên đăng nhập:</label>
-                    <input type="text" class="form-control" id="username" name="username" 
-                           pattern="^[a-zA-Z0-9]{5,20}$" required>
+                    <input type="text" class="form-control" id="username" name="username"
+                        pattern="^[a-zA-Z0-9]{5,20}$" required>
                     <div class="invalid-feedback">
                         Tên đăng nhập phải từ 5-20 ký tự và chỉ chứa chữ cái và số
                     </div>
@@ -25,8 +25,8 @@
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Mật khẩu:</label>
-                    <input type="password" class="form-control" id="password" name="password" 
-                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" required>
+                    <input type="password" class="form-control" id="password" name="password"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" required>
                     <div class="invalid-feedback">
                         Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số
                     </div>
@@ -35,7 +35,7 @@
                 <div class="mb-3">
                     <label for="hoten" class="form-label">Họ tên:</label>
                     <input type="text" class="form-control" id="hoten" name="hoten"
-                           pattern="^[a-zA-ZÀ-ỹ\s]{2,50}$" required>
+                        pattern="^[a-zA-ZÀ-ỹ\s]{2,50}$" required>
                     <div class="invalid-feedback">
                         Họ tên phải từ 2-50 ký tự và chỉ chứa chữ cái
                     </div>
@@ -66,7 +66,7 @@
                 <div class="mb-3">
                     <label for="dienthoai" class="form-label">Điện thoại:</label>
                     <input type="tel" class="form-control" id="dienthoai" name="dienthoai"
-                           pattern="^[0-9]{10}$" required>
+                        pattern="^[0-9]{10}$" required>
                     <div class="invalid-feedback">
                         Số điện thoại phải có đúng 10 chữ số
                     </div>
@@ -85,7 +85,7 @@
         // Form validation
         const form = document.getElementById('formreg');
         const inputs = form.querySelectorAll('input');
-        
+
         // Chỉ validate khi user blur khỏi field
         inputs.forEach(input => {
             input.addEventListener('blur', function() {
@@ -100,7 +100,7 @@
 
         // Validate individual field
         function validateField(field) {
-            switch(field.id) {
+            switch (field.id) {
                 case 'username':
                     if (!field.value.match(/^[a-zA-Z0-9]{5,20}$/)) {
                         field.classList.add('is-invalid');

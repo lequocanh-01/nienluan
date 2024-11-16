@@ -63,9 +63,9 @@ if (isset($_GET['reqact'])) {
             $lh = new hanghoa();
             $kq = $lh->HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idhanghoa);
             if ($kq) {
-                header('location: ../../index.php?req=hanghoaView&result=ok');
+                header('location: ../../index.php?req=hanghoaview&result=ok');
             } else {
-                header('location: ../../index.php?req=hanghoaView&result=notok');
+                header('location: ../../index.php?req=hanghoaview&result=notok');
             }
             break;
         default:

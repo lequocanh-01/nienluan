@@ -72,4 +72,23 @@ class hanghoa extends Database
 
         return $getOne->fetchAll();
     }
+    public function HanghoaUpdatePrice($idhanghoa, $giaban)
+    {
+        $sql = "UPDATE hanghoa SET giathamkhao = ? WHERE idhanghoa = ?";
+        $data = array($giaban, $idhanghoa);
+        
+        $update = $this->connect->prepare($sql);
+        $update->execute($data);
+        return $update->rowCount();
+    }
+    public function searchHanghoa($query) {
+        // Logic to search for products based on the query
+        // This is just a placeholder; implement your actual search logic here
+        $results = []; // Assume this will hold the search results
+
+        // Example: Query the database to find matching products
+        // $results = $this->database->query("SELECT * FROM products WHERE name LIKE '%$query%'");
+
+        return $results;
+    }
 }

@@ -13,7 +13,7 @@
 }
 #left_div {
   min-height: 500px;
-  width: 15%;
+  width: 13%;
 
   float: left;
   height: 150px;
@@ -87,28 +87,28 @@
 
 .cateOrder {
   font-weight: bold;
-  color: #ffd700;
+  color: #3b14bb;
 }
 
 .itemOrder {
   font-style: italic;
-  color: #ffd700;
+  color: #2b0f8f;
 }
 
 ul {
   list-style: none;
   margin: 0;
   padding-left: 15px;
-  color: #ffd700;
+  color:  #001aff;
 }
 
 a {
   text-decoration: none;
-  color: #ffd700;
+  color: #7700ff;
 }
 
 a:hover {
-  color: #ffb700;
+  color: #4c00ff;
 }
 
 .isconing {
@@ -147,6 +147,91 @@ a:hover {
 }
 
 #w_update_hh {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+#w_update_dg {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+#w_update_th {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+#w_update_nv {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+#w_update_tt {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+#w_update_tthh {
+  position: absolute;
+  z-index: 1;
+  min-height: 200px;
+  min-width: 600px;
+  border: solid 1px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 10px 10px gainsboro;
+  background-color: #f8f9fa;
+}
+
+#w_update_dvt {
   position: absolute;
   z-index: 1;
   min-height: 200px;
@@ -218,26 +303,25 @@ button:hover {
 }
 
 .signup-link a {
-  color: rgb(247, 202, 0);
+  color: rgb(110, 23, 154);
   font-weight: 500;
   text-decoration: none;
 }
 
 .signup-link a:hover {
-  color: rgb(222, 180, 0);
+  color: rgb(108, 15, 221);
   text-decoration: underline;
 }
 
-/* Đảm bảo tất cả các text có màu vàng trong menu */
-.left-menu,
-.left-menu a,
-.left-menu .cateOrder,
-.left-menu .itemOrder,
-.left-menu ul,
-.left-menu li {
-  color: rgb(247, 202, 0);
+/* Thay đổi màu sắc cho các mục trong menu */
+.left-menu a {
+    color: #ffcc00; /* Màu mới cho các liên kết */
 }
 
 .left-menu a:hover {
-  color: rgb(222, 180, 0);
+    color: #ff9900; /* Màu khi di chuột qua */
 }
+
+
+
+
