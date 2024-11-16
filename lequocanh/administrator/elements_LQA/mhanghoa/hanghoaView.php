@@ -61,7 +61,7 @@ $l = count($list_lh);
             <thead>
                 <th>ID</th>
                 <th>Tên loại hàng</th>
-                <th>Gía tham khảo</th>
+                <th>Gia tham khảo</th>
                 <th>Mô tả</th>
                 <th>Hình ảnh</th>
                 <th>Chức năng</th>

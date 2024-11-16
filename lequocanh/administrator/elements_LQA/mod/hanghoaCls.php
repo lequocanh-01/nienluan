@@ -91,4 +91,27 @@ class hanghoa extends Database
 
         return $results;
     }
+    public function CheckRelations($idhanghoa) {
+        $tablesWithRelations = []; // Mảng để lưu tên các bảng có liên kết
+
+        // Kiểm tra liên kết với bảng thuộc tính hàng hóa (ví dụ)
+        $sql = "SELECT COUNT(*) FROM thuoctinhhh WHERE idhanghoa = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$idhanghoa]);
+        if ($stmt->fetchColumn() > 0) {
+            $tablesWithRelations[] = 'thuoctinhhh';
+        }
+
+        // Kiểm tra liên kết với bảng đơn giá (ví dụ)
+        $sql = "SELECT COUNT(*) FROM dongia WHERE idhanghoa = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$idhanghoa]);
+        if ($stmt->fetchColumn() > 0) {
+            $tablesWithRelations[] = 'dongia';
+        }
+
+        // Thêm các bảng khác mà bạn muốn kiểm tra ở đây
+
+        return $tablesWithRelations; // Trả về danh sách các bảng có liên kết
+    }
 }

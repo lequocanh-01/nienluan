@@ -4,7 +4,7 @@ require '../../elements_LQA/mod/hanghoaCls.php';
 //nếu có biến yêu cầu đlúng tên biến thì cbo vô nếu không đẩy về index.php ngăn truy cập mục đichs không rõ ràng
 if (isset($_GET['reqact'])) {
     $requestAction = $_GET['reqact'];
-    echo$requestAction;
+    echo $requestAction;
     switch ($requestAction) {
         case 'addnew': //them moi
             //xu lys them moi 
@@ -13,6 +13,21 @@ if (isset($_GET['reqact'])) {
             $giathamkhao = $_REQUEST['giathamkhao'];
             $mota = $_REQUEST['mota'];
             $idloaihang = $_REQUEST['idloaihang'];
+
+            // Kiểm tra xem người dùng đã chọn loại hàng hay chưa
+            if (empty($idloaihang)) {
+                // Nếu không có loại hàng, hiển thị alert và quay lại trang thêm hàng hóa
+                echo "<script>alert('Vui lòng chọn loại hàng trước khi thêm hàng hóa.'); window.history.back();</script>";
+                exit; // Dừng thực thi mã
+            }
+
+            // Kiểm tra xem người dùng đã chọn ảnh hay chưa
+            if (empty($_FILES['fileimage']['tmp_name'])) {
+                // Nếu không có ảnh, hiển thị alert và quay lại trang thêm hàng hóa
+                echo "<script>alert('Vui lòng nhập hình ảnh trước khi thêm hàng hóa.'); window.history.back();</script>";
+                exit; // Dừng thực thi mã
+            }
+
             $hinhanh_file = $_FILES['fileimage']['tmp_name'];
             $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
             //kiem thu lieu da nhan du khong
@@ -21,27 +36,40 @@ if (isset($_GET['reqact'])) {
             // echo $giathamkhao . '<br/>';
             // echo $idloaihang . '<br/>';
             // echo $hinhanh . '<br/>';
-            
 
             $lh = new hanghoa();
             $kq = $lh->HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang);
             if ($kq) {
-                header('location: ../../index.php?req=hanghoaView&result=ok');
+                header('location: ../../index.php?req=hanghoaview&result=ok');
             } else {
                 header('location: ../../index.php?req=hanghoaView&result=notok');
             }
             break;
+
         case 'deletehanghoa':
             $idhanghoa = $_REQUEST['idhanghoa'];
-            // echo $idhanghoa;
+            // Kiểm tra xem hàng hóa có liên kết với bảng khác không
             $hh = new hanghoa();
-            $kq = $hh->HanghoaDelete($idhanghoa);
-            if ($kq) {
-                header('location: ../../index.php?req=hanghoaView&result=ok');
+            $relations = $hh->CheckRelations($idhanghoa); // Phương thức kiểm tra liên kết
+
+            if ($relations) {
+                // Nếu có liên kết, hiển thị thông báo
+                $relatedTables = implode(", ", $relations); // Chuyển danh sách bảng thành chuỗi
+                echo "<script>
+                        alert('Hàng hóa này có thuộc tính liên quan trong các bảng: $relatedTables. Vui lòng xóa thuộc tính trong các bảng này trước khi xóa hàng hóa.');
+                        window.history.back();
+                      </script>";
             } else {
-                header('location: ../../index.php?req=hanghoaView&result=notok');
+                // Nếu không có liên kết, thực hiện xóa ngay
+                $kq = $hh->HanghoaDelete($idhanghoa);
+                if ($kq) {
+                    header('location: ../../index.php?req=hanghoaview&result=ok');
+                } else {
+                    header('location: ../../index.php?req=hanghoaView&result=notok');
+                }
             }
             break;
+
         case 'updatehanghoa':
 
             $idhanghoa = $_REQUEST['idhanghoa'];

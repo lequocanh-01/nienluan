@@ -10,6 +10,14 @@ if (isset($_GET['reqact'])) {
             //nhabn du lieu
             $tenloaihang = $_REQUEST['tenloaihang'];
             $mota = $_REQUEST['mota'];
+            
+            // Kiểm tra xem người dùng đã chọn ảnh hay chưa
+            if (empty($_FILES['fileimage']['tmp_name'])) {
+                // Nếu không có ảnh, hiển thị alert và quay lại trang thêm loại hàng
+                echo "<script>alert('Vui lòng nhập ảnh trước khi thêm loại hàng.'); window.history.back();</script>";
+                exit; // Dừng thực thi mã
+            }
+
             $hinhanh_file = $_FILES['fileimage']['tmp_name'];
             $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
             //kiem thu lieu da nhan du khong
@@ -19,7 +27,7 @@ if (isset($_GET['reqact'])) {
             $lh = new loaihang();
             $kq = $lh->LoaihangAdd($tenloaihang, $hinhanh, $mota);
             if ($kq) {
-                header('location: ../../index.php?req=loaihangView&result=ok');
+                header('location: ../../index.php?req=loaihangview&result=ok');
             } else {
                 header('location: ../../index.php?req=loaihangView&result=notok');
             }
@@ -31,14 +39,13 @@ if (isset($_GET['reqact'])) {
             $lh = new loaihang();
             $kq = $lh->LoaihangDelete($idloaihang);
             if ($kq) {
-                header('location: ../../index.php?req=loaihangView&result=ok');
+                header('location: ../../index.php?req=loaihangview&result=ok');
             } else {
                 header('location: ../../index.php?req=loaihangView&result=notok');
             }
             break;
 
         case 'updateloaihang':
-
             $idloaihang = $_REQUEST['idloaihang'];
             $tenloaihang = $_REQUEST['tenloaihang'];
             $mota = $_REQUEST['mota'];
@@ -57,7 +64,7 @@ if (isset($_GET['reqact'])) {
             $lh = new loaihang();
             $kq = $lh->LoaihangUpdate($tenloaihang, $hinhanh, $mota, $idloaihang);
             if ($kq) {
-                header('location: ../../index.php?req=loaihangView&result=ok');
+                header('location: ../../index.php?req=loaihangview&result=ok');
             } else {
                 header('location: ../../index.php?req=loaihangView&result=notok');
             }
