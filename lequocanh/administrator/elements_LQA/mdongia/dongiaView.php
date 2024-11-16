@@ -112,16 +112,16 @@ if (empty($list_hh)) {
                                 if (isset($_SESSION['ADMIN'])) {
                                 ?>
                                     <a href="./elements_LQA/mdongia/dongiaAct.php?reqact=deletedongia&idDonGia=<?php echo $u->idDonGia; ?>">
-                                    <img src="./elements_LQA/idelete.png" class="iconimg" width="16" height="16">
+                                    <img src="./img_LQA/Delete.png" class="iconimg" >
                                     </a>
                                 <?php
                                 } else {
                                 ?>
-                                    <img src="./elements_LQA/idelete.png" class="iconimg" width="16" height="16">
+                                    <img src="./img_LQA/Delete.png" class="iconimg" >
                                 <?php
                                 }
                                 ?>
-                                <img height="25px" src="./elements_LQA/Updateicon.png" class="w_update_btn_open_dg" data-id="<?php echo $u->idDonGia; ?>">
+                                <img  src="./img_LQA/Update.png" class="w_update_btn_open_dg" data-id="<?php echo $u->idDonGia; ?>">
                             </td>
                         </tr>
                 <?php
