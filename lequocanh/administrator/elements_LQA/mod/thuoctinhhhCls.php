@@ -28,10 +28,10 @@ class ThuocTinhHH extends Database
     }
 
     // Thêm thuộc tính mới
-    public function thuoctinhhhAdd($idhanghoa, $idThuocTinh, $tenThuocTinhHH, $giaTri, $ghiChu)
+    public function thuoctinhhhAdd($idhanghoa, $idThuocTinh, $tenThuocTinhHH,  $ghiChu)
     {
-        $sql = "INSERT INTO thuoctinhhh (idhanghoa, idThuocTinh, tenThuocTinhHH, giaTri, ghiChu) VALUES (?, ?, ?, ?, ?)";
-        $data = array($idhanghoa, $idThuocTinh, $tenThuocTinhHH, $giaTri, $ghiChu);
+        $sql = "INSERT INTO thuoctinhhh (idhanghoa, idThuocTinh, tenThuocTinhHH,  ghiChu) VALUES (?, ?, ?, ?)";
+        $data = array($idhanghoa, $idThuocTinh, $tenThuocTinhHH,  $ghiChu);
 
         $add = $this->connect->prepare($sql);
 
@@ -60,12 +60,12 @@ class ThuocTinhHH extends Database
     }
 
     // Cập nhật thông tin thuộc tính
-    public function thuoctinhhhUpdate( $tenThuocTinhHH, $giaTri, $ghiChu, $idThuocTinhHH)
+    public function thuoctinhhhUpdate( $tenThuocTinhHH,  $ghiChu, $idThuocTinhHH)
     {
         $sql = "UPDATE thuoctinhhh 
-                SET  tenThuocTinhHH = ?, giaTri = ?, ghiChu = ? 
+                SET  tenThuocTinhHH = ?,  ghiChu = ? 
                 WHERE idThuocTinhHH = ?";
-        $data = array( $tenThuocTinhHH, $giaTri, $ghiChu, $idThuocTinhHH);
+        $data = array( $tenThuocTinhHH,  $ghiChu, $idThuocTinhHH);
 
         $update = $this->connect->prepare($sql);
 

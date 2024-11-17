@@ -12,12 +12,11 @@ if (isset($_GET['reqact'])) {
             $idhanghoa = $_POST['idhanghoa'] ?? null;
             $idThuocTinh = $_POST['idThuocTinh'] ?? null;
             $tenThuocTinhHH = $_POST['tenThuocTinhHH'] ?? null;
-            $giaTri = $_POST['giaTri'] ?? null;
             $ghiChu = $_POST['ghiChu'] ?? null;
 
             // Kiểm tra dữ liệu đầu vào
-            if ($idhanghoa && $idThuocTinh && $tenThuocTinhHH && $giaTri) {
-                $result = $thuocTinhHHObj->thuoctinhhhAdd($idhanghoa, $idThuocTinh, $tenThuocTinhHH, $giaTri, $ghiChu);
+            if ($idhanghoa && $idThuocTinh && $tenThuocTinhHH ) {
+                $result = $thuocTinhHHObj->thuoctinhhhAdd($idhanghoa, $idThuocTinh, $tenThuocTinhHH,  $ghiChu);
                 header("Location: ../../index.php?req=thuoctinhhhview&result=" . ($result ? 'ok' : 'notok'));
             } else {
                 // Nếu thiếu dữ liệu
@@ -41,12 +40,11 @@ if (isset($_GET['reqact'])) {
             // Lấy dữ liệu từ form
             $idThuocTinhHH = $_POST['idThuocTinhHH'] ?? null;
             $tenThuocTinhHH = $_POST['tenThuocTinhHH'] ?? null;
-            $giaTri = $_POST['giaTri'] ?? null;
             $ghiChu = $_POST['ghiChu'] ?? null;
 
             // echo $hinhanh . '<br/>';
             $lh = new thuoctinhhh();
-            $kq = $lh->thuoctinhhhUpdate($tenThuocTinhHH, $giaTri, $ghiChu,  $idThuocTinhHH);
+            $kq = $lh->thuoctinhhhUpdate($tenThuocTinhHH,  $ghiChu,  $idThuocTinhHH);
             if ($kq) {
                 header('location: ../../index.php?req=thuoctinhhhview&result=ok');
             } else {

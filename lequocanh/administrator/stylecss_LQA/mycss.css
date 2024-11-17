@@ -322,6 +322,14 @@ button:hover {
     color: #ff9900; /* Màu khi di chuột qua */
 }
 
+/* CSS cho tên thuộc tính hàng hóa */
+.tenthuoctinhhh {
+  white-space: nowrap;     /* Không cho xuống dòng */
+  overflow: hidden;        /* Ẩn phần nội dung tràn */
+  text-overflow: ellipsis; /* Hiển thị dấu ... khi nội dung quá dài */
+  max-width: 550px;        /* Đặt độ rộng tối đa cho cột */
+}
+
 
 
 

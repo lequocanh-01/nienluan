@@ -56,10 +56,6 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
                 <td><input type="text" name="tenThuocTinhHH" required /></td>
             </tr>
             <tr>
-                <td>Giá trị</td>
-                <td><input type="text" name="giaTri" required /></td>
-            </tr>
-            <tr>
                 <td>Ghi Chú</td>
                 <td><input type="text" name="ghiChu" /></td>
             </tr>
@@ -79,7 +75,6 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
             <th>ID Hàng Hóa</th>
             <th>ID Thuộc Tính</th>
             <th>Tên Thuộc Tính HH</th>
-            <th>Giá trị</th>
             <th>Ghi Chú</th>
             <th>Thao tác</th>
         </tr>
@@ -91,8 +86,7 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
                     <td><?php echo htmlspecialchars($u->idThuocTinhHH); ?></td>
                     <td><?php echo htmlspecialchars($u->idhanghoa); ?></td>
                     <td><?php echo htmlspecialchars($u->idThuocTinh); ?></td>
-                    <td><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
-                    <td><?php echo htmlspecialchars($u->giaTri); ?></td>
+                    <td class="tenthuoctinhhh"><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
                     <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
                     <td>
                         <a href="./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=deletethuoctinhhh&idThuocTinhHH=<?php echo htmlspecialchars($u->idThuocTinhHH); ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">

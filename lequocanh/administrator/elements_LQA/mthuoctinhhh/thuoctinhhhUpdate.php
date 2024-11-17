@@ -22,10 +22,6 @@ if (!$getLhUpdate) {
             <td><input type="text" name="tenThuocTinhHH" value="<?php echo htmlspecialchars($getLhUpdate->tenThuocTinhHH); ?>" /></td>
         </tr>
         <tr>
-            <td>Giá Trị</td>
-            <td><input type="text" name="giaTri" value="<?php echo htmlspecialchars($getLhUpdate->giaTri); ?>" /></td>
-        </tr>
-        <tr>
             <td>Ghi Chú</td>
             <td><input type="text" name="ghiChu" value="<?php echo htmlspecialchars($getLhUpdate->ghiChu); ?>" /></td>
         </tr>
