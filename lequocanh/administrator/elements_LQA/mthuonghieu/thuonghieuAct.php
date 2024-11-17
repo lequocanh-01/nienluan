@@ -12,9 +12,17 @@ if (isset($_GET['reqact'])) {
             $SDT = isset($_REQUEST['SDT']) ? $_REQUEST['SDT'] : null;
             $email = isset($_REQUEST['email']) ? $_REQUEST['email'] : null;
             $diaChi = isset($_REQUEST['diaChi']) ? $_REQUEST['diaChi'] : null;
+            if (empty($_FILES['fileimage']['tmp_name'])) {
+                // Nếu không có ảnh, hiển thị alert và quay lại trang thêm loại hàng
+                echo "<script>alert('Vui lòng nhập ảnh trước khi thêm loại hàng.'); window.history.back();</script>";
+                exit; // Dừng thực thi mã
+            }
+
+            $hinhanh_file = $_FILES['fileimage']['tmp_name'];
+            $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
 
             $lh = new ThuongHieu();
-            $kq = $lh->thuonghieuAdd($tenTH, $SDT, $email, $diaChi);
+            $kq = $lh->thuonghieuAdd($tenTH, $SDT, $email, $diaChi, $hinhanh);
             if ($kq) {
                 header('location: ../../index.php?req=thuonghieuview&result=ok');
                 exit;
@@ -44,8 +52,17 @@ if (isset($_GET['reqact'])) {
             $diaChi = isset($_REQUEST['diaChi']) ? $_REQUEST['diaChi'] : null;
             $idThuongHieu = isset($_REQUEST['idThuongHieu']) ? $_REQUEST['idThuongHieu'] : null;
 
+            // Check if a new image is uploaded
+            if (file_exists($_FILES['fileimage']['tmp_name']) && !empty($_FILES['fileimage']['tmp_name'])) {
+                $hinhanh_file = $_FILES['fileimage']['tmp_name'];
+                $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
+            } else {
+                // Use the old image if no new image is uploaded
+                $hinhanh = $_REQUEST['hinhanh']; // Assuming hinhanh is passed in the request
+            }
+
             $lh = new ThuongHieu();
-            $kq = $lh->thuonghieuUpdate($tenTH, $SDT, $email, $diaChi, $idThuongHieu);
+            $kq = $lh->thuonghieuUpdate($tenTH, $SDT, $email, $diaChi, $hinhanh, $idThuongHieu);
             if ($kq) {
                 header('location: ../../index.php?req=thuonghieuview&result=ok');
                 exit;

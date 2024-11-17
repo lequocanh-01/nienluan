@@ -16,10 +16,13 @@ class ThuocTinhHH extends Database
     public function thuoctinhhhGetAll()
     {
         $sql = 'SELECT * FROM thuoctinhhh';
-
         $getAll = $this->connect->prepare($sql);
         $getAll->setFetchMode(PDO::FETCH_OBJ);
-        $getAll->execute();
+
+        if (!$getAll->execute()) {
+            error_log(print_r($getAll->errorInfo(), true));
+            return false;
+        }
 
         return $getAll->fetchAll();
     }
@@ -31,49 +34,68 @@ class ThuocTinhHH extends Database
         $data = array($idhanghoa, $idThuocTinh, $tenThuocTinhHH, $giaTri, $ghiChu);
 
         $add = $this->connect->prepare($sql);
-        $add->execute($data);
+
+        if (!$add->execute($data)) {
+            error_log(print_r($add->errorInfo(), true));
+            return false;
+        }
 
         return $add->rowCount();
     }
 
     // Xóa thuộc tính theo ID
-    public function thuoctinhhhDelete($idthuoctinhhh)
+    public function thuoctinhhhDelete($idThuocTinhHH)
     {
-        $sql = "DELETE FROM thuoctinhhh WHERE idthuoctinhhh = ?";
-        $data = array($idthuoctinhhh);
+        $sql = "DELETE FROM thuoctinhhh WHERE idThuocTinhHH = ?";
+        $data = array($idThuocTinhHH);
 
         $del = $this->connect->prepare($sql);
-        $del->execute($data);
+
+        if (!$del->execute($data)) {
+            error_log(print_r($del->errorInfo(), true));
+            return false;
+        }
 
         return $del->rowCount();
     }
 
     // Cập nhật thông tin thuộc tính
-    public function thuoctinhhhUpdate($tenThuocTinhHH, $giaTri, $ghiChu, $idthuoctinhhh)
+    public function thuoctinhhhUpdate( $tenThuocTinhHH, $giaTri, $ghiChu, $idThuocTinhHH)
     {
-        $sql = "UPDATE thuoctinhhh SET tenThuocTinhHH = ?, giaTri = ?, ghiChu = ? WHERE idthuoctinhhh = ?";
-        $data = array($tenThuocTinhHH, $giaTri, $ghiChu, $idthuoctinhhh);
+        $sql = "UPDATE thuoctinhhh 
+                SET  tenThuocTinhHH = ?, giaTri = ?, ghiChu = ? 
+                WHERE idThuocTinhHH = ?";
+        $data = array( $tenThuocTinhHH, $giaTri, $ghiChu, $idThuocTinhHH);
 
         $update = $this->connect->prepare($sql);
-        $update->execute($data);
+
+        if (!$update->execute($data)) {
+            error_log(print_r($update->errorInfo(), true));
+            return false;
+        }
 
         return $update->rowCount();
     }
 
     // Lấy thông tin thuộc tính theo ID
-    public function thuoctinhhhGetbyId($idthuoctinhhh)
+    public function thuoctinhhhGetbyId($idThuocTinhHH)
     {
-        $sql = 'SELECT * FROM thuoctinhhh WHERE idthuoctinhhh = ?';
-        $data = array($idthuoctinhhh);
+        $sql = 'SELECT * FROM thuoctinhhh WHERE idThuocTinhHH = ?';
+        $data = array($idThuocTinhHH);
 
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
-        $getOne->execute($data);
+
+        if (!$getOne->execute($data)) {
+            error_log(print_r($getOne->errorInfo(), true));
+            return false;
+        }
 
         return $getOne->fetch();
     }
 
     // Lấy các thuộc tính theo ID loại hàng (nếu cần)
+    // Xác minh xem bảng có cột idloaihang không trước khi sử dụng phương thức này
     public function thuoctinhhhGetbyIdloaihang($idloaihang)
     {
         $sql = 'SELECT * FROM thuoctinhhh WHERE idloaihang = ?';
@@ -81,7 +103,11 @@ class ThuocTinhHH extends Database
 
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
-        $getOne->execute($data);
+
+        if (!$getOne->execute($data)) {
+            error_log(print_r($getOne->errorInfo(), true));
+            return false;
+        }
 
         return $getOne->fetchAll();
     }

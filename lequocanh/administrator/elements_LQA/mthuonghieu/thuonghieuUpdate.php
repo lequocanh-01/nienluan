@@ -22,7 +22,7 @@ if (!$getLhUpdate) {
 <div>
     <form name="updatethuonghieu" id="formupdatelh" method="post" action='./elements_LQA/mthuonghieu/thuonghieuAct.php?reqact=updatethuonghieu' enctype="multipart/form-data">
         <input type="hidden" name="idThuongHieu" value="<?php echo $idThuongHieu; ?>">
-
+        <input type="hidden" name="hinhanh" value="<?php echo $getLhUpdate->hinhanh;  ?>" />
         <table>
             <tr>
                 <td>Tên thương hiệu</td>
@@ -39,6 +39,13 @@ if (!$getLhUpdate) {
             <tr>
                 <td>Địa Chỉ</td>
                 <td><input type="text" size="50" name="diaChi" value="<?php echo htmlspecialchars($getLhUpdate->diaChi); ?>" /></td>
+            </tr>
+            <tr>
+                <td>Hình ảnh</td>
+                <td>
+                    <img width="150px" src="data:image/png;base64,<?php echo $getLhUpdate->hinhanh ?>"><br>
+                    <input type="file" name="fileimage">
+                </td>
             </tr>
             <tr>
                 <td><input type="submit" id="btnsubmit" value="Update" size="50" /></td>

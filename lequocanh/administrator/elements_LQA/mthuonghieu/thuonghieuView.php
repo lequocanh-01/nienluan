@@ -22,6 +22,10 @@
                 <td><input type="text" name="diaChi" id="diaChi" /></td>
             </tr>
             <tr>
+                <td>Hình ảnh</td>
+                <td><input type="file" name="fileimage"></td>
+            </tr>
+            <tr>
                 <td><input type="submit" id="btnsubmit" value="Tạo mới" /></td>
                 <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
             </tr>
@@ -46,6 +50,7 @@
                     <th>SĐT</th>
                     <th>Email</th>
                     <th>Địa Chỉ</th>
+                    <th>Hình Ảnh</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -60,6 +65,10 @@
                             <td><?php echo $u->SDT; ?></td>
                             <td><?php echo $u->email; ?></td>
                             <td><?php echo $u->diaChi; ?></td>
+                            <td align="center">
+
+                                <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
+                            </td>
                             <td style="text-align: center;">
                                 <?php
                                 if (isset($_SESSION['ADMIN'])) {

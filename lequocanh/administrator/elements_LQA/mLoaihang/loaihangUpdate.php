@@ -29,7 +29,6 @@ $getLhUpdate = $lhobj->LoaihangGetbyId($idloaihang);
             <tr>
                 <td>Hình ảnh</td>
                 <td>
-                    
                     <img width="150px" src="data:image/png;base64,<?php echo $getLhUpdate->hinhanh ?>"><br>
                     <input type="file" name="fileimage">
                 </td>

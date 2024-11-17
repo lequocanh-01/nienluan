@@ -25,10 +25,10 @@ class ThuongHieu extends Database
     }
 
     // Thêm mới một thương hiệu
-    public function thuonghieuAdd($tenTH, $SDT, $email, $diaChi)
+    public function thuonghieuAdd($tenTH, $SDT, $email, $diaChi, $hinhanh)
     {
-        $sql = "INSERT INTO thuonghieu (tenTH, SDT, email, diaChi) VALUES (?, ?, ?, ?)";
-        $data = array($tenTH, $SDT, $email, $diaChi);
+        $sql = "INSERT INTO thuonghieu (tenTH, SDT, email, diaChi, hinhanh) VALUES (?, ?, ?, ?, ?)";
+        $data = array($tenTH, $SDT, $email, $diaChi, $hinhanh);
         $add = $this->connect->prepare($sql);
         $add->execute($data);
         return $add->rowCount();
@@ -50,11 +50,11 @@ class ThuongHieu extends Database
     }
 
     // Cập nhật thông tin thương hiệu
-    public function thuonghieuUpdate($tenTH, $SDT, $email, $diaChi, $idThuongHieu)
+    public function thuonghieuUpdate($tenTH, $SDT, $email, $diaChi, $hinhanh, $idThuongHieu)
     {
         try {
-            $sql = "UPDATE thuonghieu SET tenTH = ?, SDT = ?, email = ?, diaChi = ? WHERE idThuongHieu = ?";
-            $data = array($tenTH, $SDT, $email, $diaChi, $idThuongHieu);
+            $sql = "UPDATE thuonghieu SET tenTH = ?, SDT = ?, email = ?, diaChi = ?, hinhanh = ? WHERE idThuongHieu = ?";
+            $data = array($tenTH, $SDT, $email, $diaChi, $hinhanh, $idThuongHieu);
             $update = $this->connect->prepare($sql);
             $update->execute($data);
             return $update->rowCount();

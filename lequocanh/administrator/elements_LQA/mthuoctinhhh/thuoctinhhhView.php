@@ -6,12 +6,15 @@ require_once './elements_LQA/mod/hanghoaCls.php';
 require_once './elements_LQA/mod/thuoctinhCls.php';
 require_once './elements_LQA/mod/thuoctinhhhCls.php';
 
+// Lấy danh sách hàng hóa
 $hangHoaObj = new HangHoa();
 $list_hh = $hangHoaObj->HanghoaGetAll();
 
+// Lấy danh sách thuộc tính
 $thuocTinhObj = new ThuocTinh();
 $list_lh_thuoctinh = $thuocTinhObj->thuoctinhGetAll();
 
+// Lấy danh sách thuộc tính hàng hóa
 $thuocTinhHHObj = new ThuocTinhHH();
 $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
 ?>
@@ -22,10 +25,14 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
             <tr>
                 <td>Chọn hàng hóa:</td>
                 <td>
-                    <select name="idhanghoa" id="hanghoaSelect">
+                    <select name="idhanghoa" id="hanghoaSelect" required>
                         <option value="">-- Chọn hàng hóa --</option>
-                        <?php foreach ($list_hh as $h) { ?>
-                            <option value="<?php echo $h->idhanghoa; ?>"><?php echo $h->tenhanghoa; ?></option>
+                        <?php if (!empty($list_hh)) {
+                            foreach ($list_hh as $h) { ?>
+                                <option value="<?php echo htmlspecialchars($h->idhanghoa); ?>"><?php echo htmlspecialchars($h->tenhanghoa); ?></option>
+                            <?php }
+                        } else { ?>
+                            <option value="">Không có hàng hóa nào</option>
                         <?php } ?>
                     </select>
                 </td>
@@ -33,16 +40,24 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
             <tr>
                 <td>Chọn thuộc tính:</td>
                 <td>
-                    <select name="idThuocTinh" id="idThuocTinh">
-                        <?php foreach ($list_lh_thuoctinh as $l) { ?>
-                            <option value="<?php echo $l->idThuocTinh; ?>"><?php echo $l->tenThuocTinh; ?></option>
+                    <select name="idThuocTinh" id="idThuocTinh" required>
+                        <?php if (!empty($list_lh_thuoctinh)) {
+                            foreach ($list_lh_thuoctinh as $l) { ?>
+                                <option value="<?php echo htmlspecialchars($l->idThuocTinh); ?>"><?php echo htmlspecialchars($l->tenThuocTinh); ?></option>
+                            <?php }
+                        } else { ?>
+                            <option value="">Không có thuộc tính nào</option>
                         <?php } ?>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td>Tên Thuộc Tính HH</td>
-                <td><input type="text" name="tenThuocTinhHH" /></td>
+                <td><input type="text" name="tenThuocTinhHH" required /></td>
+            </tr>
+            <tr>
+                <td>Giá trị</td>
+                <td><input type="text" name="giaTri" required /></td>
             </tr>
             <tr>
                 <td>Ghi Chú</td>
@@ -64,24 +79,32 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
             <th>ID Hàng Hóa</th>
             <th>ID Thuộc Tính</th>
             <th>Tên Thuộc Tính HH</th>
+            <th>Giá trị</th>
             <th>Ghi Chú</th>
             <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($list_lh_thuoctinhhh as $u) { ?>
+        <?php if (!empty($list_lh_thuoctinhhh)) {
+            foreach ($list_lh_thuoctinhhh as $u) { ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($u->idThuocTinhHH); ?></td>
+                    <td><?php echo htmlspecialchars($u->idhanghoa); ?></td>
+                    <td><?php echo htmlspecialchars($u->idThuocTinh); ?></td>
+                    <td><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
+                    <td><?php echo htmlspecialchars($u->giaTri); ?></td>
+                    <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
+                    <td>
+                        <a href="./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=deletethuoctinhhh&idThuocTinhHH=<?php echo htmlspecialchars($u->idThuocTinhHH); ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">
+                            <img src="./img_LQA/delete.png" class="iconimg">
+                        </a>
+                        <img src="./img_LQA/Update.png" class="w_update_btn_open_tthh" data-id="<?php echo htmlspecialchars($u->idThuocTinhHH); ?>">
+                    </td>
+                </tr>
+            <?php }
+        } else { ?>
             <tr>
-                <td><?php echo $u->idThuocTinhHH; ?></td>
-                <td><?php echo $u->idhanghoa; ?></td>
-                <td><?php echo $u->idThuocTinh; ?></td>
-                <td><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
-                <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
-                <td>
-                    <a href="./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=deletethuoctinhhh&idThuocTinhHH=<?php echo $u->idThuocTinhHH; ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">
-                        <img src="./img_LQA/delete.png" class="iconimg">
-                    </a>
-                    <img src="./img_LQA/Update.png" class="w_update_btn_open_tthh" data-id="<?php echo $u->idThuocTinhHH; ?>">
-                </td>
+                <td colspan="7">Không có thuộc tính hàng hóa nào.</td>
             </tr>
         <?php } ?>
     </tbody>

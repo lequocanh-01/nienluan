@@ -179,7 +179,9 @@ $(document).ready(function () {
       "./elements_LQA/mthuoctinh/thuoctinhUpdate.php",
       { idThuocTinh: $idThuocTinh },
       function (response, status, request) {
-        this;
+        if (status === "error") {
+          console.error("Error loading update form:", request.status, request.statusText);
+        }
       }
     );
     $("#w_update_tt").show();

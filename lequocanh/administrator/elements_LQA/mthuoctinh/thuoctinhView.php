@@ -17,12 +17,12 @@ $l = count($list_lh);
                 <td><input type="text" name="tenThuocTinh" id="tenThuocTinh" /></td>
             </tr>
             <tr>
-                <td>Giá trị</td>
-                <td><input type="text" name="giaTri" id="giaTri" /></td>
-            </tr>
-            <tr>
                 <td>Ghi Chú</td>
                 <td><input type="text" name="ghiChu" /></td>
+            </tr>
+            <tr>
+                <td>Hình ảnh</td>
+                <td><input type="file" name="fileimage"></td>
             </tr>
             <tr>
                 <td><input type="submit" id="btnsubmit" value="Tạo mới" /></td>
@@ -40,8 +40,8 @@ $l = count($list_lh);
                 <tr>
                     <th>ID</th>
                     <th>Tên thuộc tính</th>
-                    <th>Giá trị</th>
                     <th>Ghi Chú</th>
+                    <th>Hình ảnh</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -53,8 +53,11 @@ $l = count($list_lh);
                         <tr>
                             <td><?php echo $u->idThuocTinh; ?></td>
                             <td><?php echo htmlspecialchars($u->tenThuocTinh); ?></td>
-                            <td><?php echo htmlspecialchars($u->giaTri); ?></td>
                             <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
+                            <td align="center">
+
+                            <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
+                        </td>
                             <td style="text-align: center;">
                                 <?php if (isset($_SESSION['ADMIN'])) { ?>
                                     <a href="./elements_LQA/mthuoctinh/thuoctinhAct.php?reqact=deletethuoctinh&idThuocTinh=<?php echo $u->idThuocTinh; ?>">

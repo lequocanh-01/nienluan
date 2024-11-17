@@ -29,11 +29,11 @@ class ThuocTinh extends Database
     }
 
     // Thêm thuộc tính
-    public function thuoctinhAdd($tenThuocTinh, $giaTri, $ghiChu)
+    public function thuoctinhAdd($tenThuocTinh,  $ghiChu, $hinhanh)
     {
         try {
-            $sql = "INSERT INTO thuoctinh (tenThuocTinh, giaTri, ghiChu) VALUES (?, ?, ?)";
-            $data = array($tenThuocTinh, $giaTri, $ghiChu);
+            $sql = "INSERT INTO thuoctinh (tenThuocTinh, ghiChu, hinhanh) VALUES (?, ?, ?)";
+            $data = array($tenThuocTinh, $ghiChu, $hinhanh);
             $add = $this->connect->prepare($sql);
             $add->execute($data);
             return $add->rowCount();
@@ -59,11 +59,11 @@ class ThuocTinh extends Database
     }
 
     // Cập nhật thông tin thuộc tính
-    public function thuoctinhUpdate($tenThuocTinh, $giaTri, $ghiChu, $idThuocTinh)
+    public function thuoctinhUpdate($tenThuocTinh, $ghiChu, $hinhanh, $idThuocTinh)
     {
         try {
-            $sql = "UPDATE thuoctinh SET tenThuocTinh = ?, giaTri = ?, ghiChu = ? WHERE idThuocTinh = ?";
-            $data = array($tenThuocTinh, $giaTri, $ghiChu, $idThuocTinh);
+            $sql = "UPDATE thuoctinh SET tenThuocTinh = ?, ghiChu = ?, hinhanh = ? WHERE idThuocTinh = ?";
+            $data = array($tenThuocTinh, $ghiChu, $hinhanh, $idThuocTinh);
             $update = $this->connect->prepare($sql);
             $update->execute($data);
             return $update->rowCount();
