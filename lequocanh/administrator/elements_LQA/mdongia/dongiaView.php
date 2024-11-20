@@ -91,6 +91,7 @@ if (empty($list_hh)) {
                 <th>Ngày kết thúc</th>
                 <th>Điều kiện</th>
                 <th>Ghi chú</th>
+                <th>Áp dụng</th>
                 <th>thao tác</th>
             </thead>
             <tbody>
@@ -107,21 +108,22 @@ if (empty($list_hh)) {
                             <td><?php echo $u->ngayKetThuc; ?></td>
                             <td><?php echo $u->dieuKien; ?></td>
                             <td><?php echo $u->ghiChu; ?></td>
+                            
                             <td align="center">
                                 <?php
                                 if (isset($_SESSION['ADMIN'])) {
                                 ?>
                                     <a href="./elements_LQA/mdongia/dongiaAct.php?reqact=deletedongia&idDonGia=<?php echo $u->idDonGia; ?>">
-                                    <img src="./img_LQA/Delete.png" class="iconimg" >
+                                        <img src="./img_LQA/Delete.png" class="iconimg">
                                     </a>
                                 <?php
                                 } else {
                                 ?>
-                                    <img src="./img_LQA/Delete.png" class="iconimg" >
+                                    <img src="./img_LQA/Delete.png" class="iconimg">
                                 <?php
                                 }
                                 ?>
-                                <img  src="./img_LQA/Update.png" class="w_update_btn_open_dg" data-id="<?php echo $u->idDonGia; ?>">
+                                <img src="./img_LQA/Update.png" class="w_update_btn_open_dg" data-id="<?php echo $u->idDonGia; ?>">
                             </td>
                         </tr>
                 <?php

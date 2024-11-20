@@ -5,7 +5,7 @@ if (file_exists($s)) {
 } else {
     $f = './elements_LQA/mod/database.php';
     if (!file_exists($f)) {
-        $f = './administrator/element_LHK/mod/database.php';
+        $f = './administrator/elements_LQA/mod/database.php';
     }
 }
 require_once $f;
