@@ -2,9 +2,17 @@
 <hr>
 <div>Thêm hàng hóa</div>
 <?php
-require './elements_LQA/mod/loaihangCls.php';
+require_once './elements_LQA/mod/loaihangCls.php';
+require_once './elements_LQA/mod/hanghoaCls.php';
+
 $lhobj = new loaihang();
+$hanghoaObj = new hanghoa();
+
 $list_lh = $lhobj->LoaihangGetAll();
+$list_thuonghieu = $hanghoaObj->GetAllThuongHieu();
+$list_donvitinh = $hanghoaObj->GetAllDonViTinh();
+$list_nhanvien = $hanghoaObj->GetAllNhanVien();
+
 $l = count($list_lh);
 ?>
 <div>
@@ -41,6 +49,51 @@ $l = count($list_lh);
                 </td>
             </tr>
             <tr>
+                <td>Chọn thương hiệu:</td>
+                <td>
+                    <select name="idThuongHieu">
+                        <option value="">-- Chọn thương hiệu --</option>
+                        <?php
+                        foreach ($list_thuonghieu as $th) {
+                        ?>
+                            <option value="<?php echo $th->idThuongHieu; ?>"><?php echo $th->tenTH; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Chọn đơn vị tính:</td>
+                <td>
+                    <select name="idDonViTinh">
+                        <option value="">-- Chọn đơn vị tính --</option>
+                        <?php
+                        foreach ($list_donvitinh as $dvt) {
+                        ?>
+                            <option value="<?php echo $dvt->idDonViTinh; ?>"><?php echo $dvt->tenDonViTinh; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Chọn nhân viên:</td>
+                <td>
+                    <select name="idNhanVien">
+                        <option value="">-- Chọn nhân viên --</option>
+                        <?php
+                        foreach ($list_nhanvien as $nv) {
+                        ?>
+                            <option value="<?php echo $nv->idNhanVien; ?>"><?php echo $nv->tenNV; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td><input type="submit" id="btnsubmit" value="Tạo mới" /></td>
                 <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
             </tr>
@@ -48,7 +101,7 @@ $l = count($list_lh);
     </form>
     <hr />
     <?php
-    require './elements_LQA/mod/hanghoaCls.php';
+    require_once './elements_LQA/mod/hanghoaCls.php';
     $lhobj = new hanghoa();
     $list_lh = $lhobj->HanghoaGetAll();
     $l = count($list_lh);
@@ -64,6 +117,9 @@ $l = count($list_lh);
                 <th>Gia tham khảo</th>
                 <th>Mô tả</th>
                 <th>Hình ảnh</th>
+                <th>Thương Hiệu</th>
+                <th>Đơn Vị Tính</th>
+                <th>Nhân Viên</th>
                 <th>Chức năng</th>
             </thead>
             <?php
@@ -79,6 +135,9 @@ $l = count($list_lh);
 
                             <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
                         </td>
+                        <td><?php echo $u->idThuongHieu ?? 'Chưa chọn'; ?></td>
+                        <td><?php echo $u->idDonViTinh ?? 'Chưa chọn'; ?></td>
+                        <td><?php echo $u->idNhanVien ?? 'Chưa chọn'; ?></td>
                         <td align="center">
                             <?php
                             if (isset($_SESSION['ADMIN'])) {

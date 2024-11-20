@@ -94,8 +94,6 @@ class ThuocTinhHH extends Database
         return $getOne->fetch();
     }
 
-    // Lấy các thuộc tính theo ID loại hàng (nếu cần)
-    // Xác minh xem bảng có cột idloaihang không trước khi sử dụng phương thức này
     public function thuoctinhhhGetbyIdloaihang($idloaihang)
     {
         $sql = 'SELECT * FROM thuoctinhhh WHERE idloaihang = ?';

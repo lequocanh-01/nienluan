@@ -32,7 +32,7 @@ if (isset($_GET['reqHanghoa'])) {
                 <p class="card-text">Số lượng: <strong><?php echo isset($obj->soluong) ? $obj->soluong : 'N/A'; ?></strong></p>
                 <p class="card-text"><?php echo $obj->mota; ?></p>
                 <p class="card-text"><small class="text-muted">Giá bán: <?php echo $obj->giathamkhao; ?></small></p>
-                
+                <p class="card-text"><strong>Thương hiệu: </strong><?php echo $obj->idThuongHieu ? $hanghoa->GetThuongHieuById($obj->idThuongHieu)->tenTH : 'Chưa chọn'; ?></p>
                 <!-- Hiển thị thông tin thuộc tính hàng hóa -->
                 <?php if (!empty($listThuocTinh)): ?>
                     <h6>Thông số kỹ thuật:</h6>

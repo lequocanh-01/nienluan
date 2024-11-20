@@ -1,4 +1,5 @@
 <?php
+
 $s = '../../elements_LQA/mod/database.php';
 if (file_exists($s)) {
     $f = $s;
@@ -9,6 +10,7 @@ if (file_exists($s)) {
     }
 }
 require_once $f;
+
 class hanghoa extends Database
 {
     public function HanghoaGetAll()
@@ -21,10 +23,10 @@ class hanghoa extends Database
 
         return $getAll->fetchAll();
     }
-    public function HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang)
-    {   
-        $sql = "INSERT INTO hanghoa (tenhanghoa, mota, giathamkhao, hinhanh, idloaihang) VALUES (?,?,?,?,?)";
-        $data = array($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang);
+    public function HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien)
+    {
+        $sql = "INSERT INTO hanghoa (tenhanghoa, mota, giathamkhao, hinhanh, idloaihang, idThuongHieu, idDonViTinh, idNhanVien) VALUES (?,?,?,?,?,?,?,?)";
+        $data = array($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien);
         $add = $this->connect->prepare($sql);
         $add->execute($data);
         return $add->rowCount();
@@ -38,10 +40,10 @@ class hanghoa extends Database
         $del->execute($data);
         return $del->rowCount();
     }
-    public function HanghoaUpdate($tenhanghoa, $hinhanh, $mota,$giathamkhao, $idloaihang, $idhanghoa)
+    public function HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa)
     {
-        $sql = "UPDATE hanghoa set tenhanghoa=?, hinhanh=?, mota=?, giathamkhao=?, idloaihang=? WHERE idhanghoa =?";
-        $data = array($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idhanghoa);
+        $sql = "UPDATE hanghoa SET tenhanghoa=?, hinhanh=?, mota=?, giathamkhao=?, idloaihang=?, idThuongHieu=?, idDonViTinh=?, idNhanVien=? WHERE idhanghoa =?";
+        $data = array($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa);
 
         $update = $this->connect->prepare($sql);
         $update->execute($data);
@@ -51,7 +53,6 @@ class hanghoa extends Database
     {
         $sql = 'select * from hanghoa where idhanghoa=?';
         $data = array($idhanghoa);
-
 
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
@@ -65,7 +66,6 @@ class hanghoa extends Database
         $sql = 'select * from hanghoa where idloaihang=?';
         $data = array($idloaihang);
 
-
         $getOne = $this->connect->prepare($sql);
         $getOne->setFetchMode(PDO::FETCH_OBJ);
         $getOne->execute($data);
@@ -76,12 +76,13 @@ class hanghoa extends Database
     {
         $sql = "UPDATE hanghoa SET giathamkhao = ? WHERE idhanghoa = ?";
         $data = array($giaban, $idhanghoa);
-        
+
         $update = $this->connect->prepare($sql);
         $update->execute($data);
         return $update->rowCount();
     }
-    public function searchHanghoa($query) {
+    public function searchHanghoa($query)
+    {
         // Logic to search for products based on the query
         // This is just a placeholder; implement your actual search logic here
         $results = []; // Assume this will hold the search results
@@ -91,7 +92,8 @@ class hanghoa extends Database
 
         return $results;
     }
-    public function CheckRelations($idhanghoa) {
+    public function CheckRelations($idhanghoa)
+    {
         $tablesWithRelations = []; // Mảng để lưu tên các bảng có liên kết
 
         // Kiểm tra liên kết với bảng thuộc tính hàng hóa (ví dụ)
@@ -113,5 +115,40 @@ class hanghoa extends Database
         // Thêm các bảng khác mà bạn muốn kiểm tra ở đây
 
         return $tablesWithRelations; // Trả về danh sách các bảng có liên kết
+    }
+    public function GetAllThuongHieu()
+    {
+        $sql = 'SELECT * FROM thuonghieu';
+        $getAll = $this->connect->prepare($sql);
+        $getAll->setFetchMode(PDO::FETCH_OBJ);
+        $getAll->execute();
+        return $getAll->fetchAll();
+    }
+
+    public function GetAllDonViTinh()
+    {
+        $sql = 'SELECT * FROM donvitinh';
+        $getAll = $this->connect->prepare($sql);
+        $getAll->setFetchMode(PDO::FETCH_OBJ);
+        $getAll->execute();
+        return $getAll->fetchAll();
+    }
+
+    public function GetAllNhanVien()
+    {
+        $sql = 'SELECT * FROM nhanvien';
+        $getAll = $this->connect->prepare($sql);
+        $getAll->setFetchMode(PDO::FETCH_OBJ);
+        $getAll->execute();
+        return $getAll->fetchAll();
+    }
+
+    // Lấy thông tin thương hiệu theo ID
+    public function GetThuongHieuById($idThuongHieu)
+    {
+        $sql = 'SELECT * FROM thuonghieu WHERE idThuongHieu = ?';
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$idThuongHieu]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 }

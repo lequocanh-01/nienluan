@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../../elements_LQA/mod/hanghoaCls.php';
+require_once '../../elements_LQA/mod/hanghoaCls.php';
 //nếu có biến yêu cầu đlúng tên biến thì cbo vô nếu không đẩy về index.php ngăn truy cập mục đichs không rõ ràng
 if (isset($_GET['reqact'])) {
     $requestAction = $_GET['reqact'];
@@ -13,6 +13,9 @@ if (isset($_GET['reqact'])) {
             $giathamkhao = $_REQUEST['giathamkhao'];
             $mota = $_REQUEST['mota'];
             $idloaihang = $_REQUEST['idloaihang'];
+            $idThuongHieu = $_REQUEST['idThuongHieu'] ?? null;
+            $idDonViTinh = $_REQUEST['idDonViTinh'] ?? null;
+            $idNhanVien = $_REQUEST['idNhanVien'] ?? null;
 
             // Kiểm tra xem người dùng đã chọn loại hàng hay chưa
             if (empty($idloaihang)) {
@@ -38,7 +41,7 @@ if (isset($_GET['reqact'])) {
             // echo $hinhanh . '<br/>';
 
             $lh = new hanghoa();
-            $kq = $lh->HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang);
+            $kq = $lh->HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien);
             if ($kq) {
                 header('location: ../../index.php?req=hanghoaview&result=ok');
             } else {
@@ -77,6 +80,9 @@ if (isset($_GET['reqact'])) {
             $giathamkhao = $_REQUEST['giathamkhao'];
             $idloaihang = $_REQUEST['idloaihang'];
             $mota = $_REQUEST['mota'];
+            $idThuongHieu = $_REQUEST['idThuongHieu'] ?? null;
+            $idDonViTinh = $_REQUEST['idDonViTinh'] ?? null;
+            $idNhanVien = $_REQUEST['idNhanVien'] ?? null;
             
             if (file_exists($_FILES['fileimage']['tmp_name'])) {
                 $hinhanh_file = $_FILES['fileimage']['tmp_name'];
@@ -89,7 +95,7 @@ if (isset($_GET['reqact'])) {
             // echo $mota . '<br/>';
             // echo $hinhanh . '<br/>';
             $lh = new hanghoa();
-            $kq = $lh->HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idhanghoa);
+            $kq = $lh->HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa);
             if ($kq) {
                 header('location: ../../index.php?req=hanghoaview&result=ok');
             } else {
