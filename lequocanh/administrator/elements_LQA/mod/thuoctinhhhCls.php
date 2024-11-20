@@ -111,4 +111,21 @@ class ThuocTinhHH extends Database
 
         return $getOne->fetchAll();
     }
+
+    // Thêm phương thức này vào lớp ThuocTinhHH
+    public function thuoctinhhhGetbyIdHanghoa($idhanghoa)
+    {
+        $sql = 'SELECT * FROM thuoctinhhh WHERE idhanghoa = ?';
+        $data = array($idhanghoa);
+
+        $getOne = $this->connect->prepare($sql);
+        $getOne->setFetchMode(PDO::FETCH_OBJ);
+
+        if (!$getOne->execute($data)) {
+            error_log(print_r($getOne->errorInfo(), true));
+            return false;
+        }
+
+        return $getOne->fetchAll();
+    }
 }
