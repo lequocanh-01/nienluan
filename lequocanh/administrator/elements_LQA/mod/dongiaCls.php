@@ -13,22 +13,23 @@ class Dongia extends Database
 {
     public function DongiaGetAll()
     {
-        $sql = 'select * from Dongia';
-
+        $sql = 'SELECT * FROM dongia';
         $getAll = $this->connect->prepare($sql);
         $getAll->setFetchMode(PDO::FETCH_OBJ);
         $getAll->execute();
-
         return $getAll->fetchAll();
     }
-    public function DongiaAdd($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu)
+    
+    public function DongiaAdd($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung)
     {
-        $sql = "INSERT INTO dongia (idHangHoa, tenhanghoa, giaBan, ngayApDung, ngayKetThuc, dieuKien, ghiChu) VALUES (?,?,?,?,?,?,?)";
-        $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu);
+        $sql = "INSERT INTO dongia (idHangHoa, tenhanghoa, giaBan, ngayApDung, ngayKetThuc, dieuKien, ghiChu, apDung) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
         $add = $this->connect->prepare($sql);
         $add->execute($data);
         return $add->rowCount();
     }
+    
     public function DongiaDelete($idDongia)
     {
         $sql = "DELETE from Dongia where idDongia = ?";
@@ -38,24 +39,20 @@ class Dongia extends Database
         $del->execute($data);
         return $del->rowCount();
     }
-    public function DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu) {
-        try {
-            $sql = "UPDATE dongia SET idHangHoa=?, tenhanghoa=?, giaBan=?, ngayApDung=?, ngayKetThuc=?, dieuKien=?, ghiChu=? WHERE idDonGia=?";
-            $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $idDonGia);
-
-            $update = $this->connect->prepare($sql);
-            $update->execute($data);
-            return $update->rowCount();
-        } catch (Exception $e) {
-            // Log the error message or display it for debugging
-            error_log($e->getMessage());
-            return false; // Indicate failure
-        }
+    public function DongiaUpdateStatus($idDonGia, $apDung)
+    {
+        $sql = "UPDATE dongia SET apDung = ? WHERE idDonGia = ?";
+        $data = array($apDung ? 1 : 0, $idDonGia);
+        
+        $update = $this->connect->prepare($sql);
+        $update->execute($data);
+        return $update->rowCount();
     }
-    public function DongiaGetbyId($idDonGia)
+
+    public function DongiaGetbyId($idDongia)
     {
         $sql = 'select * from dongia where idDonGia=?';
-        $data = array($idDonGia);
+        $data = array($idDongia);
 
 
         $getOne = $this->connect->prepare($sql);
@@ -82,6 +79,35 @@ class Dongia extends Database
         $sql = "UPDATE hanghoa SET giathamkhao = ? WHERE idhanghoa = ?";
         $data = array($giaban, $idhanghoa);
 
+        $update = $this->connect->prepare($sql);
+        $update->execute($data);
+        return $update->rowCount();
+    }
+
+    public function DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung)
+    {
+        $sql = "UPDATE dongia SET 
+                idHangHoa = ?, 
+                tenhanghoa = ?, 
+                giaBan = ?, 
+                ngayApDung = ?, 
+                ngayKetThuc = ?, 
+                dieuKien = ?, 
+                ghiChu = ?,
+                apDung = ? 
+                WHERE idDonGia = ?";
+                
+        $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung, $idDonGia);
+
+        $update = $this->connect->prepare($sql);
+        $update->execute($data);
+        return $update->rowCount();
+    }
+
+    public function DongiaSetAllToFalse($idHangHoa) {
+        $sql = "UPDATE dongia SET apDung = 0 WHERE idHangHoa = ? AND apDung = 1";
+        $data = array($idHangHoa);
+        
         $update = $this->connect->prepare($sql);
         $update->execute($data);
         return $update->rowCount();

@@ -108,7 +108,15 @@ if (empty($list_hh)) {
                             <td><?php echo $u->ngayKetThuc; ?></td>
                             <td><?php echo $u->dieuKien; ?></td>
                             <td><?php echo $u->ghiChu; ?></td>
-                            
+                            <td>
+                                <form method="post" action="./elements_LQA/mdongia/updateSetFalse.php">
+                                    <input type="hidden" name="idDonGia" value="<?php echo $u->idDonGia; ?>">
+                                    <input type="hidden" name="apDung" value="<?php echo $u->apDung ? 'false' : 'true'; ?>">
+                                    <button type="submit" class="btn btn-sm <?php echo $u->apDung ? 'btn-success' : 'btn-danger'; ?>">
+                                        <?php echo $u->apDung ? 'True' : 'False'; ?>
+                                    </button>
+                                </form>
+                            </td>
                             <td align="center">
                                 <?php
                                 if (isset($_SESSION['ADMIN'])) {

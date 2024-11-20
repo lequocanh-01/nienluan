@@ -15,7 +15,7 @@ if (isset($_GET['reqact'])) {
             $ghiChu = $_REQUEST['ghichu'];
             $tenHangHoa  = $_REQUEST['tenHangHoa'];
             $dongiaObj = new Dongia();
-            $kq = $dongiaObj->DongiaAdd($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu);
+            $kq = $dongiaObj->DongiaAdd($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
             if ($kq) {
                 $hanghoaObj = new Hanghoa();
                 $hanghoaObj->HanghoaUpdatePrice($idHangHoa, $giaBan);
@@ -32,6 +32,25 @@ if (isset($_GET['reqact'])) {
             header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
             break;
 
+        case 'updateStatus':
+            $idDonGia = $_REQUEST['idDonGia'];
+            $apDung = ($_REQUEST['apDung'] === 'true');
+
+            $dongiaObj = new Dongia();
+            $dongia = $dongiaObj->DongiaGetbyId($idDonGia);
+
+            $kq = $dongiaObj->DongiaUpdateStatus($idDonGia, $apDung);
+
+            if ($kq) {
+                if ($apDung) {
+                    $dongiaObj->HanghoaUpdatePrice($dongia->idHangHoa, $dongia->giaBan);
+                }
+                header('location: ../../index.php?req=dongiaView&result=ok');
+            } else {
+                header('location: ../../index.php?req=dongiaView&result=notok');
+            }
+            break;
+
         case 'updatedongia':
             $idDonGia = $_REQUEST['idDonGia'];
             $idHangHoa = $_REQUEST['idHangHoa'];
@@ -43,13 +62,13 @@ if (isset($_GET['reqact'])) {
             $ghiChu = $_REQUEST['ghiChu'];
 
             $dongiaObj = new Dongia();
-            $kq = $dongiaObj->DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu);
-            
+            $kq = $dongiaObj->DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
+
             if ($kq) {
                 $hanghoaObj = new Hanghoa();
                 $hanghoaObj->HanghoaUpdatePrice($idHangHoa, $giaBan);
             }
-            
+
             header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
             break;
 
