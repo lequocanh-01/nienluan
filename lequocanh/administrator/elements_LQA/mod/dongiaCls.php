@@ -23,6 +23,8 @@ class Dongia extends Database
     public function DongiaAdd($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu)
     {
         $apDung = 1;
+        $this->DongiaSetAllToFalse($idHangHoa);
+
         $sql = "INSERT INTO dongia (idHangHoa, tenhanghoa, giaBan, ngayApDung, ngayKetThuc, dieuKien, ghiChu, apDung) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
