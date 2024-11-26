@@ -31,7 +31,13 @@ if (isset($_GET['reqHanghoa'])) {
                 <h5 class="card-title"><?php echo $obj->tenhanghoa; ?></h5>
                 <p class="card-text">Số lượng: <strong><?php echo isset($obj->soluong) ? $obj->soluong : 'N/A'; ?></strong></p>
                 <p class="card-text"><?php echo $obj->mota; ?></p>
-                <p class="card-text"><small class="text-muted">Giá bán: <?php echo $obj->giathamkhao; ?></small></p>
+                <p class="card-text">
+                    <small class="text-muted">Giá bán: 
+                        <span class="text-danger fw-bold">
+                            <?php echo number_format($obj->giathamkhao, 0, ',', '.') . ' VNĐ'; ?>
+                        </span>
+                    </small>
+                </p>
                 <p class="card-text"><strong>Thương hiệu: </strong><?php echo $obj->idThuongHieu ? $hanghoa->GetThuongHieuById($obj->idThuongHieu)->tenTH : 'Chưa chọn'; ?></p>
                 <!-- Hiển thị thông tin thuộc tính hàng hóa -->
                 <?php if (!empty($listThuocTinh)): ?>

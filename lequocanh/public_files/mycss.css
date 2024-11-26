@@ -235,3 +235,56 @@ body {
   justify-content: flex-start;
   padding: 20px;
 }
+
+#searchResults {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 350px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1050;
+}
+
+.search-suggestion {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.search-suggestion:hover {
+  background-color: #f8f9fa;
+}
+
+.search-suggestion img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+
+.suggestion-details {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.suggestion-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-price {
+  color: #dc3545;
+  font-size: 0.8rem;
+}

@@ -28,7 +28,12 @@ $list_hanghoa = $hanghoa->searchHanghoa($query);
                             <img src="data:image/png;base64,<?php echo $v->hinhanh; ?>" class="card-img-top" alt="<?php echo $v->tenhanghoa; ?>">
                             <div class="card-body">
                                 <h5 class="card-title text-primary"><?php echo $v->tenhanghoa; ?></h5>
-                                <p class="card-text text-muted">Giá bán: <span class="text-danger font-weight-bold"><?php echo number_format($v->giathamkhao, 0, ',', '.'); ?> VNĐ</span></p>
+                                <p class="card-text text-muted">
+                                    Giá bán: 
+                                    <span class="text-danger fw-bold">
+                                        <?php echo number_format($v->giathamkhao, 0, ',', '.') . ' VNĐ'; ?>
+                                    </span>
+                                </p>
                                 <a href="./index.php?reqHanghoa=<?php echo $v->idhanghoa; ?>" class="btn btn-outline-primary">Xem chi tiết</a>
                             </div>
                         </div>
@@ -41,6 +46,7 @@ $list_hanghoa = $hanghoa->searchHanghoa($query);
             <?php endif; ?>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

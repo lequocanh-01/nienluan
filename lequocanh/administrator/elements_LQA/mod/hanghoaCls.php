@@ -83,14 +83,11 @@ class hanghoa extends Database
     }
     public function searchHanghoa($query)
     {
-        // Logic to search for products based on the query
-        // This is just a placeholder; implement your actual search logic here
-        $results = []; // Assume this will hold the search results
-
-        // Example: Query the database to find matching products
-        // $results = $this->database->query("SELECT * FROM products WHERE name LIKE '%$query%'");
-
-        return $results;
+        $query = "%" . $query . "%";
+        $sql = "SELECT * FROM hanghoa WHERE tenhanghoa LIKE ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$query]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
     public function CheckRelations($idhanghoa)
     {

@@ -46,8 +46,10 @@ if (isset($_GET['reqView'])) {
             <div class="card h-100">
                 <img src="data:image/png;base64,<?php echo $v->hinhanh; ?>" class="card-img-top" alt="<?php echo $v->tenhanghoa; ?>">
                 <div class="card-body">
-                    <h5 class="card-title text-primary"><?php echo $v->tenhanghoa; ?></h5>
-                    <p class="card-text text-muted">Giá bán: <span class="text-danger font-weight-bold"><?php echo $v->giathamkhao; ?></span></p>
+                    <h5 class="card-title"><?php echo $v->tenhanghoa; ?></h5>
+                    <p class="card-text text-danger fw-bold">
+                        <?php echo number_format($v->giathamkhao, 0, ',', '.') . ' VNĐ'; ?>
+                    </p>
                     <a href="./index.php?reqHanghoa=<?php echo $v->idhanghoa; ?>" class="btn btn-outline-primary">Xem chi tiết</a>
                 </div>
             </div>

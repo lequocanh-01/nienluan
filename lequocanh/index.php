@@ -15,15 +15,26 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <h1 class="h4 mb-0">Trang sản phẩm</h1>
+                        <h1 class="h4 mb-0">Cửa Hàng Điện Thoại</h1>
                     </div>
-                    <div class="col text-end">
-                        <form class="d-flex" action="./search.php" method="GET">
-                            <input class="form-control me-2" type="search" placeholder="Tìm sản phẩm"
-                                aria-label="Search" name="query">
-                            <button class="btn btn-outline-light" type="submit">Tìm</button>
-                        </form>
-                        <a href="./administrator/userLogin.php" class="btn btn-primary">Đăng nhập</a>
+                    <div class="col text-end position-relative">
+                        <div style="display: inline-block; position: relative; min-width: 350px;">
+                            <form class="d-flex" action="./search.php" method="GET" id="searchForm">
+                                <input class="form-control me-2" type="search" placeholder="Tìm sản phẩm"
+                                    aria-label="Search" name="query" id="searchInput">
+                                <button class="btn btn-outline-light" type="submit">Tìm</button>
+                            </form>
+                            <div id="searchResults"></div>
+                        </div>
+                        <a href="./administrator/userLogin.php" class="btn btn-primary ms-2">
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                </svg>
+                                Đăng nhập
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -78,6 +89,61 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let searchTimeout;
+    const searchInput = $('#searchInput');
+    const searchResults = $('#searchResults');
+
+    searchInput.on('input', function() {
+        clearTimeout(searchTimeout);
+        const query = $(this).val();
+        
+        if(query.length < 2) {
+            searchResults.hide();
+            return;
+        }
+
+        searchTimeout = setTimeout(function() {
+            $.get('search_suggestions.php', { term: query }, function(data) {
+                if(data.length > 0) {
+                    let html = '';
+                    data.forEach(item => {
+                        html += `
+                            <a href="./index.php?reqHanghoa=${item.id}" class="text-decoration-none text-dark">
+                                <div class="search-suggestion">
+                                    <img src="data:image/png;base64,${item.image}" alt="${item.name}">
+                                    <div class="suggestion-details">
+                                        <div class="suggestion-name">${item.name}</div>
+                                        <div class="suggestion-price">${item.price}</div>
+                                    </div>
+                                </div>
+                            </a>`;
+                    });
+                    searchResults.html(html).show();
+                } else {
+                    searchResults.html('<div class="p-3 text-center">Không tìm thấy sản phẩm</div>').show();
+                }
+            });
+        }, 300);
+    });
+
+    // Ẩn kết quả khi click bên ngoài
+    $(document).on('click', function(e) {
+        if(!$(e.target).closest('#searchForm').length) {
+            searchResults.hide();
+        }
+    });
+
+    // Hiện lại kết quả khi focus vào input
+    searchInput.on('focus', function() {
+        if($(this).val().length >= 2) {
+            searchResults.show();
+        }
+    });
+});
+</script>
 </body>
 
 </html>
