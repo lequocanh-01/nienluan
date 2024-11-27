@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once './administrator/elements_LQA/mod/giohangCls.php';
+
+// Khởi tạo đối tượng GioHang và lấy số lượng sản phẩm
+$giohang = new GioHang();
+$cartItemCount = $giohang->getCartItemCount();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -124,7 +133,7 @@
                     <a href="./administrator/elements_LQA/mgiohang/giohangView.php" class="btn btn-light position-relative">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            0
+                            <?php echo $cartItemCount; ?>
                         </span>
                     </a>
                 </div>
