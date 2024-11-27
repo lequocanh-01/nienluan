@@ -19,98 +19,203 @@ $cart = $giohang->getCart();
             max-width: 1200px;
             margin: 20px auto;
             background: #fff;
-            padding: 20px;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .13);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
 
         .cart-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 20px;
         }
 
         .cart-table th {
             background-color: #f8f9fa;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 2px solid #e9ecef;
+            color: #495057;
+            font-weight: 600;
         }
 
         .cart-table td {
-            padding: 12px;
+            padding: 15px;
             text-align: center;
             vertical-align: middle;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #e9ecef;
         }
 
         .product-image {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .product-name {
             text-align: left;
-            color: #212529;
+            color: #2c3e50;
+            font-weight: 500;
         }
 
         .price {
-            color: #ee4d2d;
-            font-weight: 500;
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 1.1em;
         }
 
         .quantity-control {
             display: inline-flex;
             align-items: center;
-            border: 1px solid #dee2e6;
-            border-radius: 3px;
+            border: 1px solid #dde2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
         }
 
         .quantity-btn {
             border: none;
-            background: none;
-            padding: 5px 10px;
+            background: #f8f9fa;
+            padding: 8px 15px;
             cursor: pointer;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #e9ecef;
+            color: #212529;
         }
 
         .quantity-input {
-            width: 50px;
+            width: 60px;
             text-align: center;
             border: none;
-            border-left: 1px solid #dee2e6;
-            border-right: 1px solid #dee2e6;
+            border-left: 1px solid #dde2e6;
+            border-right: 1px solid #dde2e6;
+            padding: 8px;
+            font-weight: 500;
         }
 
         .remove-btn {
-            color: #ff424f;
+            color: #dc3545;
             text-decoration: none;
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px 10px;
-            font-size: 14px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
 
         .remove-btn:hover {
-            color: #ff0015;
-            text-decoration: underline;
+            background-color: #dc3545;
+            color: #fff;
         }
 
         .cart-footer {
-            margin-top: 20px;
+            margin-top: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-top: 1px solid #dee2e6;
+            border-top: 2px solid #e9ecef;
         }
 
         .checkout-btn {
-            background-color: #ee4d2d;
+            background-color: #2ecc71;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+        }
+
+        .form-check-input {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .form-check-input:checked {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-cart img {
+            width: 150px;
+            margin-bottom: 25px;
+            opacity: 0.7;
+        }
+
+        .empty-cart h5 {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(149, 165, 166, 0.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cart-container {
+                padding: 15px;
+            }
+
+            .product-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .cart-footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -183,12 +288,14 @@ $cart = $giohang->getCart();
                 </div>
             </div>
         <?php else: ?>
-            <div class="text-center py-5">
-                <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9bdd8040b334d31946f49e36beaf32db.png"
-                    alt="Empty Cart" style="width: 100px; margin-bottom: 20px;">
-                <h5>Giỏ hàng của bạn còn trống</h5>
-                <a href="../../../index.php" class="btn btn-primary mt-3">Mua sắm ngay</a>
-                <button onclick="goBack()" class="btn btn-secondary mt-3 ms-2">Quay lại</button>
+            <div class="cart-container">
+                <div class="empty-cart">
+                    <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9bdd8040b334d31946f49e36beaf32db.png" 
+                         alt="Empty Cart">
+                    <h5>Giỏ hàng của bạn còn trống</h5>
+                    <a href="../../../index.php" class="btn btn-primary">Mua sắm ngay</a>
+                    <button onclick="goBack()" class="btn btn-secondary ms-2">Quay lại</button>
+                </div>
             </div>
         <?php endif; ?>
     </div>
@@ -328,12 +435,14 @@ $cart = $giohang->getCart();
                         // Kiểm tra nếu giỏ hàng trống
                         if (document.querySelectorAll('.cart-table tbody tr').length === 0) {
                             document.querySelector('.cart-container').innerHTML = `
-                                <div class="text-center py-5">
-                                    <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9bdd8040b334d31946f49e36beaf32db.png" 
-                                         alt="Empty Cart" style="width: 100px; margin-bottom: 20px;">
-                                    <h5>Giỏ hàng của bạn còn trống</h5>
-                                    <a href="../../../index.php" class="btn btn-primary mt-3">Mua sắm ngay</a>
-                                    <button onclick="goBack()" class="btn btn-secondary mt-3 ms-2">Quay lại</button>
+                                <div class="cart-container">
+                                    <div class="empty-cart">
+                                        <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9bdd8040b334d31946f49e36beaf32db.png" 
+                                             alt="Empty Cart">
+                                        <h5>Giỏ hàng của bạn còn trống</h5>
+                                        <a href="../../../index.php" class="btn btn-primary">Mua sắm ngay</a>
+                                        <button onclick="goBack()" class="btn btn-secondary ms-2">Quay lại</button>
+                                    </div>
                                 </div>
                             `;
                         }

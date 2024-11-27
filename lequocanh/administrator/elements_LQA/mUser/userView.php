@@ -112,14 +112,21 @@
                     </td>
                     <td align="center">
                         <?php if ($isAdmin) { ?>
-                        <a href='./elements_LQA/mUser/userAct.php?reqact=deleteuser&iduser=<?php echo $u->iduser; ?>'>
+                        <a href='./elements_LQA/mUser/userAct.php?reqact=deleteuser&iduser=<?php echo $u->iduser; ?>' 
+                           class="admin-action"
+                           data-username="<?php echo $u->username; ?>"
+                           data-action="delete">
                             <img src="./img_LQA/Delete.png" class="iconimg" alt="">
                         </a>
                         <?php } else { ?>
                         <img src="./img_LQA/Delete.png" class="iconimg" alt="">
                         <?php } ?>
+                        
                         <?php if ($isAdmin || (isset($_SESSION['USER']) && $_SESSION['USER'] == $u->username)) { ?>
-                        <a href='index.php?req=updateuser&iduser=<?php echo $u->iduser; ?>'>
+                        <a href='index.php?req=updateuser&iduser=<?php echo $u->iduser; ?>'
+                           class="admin-action"
+                           data-username="<?php echo $u->username; ?>"
+                           data-action="update">
                             <img src="./img_LQA/Update.png" class="iconimg" alt="">
                         </a>
                         <?php } else { ?>
@@ -140,4 +147,25 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1" crossorigin="anonymous"></script>
+    <script>
+    $(document).ready(function() {
+        // Xử lý khi click vào nút xóa hoặc cập nhật cho tài khoản admin
+        $('.admin-action').click(function(e) {
+            e.preventDefault();
+            const username = $(this).data('username');
+            const action = $(this).data('action');
+            const href = $(this).attr('href');
+            
+            if (username === 'admin') {
+                const adminPass = prompt('Vui lòng nhập mật khẩu admin để thực hiện thao tác này:');
+                if (adminPass) {
+                    // Thêm mật khẩu vào URL
+                    window.location.href = href + '&admin_password=' + encodeURIComponent(adminPass);
+                }
+            } else {
+                window.location.href = href;
+            }
+        });
+    });
+    </script>
 </body>

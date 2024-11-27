@@ -26,11 +26,21 @@ if (isset($_GET['reqact'])) {
         case 'deleteuser':
             $iduser = $_REQUEST['iduser'];
             $userObj = new user();
+            $user = $userObj->UserGetByid($iduser);
+            
+            // Kiểm tra nếu là tài khoản admin
+            if ($user->username === 'admin') {
+                $admin_password = isset($_REQUEST['admin_password']) ? $_REQUEST['admin_password'] : '';
+                if ($admin_password !== 'lequocanh') {
+                    header('location: ../../index.php?req=userview&result=invalid_admin_pass');
+                    exit();
+                }
+            }
+            
             $kq = $userObj->UserDelete($iduser);
             if($kq){
                 header('location: ../../index.php?req=userview&result=ok');
-            }
-            else{
+            } else {
                 header('location: ../../index.php?req=userview&result=notok');
             }
             break;
@@ -57,12 +67,21 @@ if (isset($_GET['reqact'])) {
             $ngaysinh = $_REQUEST['ngaysinh'];
             $diachi = $_REQUEST['diachi'];
             $dienthoai = $_REQUEST['dienthoai'];
+            
+            // Kiểm tra nếu là tài khoản admin
+            if ($username === 'admin') {
+                $admin_password = isset($_REQUEST['admin_password']) ? $_REQUEST['admin_password'] : '';
+                if ($admin_password !== 'lequocanh') {
+                    header('location: ../../index.php?req=userview&result=invalid_admin_pass');
+                    exit();
+                }
+            }
+            
             $userObj = new user();
             $kq = $userObj->UserUpdate($username,$password,$hoten,$gioitinh,$ngaysinh,$diachi,$dienthoai,$iduser);
             if($kq){
                 header('location: ../../index.php?req=userview&result=ok');
-            }
-            else{
+            } else {
                 header('location: ../../index.php?req=userview&result=notok');
             }
             break;   
@@ -80,11 +99,10 @@ if (isset($_GET['reqact'])) {
                 }
                 // Đặt cookie sau khi đăng nhập thành công
                 $time_login = date('h:i - d/m/Y');
-                setcookie($username, $time_login, time() + (86400 * 30), '/'); // 1 tháng
+                setcookie($username, $time_login, time() + (86400 * 30), '/');
                 header('location: ../../index.php?req=userview&result=ok');
             } else {
-                $error = urlencode("Sai tên đăng nhập hoặc mật khẩu");
-                header('location: ../../userLogin.php?error=' . $error);
+                header('location: ../../userLogin.php?error=1');
             }
             break;
 
