@@ -201,7 +201,67 @@ $cartItemCount = $giohang->getCartItemCount();
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Existing scripts remain unchanged -->
+    <script>
+        $(document).ready(function() {
+            const searchInput = $('#searchInput');
+            const searchResults = $('#searchResults');
+            let searchTimeout;
+
+            // Xử lý sự kiện nhập vào ô tìm kiếm
+            searchInput.on('input', function() {
+                clearTimeout(searchTimeout);
+                const query = $(this).val().trim();
+                
+                if (query.length >= 2) {
+                    searchTimeout = setTimeout(() => {
+                        $.ajax({
+                            url: 'search_suggestions.php',
+                            method: 'GET',
+                            data: { term: query },
+                            success: function(data) {
+                                if (data.length > 0) {
+                                    let html = '';
+                                    data.forEach(item => {
+                                        html += `
+                                            <a href="index.php?reqHanghoa=${item.id}" class="text-decoration-none text-dark">
+                                                <div class="search-suggestion">
+                                                    <img src="data:image/png;base64,${item.image}" alt="${item.name}">
+                                                    <div>
+                                                        <div class="fw-bold">${item.name}</div>
+                                                        <div class="text-muted">${item.price}</div>
+                                                    </div>
+                                                </div>
+                                            </a>`;
+                                    });
+                                    searchResults.html(html).show();
+                                } else {
+                                    searchResults.hide();
+                                }
+                            }
+                        });
+                    }, 300);
+                } else {
+                    searchResults.hide();
+                }
+            });
+
+            // Ẩn kết quả khi click ra ngoài
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.search-container').length) {
+                    searchResults.hide();
+                }
+            });
+
+            // Xử lý form submit
+            $('#searchForm').on('submit', function(e) {
+                const query = searchInput.val().trim();
+                if (query.length < 2) {
+                    e.preventDefault();
+                    alert('Vui lòng nhập ít nhất 2 ký tự để tìm kiếm');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
