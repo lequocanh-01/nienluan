@@ -16,31 +16,6 @@ $carousel_items = array_slice($list_hanghoa, 0, 5);
 // echo "Số sản phẩm trong carousel: " . count($carousel_items);
 ?>
 
-<!-- Thêm style cho carousel -->
-<style>
-.carousel {
-    max-width: 800px;
-    margin: 0 auto 2rem auto;
-}
-.carousel-item {
-    height: 250px; /* Giảm chiều cao */
-    background-color: #f8f9fa;
-}
-.carousel-item img {
-    max-height: 200px; /* Giới hạn chiều cao ảnh */
-    width: auto; /* Để ảnh giữ tỷ lệ */
-    margin: 0 auto;
-    display: block;
-}
-.carousel-caption {
-    background: rgba(0,0,0,0.5);
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px;
-}
-</style>
-
 <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         <?php 
@@ -79,16 +54,7 @@ $carousel_items = array_slice($list_hanghoa, 0, 5);
 </div>
 
 <!-- Thêm script khởi tạo carousel -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var carousel = new bootstrap.Carousel(document.getElementById('productCarousel'), {
-        interval: 3000,
-        wrap: true,
-        keyboard: true,
-        pause: 'hover'
-    });
-});
-</script>
+<script src="administrator/elements_LQA/js_LQA/jscript.js"></script>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <?php

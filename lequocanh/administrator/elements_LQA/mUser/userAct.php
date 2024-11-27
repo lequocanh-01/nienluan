@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../../elements_LQA/mod/userCls.php';
+require '../../elements_LQA/mod/giohangCls.php';
 
 if (isset($_GET['reqact'])) {
     $requestAction = $_GET['reqact'];
@@ -59,7 +60,6 @@ if (isset($_GET['reqact'])) {
                 }
                 break;
         case 'updateuser':
-            $iduser = $_REQUEST['iduser'];
             $username = $_REQUEST['username'];
             $password = $_REQUEST['password'];
             $hoten = $_REQUEST['hoten'];
@@ -67,8 +67,9 @@ if (isset($_GET['reqact'])) {
             $ngaysinh = $_REQUEST['ngaysinh'];
             $diachi = $_REQUEST['diachi'];
             $dienthoai = $_REQUEST['dienthoai'];
+            $iduser = $_REQUEST['iduser'];
             
-            // Kiểm tra nếu là tài khoản admin
+            // Kiểm tra nếu là admin và yêu cầu mật khẩu admin
             if ($username === 'admin') {
                 $admin_password = isset($_REQUEST['admin_password']) ? $_REQUEST['admin_password'] : '';
                 if ($admin_password !== 'lequocanh') {
@@ -78,13 +79,20 @@ if (isset($_GET['reqact'])) {
             }
             
             $userObj = new user();
-            $kq = $userObj->UserUpdate($username,$password,$hoten,$gioitinh,$ngaysinh,$diachi,$dienthoai,$iduser);
-            if($kq){
+            // Kiểm tra xem có thay đổi mật khẩu không
+            if (empty($password)) {
+                // Nếu không có mật khẩu mới, lấy mật khẩu cũ
+                $oldUserData = $userObj->UserGetbyId($iduser);
+                $password = $oldUserData->password;
+            }
+            
+            $kq = $userObj->UserUpdate($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser);
+            if($kq) {
                 header('location: ../../index.php?req=userview&result=ok');
             } else {
                 header('location: ../../index.php?req=userview&result=notok');
             }
-            break;   
+            break;
             
         case 'checklogin':
             $username = $_REQUEST['username'];
@@ -94,33 +102,46 @@ if (isset($_GET['reqact'])) {
             if ($kq) {
                 if ($username == 'admin') {
                     $_SESSION['ADMIN'] = $username;
+                    // Chuyển giỏ hàng từ session sang database
+                    $giohang = new GioHang();
+                    $giohang->migrateSessionCartToDatabase($username);
+                    header('location: ../../index.php?req=userview&result=ok');
                 } else {
                     $_SESSION['USER'] = $username;
+                    // Chuyển giỏ hàng từ session sang database
+                    $giohang = new GioHang();
+                    $giohang->migrateSessionCartToDatabase($username);
+                    // Đặt cookie sau khi đăng nhập thành công
+                    $time_login = date('h:i - d/m/Y');
+                    setcookie($username, $time_login, time() + (86400 * 30), '/');
+                    header('location: ../../../index.php');
                 }
-                // Đặt cookie sau khi đăng nhập thành công
-                $time_login = date('h:i - d/m/Y');
-                setcookie($username, $time_login, time() + (86400 * 30), '/');
-                header('location: ../../index.php?req=userview&result=ok');
             } else {
                 header('location: ../../userLogin.php?error=1');
             }
             break;
 
         case 'userlogout':
-                $time_login = date('h:i - d/m/Y');
-                if(isset($_SESSION['USER'])){
-                    $namelogin = $_SESSION['USER'];
-                }
-                if(isset($_SESSION['ADMIN'])){
-                    $namelogin = $_SESSION['ADMIN'];
-                }
-                // Chỉnh sửa tên cookie
-                $namelogin = str_replace(' ', '-', $namelogin);
-                $namelogin = str_replace('"', '', $namelogin);
-                setcookie($namelogin, $time_login, time() + (86400 * 30), '/'); // 1 tháng
-                session_destroy();
+            $time_login = date('h:i - d/m/Y');
+            if(isset($_SESSION['USER'])){
+                $namelogin = $_SESSION['USER'];
+            }
+            if(isset($_SESSION['ADMIN'])){
+                $namelogin = $_SESSION['ADMIN'];
+            }
+            // Chỉnh sửa tên cookie
+            $namelogin = str_replace(' ', '-', $namelogin);
+            $namelogin = str_replace('"', '', $namelogin);
+            setcookie($namelogin, $time_login, time() + (86400 * 30), '/'); // 1 tháng
+            session_destroy();
+            
+            // Chuyển hướng về trang chủ sau khi đăng xuất
+            if(isset($_SESSION['ADMIN'])) {
                 header('location: ../../index.php');
-                break;
+            } else {
+                header('location: ../../../index.php');
+            }
+            break;
         default:
             header('Location: ../../index.php?req=userview');
             break;

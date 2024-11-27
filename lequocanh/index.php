@@ -17,423 +17,7 @@ $cartItemCount = $giohang->getCartItemCount();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Cửa Hàng Điện Thoại</title>
-    <style>
-        /* Custom styles */
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .search-container {
-            position: relative;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        #searchResults {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 0.375rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            display: none;
-        }
-
-        .search-suggestion {
-            display: flex;
-            padding: 0.75rem;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
-        }
-
-        .search-suggestion:hover {
-            background-color: #f8f9fa;
-        }
-
-        .search-suggestion img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            margin-right: 1rem;
-        }
-
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
-            padding: 4rem 0;
-            margin-bottom: 2rem;
-        }
-
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #0d6efd;
-        }
-
-        .footer {
-            background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
-            color: #fff;
-            padding: 4rem 0 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-        }
-
-        .footer h5 {
-            color: #fff;
-            font-weight: 600;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        .footer h5::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 2px;
-            background: #00c6ff;
-        }
-
-        .footer .text-muted {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
-
-        .footer a.text-muted {
-            transition: all 0.3s ease;
-        }
-
-        .footer a.text-muted:hover {
-            color: #fff !important;
-            text-decoration: none;
-            padding-left: 5px;
-        }
-
-        .footer .social-icons a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            margin-right: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .footer .social-icons a:hover {
-            background: #00c6ff;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3);
-        }
-
-        .footer .input-group .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #fff;
-        }
-
-        .footer .input-group .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .footer .input-group .btn-primary {
-            background: #00c6ff;
-            border: none;
-        }
-
-        .footer .input-group .btn-primary:hover {
-            background: #0072ff;
-        }
-
-        .footer hr.text-muted {
-            opacity: 0.1;
-        }
-
-        .footer .payment-methods img {
-            filter: brightness(0) invert(1);
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .footer .payment-methods img:hover {
-            opacity: 1;
-        }
-
-        /* Thêm hiệu ứng hover cho các nút */
-        .btn {
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Cải thiện thanh tìm kiếm */
-        .search-container .form-control {
-            border-radius: 20px;
-            padding-left: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-container .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-            border-color: #0d6efd;
-        }
-
-        .search-container .btn {
-            border-radius: 20px;
-            margin-left: -1px;
-        }
-
-        /* Cải thiện card sản phẩm */
-        .card {
-            transition: all 0.3s ease;
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-img-top {
-            transition: all 0.3s ease;
-        }
-
-        .card:hover .card-img-top {
-            transform: scale(1.05);
-        }
-
-        /* Cải thiện navbar */
-        .navbar {
-            background: linear-gradient(135deg, #0a2540 0%, #1a365d 100%) !important;
-            padding: 1rem 0;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-brand:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-item {
-            margin: 0 5px;
-            position: relative;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #fff !important;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .nav-link.active {
-            background: rgba(0, 198, 255, 0.2);
-            color: #fff !important;
-        }
-
-        /* Hiệu ứng hover mới cho nav-link */
-        .nav-link:hover::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-            animation: navHover 0.3s forwards;
-        }
-
-        @keyframes navHover {
-            to {
-                width: 80%;
-            }
-        }
-
-        /* Cải thiện cart badge */
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ff4757;
-            color: white;
-            border-radius: 50%;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border: 2px solid #fff;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
-            }
-        }
-
-        /* Cải thiện search box */
-        .search-container .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            padding-left: 2.5rem;
-            height: 45px;
-        }
-
-        .search-container .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-container .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 991.98px) {
-            .navbar-collapse {
-                background: linear-gradient(135deg, #0a2540 0%, #1a365d 100%);
-                padding: 1rem;
-                border-radius: 10px;
-                margin-top: 1rem;
-            }
-
-            .nav-link {
-                padding: 0.75rem 1rem;
-                border-radius: 5px;
-            }
-
-            .nav-link:hover::after {
-                display: none;
-            }
-        }
-
-        .footer {
-            background: linear-gradient(135deg, #212529 0%, #343a40 100%);
-        }
-
-        .social-icons a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            margin-right: 0.5rem;
-        }
-
-        .social-icons a:hover {
-            background: #0d6efd;
-            transform: translateY(-3px);
-        }
-
-        /* Cải thiện kết quả tìm kiếm */
-        #searchResults {
-            border-radius: 15px;
-            margin-top: 5px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-suggestion {
-            border-radius: 10px;
-            margin: 5px;
-        }
-
-        .search-suggestion img {
-            border-radius: 10px;
-        }
-
-        /* Badge số lượng giỏ hàng */
-        .badge {
-            transition: all 0.3s ease;
-        }
-
-        .badge:hover {
-            transform: scale(1.1);
-        }
-
-        /* Thêm hiệu ứng loading */
-        .loading {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            100% {
-                left: 100%;
-            }
-        }
-    </style>
+    
 </head>
 
 <body class="bg-light">
@@ -462,15 +46,41 @@ $cartItemCount = $giohang->getCartItemCount();
                 </div>
 
                 <div class="ms-auto d-flex align-items-center">
-                    <a href="./administrator/userLogin.php" class="btn btn-light me-2">
-                        <i class="fas fa-user me-2"></i>
-                        Đăng nhập
-                    </a>
+                    <?php if (isset($_SESSION['USER'])): ?>
+                        <div class="dropdown me-2">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>
+                                <?php echo $_SESSION['USER']; ?>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userProfile.php">
+                                    <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userAct.php?reqact=userlogout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a></li>
+                            </ul>
+                        </div>
+                    <?php elseif (isset($_SESSION['ADMIN'])): ?>
+                        <a href="./administrator/index.php" class="btn btn-light me-2">
+                            <i class="fas fa-user-shield me-2"></i>
+                            Quản trị viên
+                        </a>
+                    <?php else: ?>
+                        <a href="./administrator/userLogin.php" class="btn btn-light me-2">
+                            <i class="fas fa-user me-2"></i>
+                            Đăng nhập
+                        </a>
+                    <?php endif; ?>
+                    
                     <a href="./administrator/elements_LQA/mgiohang/giohangView.php" class="btn btn-light position-relative">
                         <i class="fas fa-shopping-cart"></i>
+                        <?php if (isset($_SESSION['USER']) || isset($_SESSION['ADMIN'])): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             <?php echo $cartItemCount; ?>
                         </span>
+                        <?php endif; ?>
                     </a>
                 </div>
             </div>
@@ -588,67 +198,7 @@ $cartItemCount = $giohang->getCartItemCount();
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            const searchInput = $('#searchInput');
-            const searchResults = $('#searchResults');
-            let searchTimeout;
-
-            // Xử lý sự kiện nhập vào ô tìm kiếm
-            searchInput.on('input', function() {
-                clearTimeout(searchTimeout);
-                const query = $(this).val().trim();
-                
-                if (query.length >= 2) {
-                    searchTimeout = setTimeout(() => {
-                        $.ajax({
-                            url: 'search_suggestions.php',
-                            method: 'GET',
-                            data: { term: query },
-                            success: function(data) {
-                                if (data.length > 0) {
-                                    let html = '';
-                                    data.forEach(item => {
-                                        html += `
-                                            <a href="index.php?reqHanghoa=${item.id}" class="text-decoration-none text-dark">
-                                                <div class="search-suggestion">
-                                                    <img src="data:image/png;base64,${item.image}" alt="${item.name}">
-                                                    <div>
-                                                        <div class="fw-bold">${item.name}</div>
-                                                        <div class="text-muted">${item.price}</div>
-                                                    </div>
-                                                </div>
-                                            </a>`;
-                                    });
-                                    searchResults.html(html).show();
-                                } else {
-                                    searchResults.hide();
-                                }
-                            }
-                        });
-                    }, 300);
-                } else {
-                    searchResults.hide();
-                }
-            });
-
-            // Ẩn kết quả khi click ra ngoài
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('.search-container').length) {
-                    searchResults.hide();
-                }
-            });
-
-            // Xử lý form submit
-            $('#searchForm').on('submit', function(e) {
-                const query = searchInput.val().trim();
-                if (query.length < 2) {
-                    e.preventDefault();
-                    alert('Vui lòng nhập ít nhất 2 ký tự để tìm kiếm');
-                }
-            });
-        });
-    </script>
+    <script src="administrator/elements_LQA/js_LQA/jscript.js"></script>
 </body>
 
 </html>

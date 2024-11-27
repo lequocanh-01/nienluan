@@ -19,6 +19,8 @@ if (isset($_GET['reqHanghoa'])) {
     $listThuocTinh = $thuocTinhHHObj->thuoctinhhhGetbyIdHanghoa($idhanghoa); 
 }
 ?>
+  <link rel="stylesheet" href="public_files/mycss.css">  
+  <script src="administrator/elements_LQA/js_LQA/jscript.js"></script>
 
 <div class="card mb-3">
     <div class="row g-0">
@@ -78,8 +80,29 @@ if (isset($_GET['reqHanghoa'])) {
 </div>
 
 <style>
-.btn-success:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
+
 </style>
+
+<?php if (isset($_SESSION['USER'])): ?>
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user me-2"></i>
+            <?php echo $_SESSION['USER']; ?>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userAct.php?reqact=userlogout">
+                <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+            </a></li>
+        </ul>
+    </div>
+<?php elseif (isset($_SESSION['ADMIN'])): ?>
+    <a href="./administrator/index.php" class="btn btn-light me-2">
+        <i class="fas fa-user-shield me-2"></i>
+        Quản trị viên
+    </a>
+<?php else: ?>
+    <a href="./administrator/userLogin.php" class="btn btn-light me-2">
+        <i class="fas fa-user me-2"></i>
+        Đăng nhập
+    </a>
+<?php endif; ?>

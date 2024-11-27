@@ -12,13 +12,17 @@ if (isset($data['productId']) && isset($data['quantity'])) {
     $quantity = (int)$data['quantity'];
 
     // Kiểm tra số lượng có hợp lệ
-    if ($productId > 0 && $quantity > 0) {
-        $giohang->updateCart($productId, $quantity);
-        $response = ['success' => true];
-    } else {
+    if ($quantity < 1) {
         $response = [
             'success' => false,
             'message' => 'Số lượng không hợp lệ!'
+        ];
+    } else {
+        // Cập nhật số lượng trong giỏ hàng
+        $result = $giohang->updateQuantity($productId, $quantity);
+        $response = [
+            'success' => $result,
+            'message' => $result ? 'Cập nhật thành công' : 'Cập nhật thất bại'
         ];
     }
 } else {
