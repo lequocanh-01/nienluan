@@ -1,15 +1,25 @@
 <?php
 
-$s = '../../elements_LQA/mod/database.php';
-if (file_exists($s)) {
-    $f = $s;
-} else {
-    $f = './elements_LQA/mod/database.php';
-    if (!file_exists($f)) {
-        $f = './administrator/elements_LQA/mod/database.php';
+// Xác định đường dẫn tới file database.php
+$possible_paths = array(
+    dirname(__FILE__) . '/database.php',                    // Cùng thư mục
+    dirname(dirname(dirname(__FILE__))) . '/elements_LQA/mod/database.php',  // Từ thư mục administrator
+    dirname(dirname(dirname(dirname(__FILE__)))) . '/administrator/elements_LQA/mod/database.php'  // Từ thư mục gốc
+);
+
+$database_file = null;
+foreach ($possible_paths as $path) {
+    if (file_exists($path)) {
+        $database_file = $path;
+        break;
     }
 }
-require_once $f;
+
+if ($database_file === null) {
+    die("Không thể tìm thấy file database.php");
+}
+
+require_once $database_file;
 
 class hanghoa extends Database
 {

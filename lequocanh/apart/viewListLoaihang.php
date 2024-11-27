@@ -1,42 +1,94 @@
 <?php
-require_once './administrator/elements_LQA/mod/hanghoaCls.php';
+require_once dirname(dirname(__FILE__)) . '/administrator/elements_LQA/mod/hanghoaCls.php';
 $hanghoa = new hanghoa();
 
 if (isset($_GET['reqView'])) {
     $idloaihang = $_GET['reqView'];
     $list_hanghoa = $hanghoa->HanghoaGetbyIdloaihang($idloaihang);
-    $s = count($list_hanghoa);
 } else {
     $list_hanghoa = $hanghoa->HanghoaGetAll();
-    $s = count($list_hanghoa);
 }
+
+// Lấy 5 sản phẩm mới nhất cho carousel
+$carousel_items = array_slice($list_hanghoa, 0, 5);
+
+// Debug: Kiểm tra số lượng sản phẩm
+// echo "Số sản phẩm trong carousel: " . count($carousel_items);
 ?>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Thêm style cho carousel -->
+<style>
+.carousel {
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+}
+.carousel-item {
+    height: 250px; /* Giảm chiều cao */
+    background-color: #f8f9fa;
+}
+.carousel-item img {
+    max-height: 200px; /* Giới hạn chiều cao ảnh */
+    width: auto; /* Để ảnh giữ tỷ lệ */
+    margin: 0 auto;
+    display: block;
+}
+.carousel-caption {
+    background: rgba(0,0,0,0.5);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+}
+</style>
 
-
-<div id="carouselExample" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="3000">
+<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="./administrator/img_LQA/Xiaomi-12T.png" class="d-block w-100" alt="Slide 1">
-        </div>
-        <div class="carousel-item">
-            <img src="./administrator/img_LQA/iphone 13.png" class="d-block w-100" alt="Slide 2">
-        </div>
-        <div class="carousel-item">
-            <img src="./administrator/img_LQA/galaxy s21.png" class="d-block w-100" alt="Slide 3">
-        </div>
+        <?php 
+        if (!empty($carousel_items)) {
+            foreach($carousel_items as $index => $item): 
+        ?>
+            <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>" data-bs-interval="3000">
+                <a href="./index.php?reqHanghoa=<?php echo $item->idhanghoa; ?>">
+                    <img src="data:image/png;base64,<?php echo $item->hinhanh; ?>" 
+                         class="d-block" 
+                         alt="<?php echo $item->tenhanghoa; ?>">
+                </a>
+                <div class="carousel-caption">
+                    <h5 class="m-0"><?php echo $item->tenhanghoa; ?></h5>
+                    <p class="m-0"><?php echo number_format($item->giathamkhao, 0, ',', '.') . ' VNĐ'; ?></p>
+                </div>
+            </div>
+        <?php 
+            endforeach;
+        } else {
+            echo '<div class="alert alert-warning">Không có sản phẩm nào để hiển thị</div>';
+        }
+        ?>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+
+    <?php if (count($carousel_items) > 1): ?>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    <?php endif; ?>
 </div>
+
+<!-- Thêm script khởi tạo carousel -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var carousel = new bootstrap.Carousel(document.getElementById('productCarousel'), {
+        interval: 3000,
+        wrap: true,
+        keyboard: true,
+        pause: 'hover'
+    });
+});
+</script>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <?php
