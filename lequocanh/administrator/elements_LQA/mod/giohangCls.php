@@ -195,5 +195,33 @@ class GioHang extends Database {
             return false;
         }
     }
+
+    public function getCartByUserId($userId) {
+        try {
+            $sql = "SELECT g.product_id, g.quantity, h.tenhanghoa, h.giathamkhao, h.hinhanh 
+                   FROM tbl_giohang g
+                   INNER JOIN hanghoa h ON g.product_id = h.idhanghoa 
+                   WHERE g.user_id = ?";
+            
+            $stmt = $this->connect->prepare($sql);
+            $stmt->execute([$userId]);
+            
+            $cart = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $cart[] = [
+                    'product_id' => $row['product_id'],
+                    'tenhanghoa' => $row['tenhanghoa'],
+                    'giathamkhao' => $row['giathamkhao'],
+                    'quantity' => $row['quantity'],
+                    'hinhanh' => $row['hinhanh']
+                ];
+            }
+            return $cart;
+            
+        } catch (PDOException $e) {
+            error_log("Error getting cart for user $userId: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

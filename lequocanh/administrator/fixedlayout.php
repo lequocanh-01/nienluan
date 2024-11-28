@@ -12,10 +12,6 @@
             <h2>Nội Dung Cột Trái</h2>
             <p>Đây là nội dung cho cột trái.</p>
         </div>
-        <div class="right-column">
-            <h2>Nội Dung Cột Phải</h2>
-            <p>Đây là nội dung cho cột phải.</p>
-        </div>
     </div>
 </body>
 

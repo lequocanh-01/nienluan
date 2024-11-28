@@ -29,8 +29,11 @@ if (isset($_GET['req'])) {
         case 'thuoctinhview':
             require './elements_LQA/mthuoctinh/thuoctinhView.php';
             break;
+        case 'thuoctinhhhview':
+            require './elements_LQA/mthuoctinhhh/thuoctinhhhView.php';
+            break;
         case 'giohangview':
-            require './elements_LQA/mgiohang/giohangView.php';
+            require './elements_LQA/mgiohang/adminGiohangView.php';
             break;
     }
 } else {

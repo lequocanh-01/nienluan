@@ -13,48 +13,35 @@
 }
 #left_div {
   min-height: 500px;
-  width: 13%;
-
+  width: 15%;
   float: left;
-  height: 150px;
-  border: solid 1px;
+  height: auto;
+  border: solid 1px #ccc;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  box-shadow: 5px 5px lightgray;
-  margin: 5px;
-  padding: 5px;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 10px;
 }
 #center_div {
   min-height: 500px;
   width: 65%;
   float: left;
-  border: solid 1px;
+  border: solid 1px #ccc;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  box-shadow: 5px 5px lightgray;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
   margin: 10px;
-  padding: 5px;
+  padding: 10px;
 }
-#right_div {
+/* #right_div {
   min-height: 500px;
-  width: 15%;
+  width: 20%;
   float: left;
-  border: solid 1px;
+  border: solid 1px #ccc;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  box-shadow: 5px 5px lightgray;
-  margin: 5px;
-  padding: 5px;
-}
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 10px;
+} */
 #bottom_div {
   min-height: 100px;
   width: 100%;
@@ -314,12 +301,119 @@ button:hover {
 }
 
 /* Thay đổi màu sắc cho các mục trong menu */
+.left-menu {
+    background: linear-gradient(145deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.left-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .left-menu a {
-    color: #ffcc00; /* Màu mới cho các liên kết */
+    color: #ecf0f1;
+    text-decoration: none;
+    display: block;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin: 5px 0;
 }
 
 .left-menu a:hover {
-    color: #ff9900; /* Màu khi di chuột qua */
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+    color: #3498db;
+}
+
+/* Style cho menu item active */
+.left-menu a.active {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.left-menu a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: #e74c3c;
+}
+
+/* Hiệu ứng hover cho active item */
+.left-menu a.active:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateX(5px);
+}
+
+.left-menu i {
+    width: 24px;
+    margin-right: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Animation cho active item */
+.left-menu a.active i {
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Style cho menu header */
+.left-menu > div > a {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Style cho submenu items */
+.left-menu ul li a {
+    font-size: 0.95em;
+    padding-left: 20px;
+}
+
+/* Hiệu ứng ripple khi click */
+.left-menu a::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.5s;
+}
+
+.left-menu a:active::after {
+    transform: scale(2);
+    opacity: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .left-menu {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .left-menu a {
+        padding: 10px;
+    }
 }
 
 /* CSS cho tên thuộc tính hàng hóa */
