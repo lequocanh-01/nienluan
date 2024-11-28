@@ -91,13 +91,21 @@ class hanghoa extends Database
         $update->execute($data);
         return $update->rowCount();
     }
-    public function searchHanghoa($query)
+    public function searchHanghoa($keyword)
     {
-        $query = "%" . $query . "%";
-        $sql = "SELECT * FROM hanghoa WHERE tenhanghoa LIKE ?";
-        $stmt = $this->connect->prepare($sql);
-        $stmt->execute([$query]);
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        try {
+            $select = "SELECT * FROM hanghoa 
+                       WHERE LOWER(tenhanghoa) LIKE LOWER(:keyword)
+                       ORDER BY tenhanghoa ASC 
+                       LIMIT 10";
+            $stmt = $this->connect->prepare($select);
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log("Search error: " . $e->getMessage());
+            return [];
+        }
     }
     public function CheckRelations($idhanghoa)
     {

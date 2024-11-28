@@ -1,4 +1,4 @@
-<div align="center">Cập nhật đơn giá</div>
+<!-- <div align="center">Cập nhật đơn giá</div>
 <hr>
 <?php
 require '../../elements_LQA/mod/dongiaCls.php';
@@ -47,4 +47,4 @@ $getLhUpdate = $dongiaObj->DongiaGetbyId($idDonGia);
             </tr>
         </table>
     </form>
-</div>
+</div> -->

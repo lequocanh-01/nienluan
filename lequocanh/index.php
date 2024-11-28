@@ -2,7 +2,6 @@
 session_start();
 require_once './administrator/elements_LQA/mod/giohangCls.php';
 
-// Khởi tạo đối tượng GioHang và lấy số lượng sản phẩm
 $giohang = new GioHang();
 $cartItemCount = $giohang->getCartItemCount();
 ?>
@@ -17,7 +16,7 @@ $cartItemCount = $giohang->getCartItemCount();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Cửa Hàng Điện Thoại</title>
-    
+
 </head>
 
 <body class="bg-light">
@@ -28,7 +27,7 @@ $cartItemCount = $giohang->getCartItemCount();
                 <i class="fas fa-mobile-alt me-2"></i>
                 Cửa Hàng Điện Thoại
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -54,12 +53,14 @@ $cartItemCount = $giohang->getCartItemCount();
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userProfile.php">
-                                    <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                        <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
+                                    </a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userAct.php?reqact=userlogout">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                                </a></li>
+                                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                    </a></li>
                             </ul>
                         </div>
                     <?php elseif (isset($_SESSION['ADMIN'])): ?>
@@ -73,13 +74,13 @@ $cartItemCount = $giohang->getCartItemCount();
                             Đăng nhập
                         </a>
                     <?php endif; ?>
-                    
+
                     <a href="./administrator/elements_LQA/mgiohang/giohangView.php" class="btn btn-light position-relative">
                         <i class="fas fa-shopping-cart"></i>
                         <?php if (isset($_SESSION['USER']) || isset($_SESSION['ADMIN'])): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?php echo $cartItemCount; ?>
-                        </span>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?php echo $cartItemCount; ?>
+                            </span>
                         <?php endif; ?>
                     </a>
                 </div>
@@ -125,7 +126,7 @@ $cartItemCount = $giohang->getCartItemCount();
                         <a href="#" title="Youtube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-white mb-3">Thông tin hữu ích</h5>
                     <ul class="list-unstyled text-muted">
@@ -136,12 +137,12 @@ $cartItemCount = $giohang->getCartItemCount();
                         <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Điều khoản dịch vụ</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-white mb-3">Liên hệ</h5>
                     <ul class="list-unstyled text-muted">
                         <li class="mb-3">
-                            <i class="fas fa-map-marker-alt me-2"></i> 
+                            <i class="fas fa-map-marker-alt me-2"></i>
                             123 Đường ABC, Phường XYZ, Quận 1, TP.HCM
                         </li>
                         <li class="mb-3">
@@ -164,23 +165,23 @@ $cartItemCount = $giohang->getCartItemCount();
                     <p class="small text-muted">Đăng ký để nhận thông tin về sản phẩm mới và khuyến mãi</p>
                     <form class="mb-3">
                         <div class="input-group">
-                            <input class="form-control" type="email" placeholder="Email của bạn" 
-                                   style="border-radius: 20px 0 0 20px;">
-                            <button class="btn btn-primary" type="submit" 
-                                    style="border-radius: 0 20px 20px 0;">
+                            <input class="form-control" type="email" placeholder="Email của bạn"
+                                style="border-radius: 20px 0 0 20px;">
+                            <button class="btn btn-primary" type="submit"
+                                style="border-radius: 0 20px 20px 0;">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
                         </div>
                     </form>
                     <div class="mt-4">
-                        <img src="path/to/payment-methods.png" alt="Phương thức thanh toán" 
-                             class="img-fluid" style="max-height: 30px;">
+                        <img src="path/to/payment-methods.png" alt="Phương thức thanh toán"
+                            class="img-fluid" style="max-height: 30px;">
                     </div>
                 </div>
             </div>
 
             <hr class="text-muted my-4">
-            
+
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
                     <p class="small text-muted mb-0">
@@ -188,17 +189,32 @@ $cartItemCount = $giohang->getCartItemCount();
                     </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
-                    <img src="path/to/verified-badge.png" alt="Chứng nhận" class="img-fluid" 
-                         style="max-height: 40px;">
+                    <img src="path/to/verified-badge.png" alt="Chứng nhận" class="img-fluid"
+                        style="max-height: 40px;">
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="administrator/elements_LQA/js_LQA/jscript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Kiểm tra xem element carousel có tồn tại không trước khi khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            const carouselElement = document.getElementById('productCarousel');
+            if (carouselElement) {
+                new bootstrap.Carousel(carouselElement, {
+                    interval: 3000,
+                    wrap: true,
+                    keyboard: true,
+                    pause: 'hover'
+                });
+            }
+        });
+    </script>
+    <script src="administrator/js_LQA/jscript.js"></script>
 </body>
 
 </html>

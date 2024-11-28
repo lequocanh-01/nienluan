@@ -1,30 +1,38 @@
 <?php
 require_once './administrator/elements_LQA/mod/hanghoaCls.php';
 
-// Lấy từ khóa tìm kiếm
-$term = isset($_GET['term']) ? $_GET['term'] : '';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Kiểm tra độ dài từ khóa
+$term = isset($_GET['term']) ? trim($_GET['term']) : '';
+error_log("Search term received: " . $term);
+
 if (strlen($term) >= 2) {
-    $hanghoa = new hanghoa();
-    $results = $hanghoa->searchHanghoa($term);
-    
-    // Chuyển đổi kết quả sang định dạng phù hợp cho JSON
-    $suggestions = array_map(function($item) {
-        return [
-            'id' => $item->idhanghoa,
-            'name' => $item->tenhanghoa,
-            'price' => number_format($item->giathamkhao, 0, ',', '.') . ' VNĐ',
-            'image' => $item->hinhanh
-        ];
-    }, $results);
-    
-    // Trả về kết quả dưới dạng JSON
-    header('Content-Type: application/json');
-    echo json_encode($suggestions);
+    try {
+        $hanghoa = new hanghoa();
+        $results = $hanghoa->searchHanghoa($term);
+        error_log("Search results count: " . count($results));
+        
+        $suggestions = array_map(function($item) {
+            return [
+                'id' => $item->idhanghoa,
+                'name' => $item->tenhanghoa,
+                'price' => number_format($item->giathamkhao, 0, ',', '.') . ' VNĐ',
+                'image' => $item->hinhanh
+            ];
+        }, $results);
+        
+        header('Content-Type: application/json');
+        echo json_encode($suggestions);
+    } catch (Exception $e) {
+        error_log("Error in search_suggestions.php: " . $e->getMessage());
+        header('HTTP/1.1 500 Internal Server Error');
+        echo json_encode(['error' => 'Có lỗi xảy ra khi tìm kiếm']);
+    }
 } else {
-    // Trả về mảng rỗng nếu từ khóa quá ngắn
     header('Content-Type: application/json');
     echo json_encode([]);
 }
+exit();
 ?>

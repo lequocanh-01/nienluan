@@ -25,12 +25,12 @@ if (isset($_GET['reqact'])) {
             }
             break;
 
-        case 'deletedongia':
-            $idDonGia = $_REQUEST['idDonGia'];
-            $dongiaObj = new Dongia();
-            $kq = $dongiaObj->DongiaDelete($idDonGia);
-            header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
-            break;
+        // case 'deletedongia':
+        //     $idDonGia = $_REQUEST['idDonGia'];
+        //     $dongiaObj = new Dongia();
+        //     $kq = $dongiaObj->DongiaDelete($idDonGia);
+        //     header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
+        //     break;
 
         case 'updateStatus':
             $idDonGia = $_REQUEST['idDonGia'];
@@ -51,26 +51,26 @@ if (isset($_GET['reqact'])) {
             }
             break;
 
-        case 'updatedongia':
-            $idDonGia = $_REQUEST['idDonGia'];
-            $idHangHoa = $_REQUEST['idHangHoa'];
-            $tenHangHoa = $_REQUEST['tenHangHoa'];
-            $giaBan = $_REQUEST['giaBan'];
-            $ngayApDung = $_REQUEST['ngayApDung'];
-            $ngayKetThuc = $_REQUEST['ngayKetThuc'];
-            $dieuKien = $_REQUEST['dieuKien'];
-            $ghiChu = $_REQUEST['ghiChu'];
+        // case 'updatedongia':
+        //     $idDonGia = $_REQUEST['idDonGia'];
+        //     $idHangHoa = $_REQUEST['idHangHoa'];
+        //     $tenHangHoa = $_REQUEST['tenHangHoa'];
+        //     $giaBan = $_REQUEST['giaBan'];
+        //     $ngayApDung = $_REQUEST['ngayApDung'];
+        //     $ngayKetThuc = $_REQUEST['ngayKetThuc'];
+        //     $dieuKien = $_REQUEST['dieuKien'];
+        //     $ghiChu = $_REQUEST['ghiChu'];
 
-            $dongiaObj = new Dongia();
-            $kq = $dongiaObj->DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
+        //     $dongiaObj = new Dongia();
+        //     $kq = $dongiaObj->DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung);
 
-            if ($kq) {
-                $hanghoaObj = new Hanghoa();
-                $hanghoaObj->HanghoaUpdatePrice($idHangHoa, $giaBan);
-            }
+        //     if ($kq) {
+        //         $hanghoaObj = new Hanghoa();
+        //         $hanghoaObj->HanghoaUpdatePrice($idHangHoa, $giaBan);
+        //     }
 
-            header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
-            break;
+        //     header('location: ../../index.php?req=dongiaview&result=' . ($kq ? 'ok' : 'notok'));
+        //     break;
 
         default:
             header('location: ../../index.php?req=dongiaView');

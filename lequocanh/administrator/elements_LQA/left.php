@@ -16,7 +16,7 @@
             <li><a href="index.php?req=thuonghieuview">Thương hiệu</a></li>
             <li><a href="index.php?req=donvitinhview">Đơn vị tính</a></li>
             <li><a href="index.php?req=nhanvienview">Nhân viên</a></li>
-           
+            <li><a href="index.php?req=giohangview">Giỏ hàng</a></li>
            
             <li><a href="../index.php">Trang mua hàng</a></li>
         </ul>

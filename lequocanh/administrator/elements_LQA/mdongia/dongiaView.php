@@ -92,7 +92,7 @@ if (empty($list_hh)) {
                 <th>Điều kiện</th>
                 <th>Ghi chú</th>
                 <th>Áp dụng</th>
-                <th>thao tác</th>
+                <!-- <th>thao tác</th> -->
             </thead>
             <tbody>
                 <?php
@@ -117,7 +117,7 @@ if (empty($list_hh)) {
                                     </button>
                                 </form>
                             </td>
-                            <td align="center">
+                            <!-- <td align="center">
                                 <?php
                                 if (isset($_SESSION['ADMIN'])) {
                                 ?>
@@ -132,7 +132,7 @@ if (empty($list_hh)) {
                                 }
                                 ?>
                                 <img src="./img_LQA/Update.png" class="w_update_btn_open_dg" data-id="<?php echo $u->idDonGia; ?>">
-                            </td>
+                            </td> -->
                         </tr>
                 <?php
                     }

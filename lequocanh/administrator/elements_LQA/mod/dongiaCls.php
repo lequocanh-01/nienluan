@@ -33,15 +33,15 @@ class Dongia extends Database
         return $add->rowCount();
     }
     
-    public function DongiaDelete($idDongia)
-    {
-        $sql = "DELETE from Dongia where idDongia = ?";
-        $data = array($idDongia);
+    // public function DongiaDelete($idDongia)
+    // {
+    //     $sql = "DELETE from Dongia where idDongia = ?";
+    //     $data = array($idDongia);
 
-        $del = $this->connect->prepare($sql);
-        $del->execute($data);
-        return $del->rowCount();
-    }
+    //     $del = $this->connect->prepare($sql);
+    //     $del->execute($data);
+    //     return $del->rowCount();
+    // }
     public function DongiaUpdateStatus($idDonGia, $apDung)
     {
         $sql = "UPDATE dongia SET apDung = ? WHERE idDonGia = ?";
@@ -87,25 +87,25 @@ class Dongia extends Database
         return $update->rowCount();
     }
 
-    public function DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung)
-    {
-        $sql = "UPDATE dongia SET 
-                idHangHoa = ?, 
-                tenhanghoa = ?, 
-                giaBan = ?, 
-                ngayApDung = ?, 
-                ngayKetThuc = ?, 
-                dieuKien = ?, 
-                ghiChu = ?,
-                apDung = ? 
-                WHERE idDonGia = ?";
+    // public function DongiaUpdate($idDonGia, $idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung)
+    // {
+    //     $sql = "UPDATE dongia SET 
+    //             idHangHoa = ?, 
+    //             tenhanghoa = ?, 
+    //             giaBan = ?, 
+    //             ngayApDung = ?, 
+    //             ngayKetThuc = ?, 
+    //             dieuKien = ?, 
+    //             ghiChu = ?,
+    //             apDung = ? 
+    //             WHERE idDonGia = ?";
                 
-        $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung, $idDonGia);
+    //     $data = array($idHangHoa, $tenHangHoa, $giaBan, $ngayApDung, $ngayKetThuc, $dieuKien, $ghiChu, $apDung, $idDonGia);
 
-        $update = $this->connect->prepare($sql);
-        $update->execute($data);
-        return $update->rowCount();
-    }
+    //     $update = $this->connect->prepare($sql);
+    //     $update->execute($data);
+    //     return $update->rowCount();
+    // }
 
     public function DongiaSetAllToFalse($idHangHoa) {
         $sql = "UPDATE dongia SET apDung = 0 WHERE idHangHoa = ? AND apDung = 1";
