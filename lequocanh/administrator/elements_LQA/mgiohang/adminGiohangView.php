@@ -11,7 +11,6 @@ $giohang = new GioHang();
 $user = new user();
 $users = $user->UserGetAll();
 
-// Đếm tổng số giỏ hàng và tổng giá trị
 $totalCartsValue = 0;
 $activeCartsCount = 0;
 $totalItemsCount = 0;
@@ -30,136 +29,116 @@ foreach ($users as $u) {
 }
 ?>
 
-<div class="container-fluid px-4 py-4">
-    <!-- Dashboard Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Tổng giỏ hàng đang hoạt động</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $activeCartsCount; ?></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+<div class="admin-title">Quản lý giỏ hàng</div>
+<hr>
+
+<div class="admin-dashboard">
+    <div class="dashboard-cards">
+        <div class="dashboard-card primary">
+            <div class="card-content">
+                <div class="card-info">
+                    <h4>Tổng giỏ hàng đang hoạt động</h4>
+                    <h2><?php echo $activeCartsCount; ?></h2>
+                </div>
+                <div class="card-icon">
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Tổng giá trị giỏ hàng</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo number_format($totalCartsValue, 0, ',', '.'); ?>₫
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="dashboard-card success">
+            <div class="card-content">
+                <div class="card-info">
+                    <h4>Tổng số sản phẩm trong giỏ</h4>
+                    <h2><?php echo $totalItemsCount; ?></h2>
+                </div>
+                <div class="card-icon">
+                    <i class="fas fa-box"></i>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Tổng số sản phẩm</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalItemsCount; ?></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-box fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="dashboard-card info">
+            <div class="card-content">
+                <div class="card-info">
+                    <h4>Tổng giá trị giỏ hàng</h4>
+                    <h2><?php echo number_format($totalCartsValue, 0, ',', '.'); ?> đ</h2>
+                </div>
+                <div class="card-icon">
+                    <i class="fas fa-money-bill"></i>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Quản lý giỏ hàng người dùng</h6>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary" onclick="printReport()">
-                    <i class="fas fa-print me-2"></i>In báo cáo
-                </button>
-                <button class="btn btn-sm btn-outline-success" onclick="exportExcel()">
-                    <i class="fas fa-file-excel me-2"></i>Xuất Excel
-                </button>
-            </div>
+    <div class="admin-content">
+        <div class="content-header">
+            <h3>Chi tiết giỏ hàng theo người dùng</h3>
+            <button class="btn-print" onclick="printReport()">
+                <i class="fas fa-print"></i> In báo cáo
+            </button>
         </div>
-        <div class="card-body">
+        
+        <div id="print-section">
+            <div class="print-header">
+                <h2>Báo Cáo Chi Tiết Giỏ Hàng</h2>
+                <p>Ngày in: <?php echo date('d/m/Y H:i:s'); ?></p>
+            </div>
+            
+            <div class="dashboard-summary">
+                <div class="summary-item">
+                    <span>Tổng giỏ hàng: <?php echo $activeCartsCount; ?></span>
+                </div>
+                <div class="summary-item">
+                    <span>Tổng sản phẩm: <?php echo $totalItemsCount; ?></span>
+                </div>
+                <div class="summary-item">
+                    <span>Tổng giá trị: <?php echo number_format($totalCartsValue, 0, ',', '.'); ?> đ</span>
+                </div>
+            </div>
+
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="cartTable">
-                    <thead class="table-light">
+                <table class="content-table">
+                    <thead>
                         <tr>
-                            <th>Người dùng</th>
-                            <th>Sản phẩm</th>
-                            <th class="text-center">Hình ảnh</th>
-                            <th class="text-end">Đơn giá</th>
-                            <th class="text-center">Số lượng</th>
-                            <th class="text-end">Thành tiền</th>
-                            <th class="text-center">Thao tác</th>
+                            <th>Username</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Hình ảnh</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        foreach ($users as $u):
-                            if ($u->username === 'admin') continue;
-                            $cart = $giohang->getCartByUserId($u->username);
-                            if (empty($cart)) continue;
-                            
-                            foreach ($cart as $index => $item):
-                                $subtotal = $item['giathamkhao'] * $item['quantity'];
+                        <?php foreach ($users as $u): 
+                            if ($u->username !== 'admin'):
+                                $cart = $giohang->getCartByUserId($u->username);
+                                if (!empty($cart)):
+                                    foreach ($cart as $item):
+                                        $subtotal = $item['giathamkhao'] * $item['quantity'];
                         ?>
-                            <tr>
-                                <?php if ($index === 0): ?>
-                                    <td rowspan="<?php echo count($cart); ?>" class="align-middle">
-                                        <div class="d-flex flex-column">
-                                            <span class="fw-bold"><?php echo htmlspecialchars($u->hoten); ?></span>
-                                            <small class="text-muted"><?php echo htmlspecialchars($u->username); ?></small>
-                                        </div>
-                                    </td>
-                                <?php endif; ?>
-                                <td class="align-middle"><?php echo htmlspecialchars($item['tenhanghoa']); ?></td>
-                                <td class="text-center">
-                                    <img src="data:image/jpeg;base64,<?php echo $item['hinhanh']; ?>" 
-                                         alt="<?php echo htmlspecialchars($item['tenhanghoa']); ?>" 
-                                         class="rounded"
-                                         style="width: 40px; height: 40px; object-fit: cover;">
-                                </td>
-                                <td class="text-end align-middle">
-                                    <?php echo number_format($item['giathamkhao'], 0, ',', '.'); ?>₫
-                                </td>
-                                <td class="text-center align-middle">
-                                    <span class="badge bg-secondary">
-                                        <?php echo $item['quantity']; ?>
-                                    </span>
-                                </td>
-                                <td class="text-end align-middle">
-                                    <?php echo number_format($subtotal, 0, ',', '.'); ?>₫
-                                </td>
-                                <td class="text-center align-middle">
-                                    <button class="btn btn-sm btn-outline-danger" 
-                                            onclick="removeItem('<?php echo $u->username; ?>', <?php echo $item['product_id']; ?>)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td><?php echo htmlspecialchars($u->username); ?></td>
+                            <td><?php echo htmlspecialchars($item['tenhanghoa']); ?></td>
+                            <td>
+                                <img src="data:image/png;base64,<?php echo $item['hinhanh']; ?>" 
+                                     alt="<?php echo htmlspecialchars($item['tenhanghoa']); ?>"
+                                     class="product-img">
+                            </td>
+                            <td><?php echo number_format($item['giathamkhao'], 0, ',', '.'); ?> đ</td>
+                            <td><?php echo $item['quantity']; ?></td>
+                            <td><?php echo number_format($subtotal, 0, ',', '.'); ?> đ</td>
+                            <td>
+                                <button class="btn-delete" onclick="removeItem('<?php echo htmlspecialchars($u->username); ?>', <?php echo $item['product_id']; ?>)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                         <?php 
-                            endforeach;
+                                    endforeach;
+                                endif;
+                            endif;
                         endforeach; 
                         ?>
                     </tbody>
@@ -168,6 +147,93 @@ foreach ($users as $u) {
         </div>
     </div>
 </div>
+
+<style>
+/* Style cho chế độ in */
+@media print {
+    /* Ẩn các phần không cần in */
+    body * {
+        visibility: hidden;
+    }
+    
+    #print-section, #print-section * {
+        visibility: visible;
+    }
+    
+    #print-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    
+    .btn-print, .btn-delete, nav, footer {
+        display: none !important;
+    }
+    
+    /* Style cho header khi in */
+    .print-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .print-header h2 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .print-header p {
+        margin: 5px 0;
+        color: #666;
+    }
+    
+    /* Style cho bảng khi in */
+    .table-responsive {
+        overflow: visible;
+        margin-top: 20px;
+    }
+    
+    .content-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    .content-table th,
+    .content-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    /* Style cho dashboard summary khi in */
+    .dashboard-summary {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+    
+    .summary-item {
+        text-align: center;
+    }
+    
+    /* Đảm bảo hình ảnh hiển thị đúng khi in */
+    .product-img {
+        max-width: 60px;
+        height: auto;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    /* Định dạng trang in */
+    @page {
+        size: landscape;
+        margin: 2cm;
+    }
+}
+</style>
 
 <script>
 function printReport() {
@@ -232,5 +298,59 @@ document.head.appendChild(style);
 }
 .btn-sm {
     padding: 0.25rem 0.5rem;
+}
+
+/* Chỉnh sửa style cho hình ảnh sản phẩm */
+.product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Thêm style cho cột hình ảnh */
+.content-table td:nth-child(3) {
+    width: 100px;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Responsive cho hình ảnh */
+@media (max-width: 768px) {
+    .product-img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Thêm hiệu ứng lightbox khi hover */
+.product-img-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.product-img-wrapper:hover::after {
+    content: '🔍';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 </style> 

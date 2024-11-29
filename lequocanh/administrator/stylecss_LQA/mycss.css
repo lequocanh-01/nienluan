@@ -418,10 +418,1206 @@ button:hover {
 
 /* CSS cho tên thuộc tính hàng hóa */
 .tenthuoctinhhh {
-  white-space: nowrap;     /* Không cho xuống dòng */
+  white-space: nowrap;     /* Không cho xuong dòng */
   overflow: hidden;        /* Ẩn phần nội dung tràn */
   text-overflow: ellipsis; /* Hiển thị dấu ... khi nội dung quá dài */
   max-width: 550px;        /* Đặt độ rộng tối đa cho cột */
+}
+
+/* Style cho bảng loại hàng */
+.title_loaihang {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.content_loaihang table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.content_loaihang th {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.content_loaihang td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_loaihang tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_loaihang img.iconbutton {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.content_loaihang img.iconbutton:hover {
+    transform: scale(1.1);
+}
+
+/* Style cho form thêm loại hàng */
+#formaddloaihang {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddloaihang table {
+    width: 100%;
+}
+
+#formaddloaihang td {
+    padding: 10px;
+}
+
+#formaddloaihang input[type="text"],
+#formaddloaihang input[type="file"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddloaihang input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddloaihang input[type="submit"],
+#formaddloaihang input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddloaihang input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddloaihang input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddloaihang input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddloaihang input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .content_loaihang table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    #formaddloaihang td {
+        display: block;
+        width: 100%;
+    }
+}
+
+/* Style cho navigation bar */
+.nav-menu {
+    position: relative;
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.menu-items {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    max-width: calc(100% - 120px); /* Để lại không gian cho nút dropdown */
+}
+
+.menu-items a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: fit-content;
+}
+
+.dropdown-btn {
+    display: none;
+    background: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    min-width: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+/* Auto-hide overflowing items */
+@media (max-width: 1200px), 
+       (min-width: 1201px) and (.menu-items::-webkit-scrollbar-track) {
+    .menu-items {
+        display: none;
+    }
+    
+    .dropdown-btn {
+        display: flex;
+    }
+}
+
+/* Show dropdown when menu is active */
+.nav-menu.show .dropdown-content {
+    display: block;
+}
+
+/* Scrollbar styling for dropdown */
+.dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-menu {
+        justify-content: center;
+        padding: 5px;
+    }
+    
+    .nav-menu a {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+
+/* Style cho menu dropdown */
+.nav-menu {
+    position: relative;
+    overflow: hidden;
+    height: 50px; /* Chiều cao cố định cho menu */
+}
+
+.nav-menu .menu-items {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-menu .dropdown-btn {
+    display: none;
+    background: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.nav-menu .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.nav-menu .dropdown-content a {
+    display: block;
+    padding: 8px 20px;
+    border-radius: 0;
+}
+
+.nav-menu .dropdown-content a:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .nav-menu .menu-items {
+        display: none;
+    }
+    
+    .nav-menu .dropdown-btn {
+        display: flex;
+    }
+    
+    .nav-menu.show .dropdown-content {
+        display: block;
+    }
+}
+
+/* Style cho navigation menu */
+.nav-menu {
+    position: relative;
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-items {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.menu-items a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover {
+    background: #c0392b;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 10px 0;
+    margin-top: 5px;
+}
+
+.nav-menu.show .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .menu-items {
+        display: none;
+    }
+    
+    .dropdown-btn {
+        margin-left: auto;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+        left: 0;
+    }
+}
+
+/* Style chung cho tất cả các form quản lý */
+.admin-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.admin-form table {
+    width: 100%;
+}
+
+.admin-form td {
+    padding: 10px;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="file"],
+.admin-form input[type="number"],
+.admin-form input[type="date"],
+.admin-form select,
+.admin-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.admin-form input[type="text"]:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.admin-form input[type="submit"],
+.admin-form input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.admin-form input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+.admin-form input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+.admin-form input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+.admin-form input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị dữ liệu */
+.content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content-table thead th {
+    background: linear-gradient(135deg, #1a2a6c, #2a4858);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.content-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content-table tbody tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content-table img.iconbutton {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.content-table img.iconbutton:hover {
+    transform: scale(1.1);
+}
+
+/* Style cho tiêu đề và thông tin */
+.admin-title {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.admin-info {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* Style cho nút chức năng */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-buttons a {
+    text-decoration: none;
+}
+
+.action-buttons i {
+    font-size: 18px;
+    transition: transform 0.2s;
+}
+
+.action-buttons i:hover {
+    transform: scale(1.2);
+}
+
+/* Style cho form thêm hàng hóa */
+#formaddhanghoa {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddhanghoa table {
+    width: 100%;
+}
+
+#formaddhanghoa td {
+    padding: 10px;
+}
+
+#formaddhanghoa input[type="text"],
+#formaddhanghoa input[type="number"],
+#formaddhanghoa input[type="file"],
+#formaddhanghoa select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddhanghoa input[type="text"]:focus,
+#formaddhanghoa input[type="number"]:focus,
+#formaddhanghoa select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddhanghoa input[type="radio"] {
+    margin-right: 10px;
+}
+
+#formaddhanghoa input[type="submit"],
+#formaddhanghoa input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddhanghoa input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddhanghoa input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddhanghoa input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddhanghoa input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị hàng hóa */
+.content_hanghoa .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style cho form thêm thuộc tính hàng hóa */
+#formaddthuoctinhhh {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddthuoctinhhh table {
+    width: 100%;
+}
+
+#formaddthuoctinhhh td {
+    padding: 10px;
+}
+
+#formaddthuoctinhhh input[type="text"],
+#formaddthuoctinhhh select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddthuoctinhhh input[type="text"]:focus,
+#formaddthuoctinhhh select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddthuoctinhhh input[type="submit"],
+#formaddthuoctinhhh input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddthuoctinhhh input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddthuoctinhhh input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddthuoctinhhh input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddthuoctinhhh input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị thuộc tính hàng hóa */
+.content_thuoctinhhh .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_thuoctinhhh td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_thuoctinhhh tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_thuoctinhhh img.iconbutton {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.content_thuoctinhhh img.iconbutton:hover {
+    transform: scale(1.1);
+}
+
+/* Style cho form thêm thuộc tính */
+#formaddthuoctinh {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddthuoctinh table {
+    width: 100%;
+}
+
+#formaddthuoctinh td {
+    padding: 10px;
+}
+
+#formaddthuoctinh input[type="text"],
+#formaddthuoctinh input[type="file"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddthuoctinh input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddthuoctinh input[type="submit"],
+#formaddthuoctinh input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddthuoctinh input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddthuoctinh input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddthuoctinh input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddthuoctinh input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị thuộc tính */
+.content_thuoctinh .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_thuoctinh td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_thuoctinh tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_thuoctinh img.iconbutton {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.content_thuoctinh img.iconbutton:hover {
+    transform: scale(1.1);
+}
+
+/* Style cho form thêm đơn giá */
+#formadddongia {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formadddongia table {
+    width: 100%;
+}
+
+#formadddongia td {
+    padding: 10px;
+}
+
+#formadddongia input[type="text"],
+#formadddongia input[type="date"],
+#formadddongia select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formadddongia input[type="text"]:focus,
+#formadddongia input[type="date"]:focus,
+#formadddongia select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formadddongia input[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+#formadddongia input[type="submit"],
+#formadddongia input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formadddongia input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formadddongia input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formadddongia input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formadddongia input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị đơn giá */
+.content_dongia .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_dongia td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_dongia tr:hover {
+    background-color: #f5f8fa;
+}
+
+/* Style cho nút trạng thái */
+.btn-status {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-status.active {
+    background: #2ecc71;
+}
+
+.btn-status:hover {
+    opacity: 0.9;
+}
+
+/* Style cho form thêm thương hiệu */
+#formaddthuonghieu {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddthuonghieu table {
+    width: 100%;
+}
+
+#formaddthuonghieu td {
+    padding: 10px;
+}
+
+#formaddthuonghieu input[type="text"],
+#formaddthuonghieu input[type="tel"],
+#formaddthuonghieu input[type="email"],
+#formaddthuonghieu input[type="file"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddthuonghieu input[type="text"]:focus,
+#formaddthuonghieu input[type="tel"]:focus,
+#formaddthuonghieu input[type="email"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddthuonghieu input[type="submit"],
+#formaddthuonghieu input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddthuonghieu input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddthuonghieu input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddthuonghieu input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddthuonghieu input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị thương hiệu */
+.content_thuonghieu .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_thuonghieu td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_thuonghieu tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_thuonghieu img.iconbutton {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Style cho form thêm đơn vị tính */
+#formadddonvitinh {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formadddonvitinh table {
+    width: 100%;
+}
+
+#formadddonvitinh td {
+    padding: 10px;
+}
+
+#formadddonvitinh input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formadddonvitinh input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formadddonvitinh input[type="submit"],
+#formadddonvitinh input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formadddonvitinh input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formadddonvitinh input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formadddonvitinh input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formadddonvitinh input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị đơn vị tính */
+.content_donvitinh .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_donvitinh th,
+.content_donvitinh td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_donvitinh tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_donvitinh .iconimg,
+.content_donvitinh img[src*="Update.png"] {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.content_donvitinh .iconimg:hover,
+.content_donvitinh img[src*="Update.png"]:hover {
+    transform: scale(1.1);
+}
+
+/* Style cho form thêm nhân viên */
+#formaddnhanvien {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#formaddnhanvien table {
+    width: 100%;
+}
+
+#formaddnhanvien td {
+    padding: 10px;
+}
+
+#formaddnhanvien input[type="text"],
+#formaddnhanvien input[type="tel"],
+#formaddnhanvien input[type="email"],
+#formaddnhanvien input[type="number"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#formaddnhanvien input[type="text"]:focus,
+#formaddnhanvien input[type="tel"]:focus,
+#formaddnhanvien input[type="email"]:focus,
+#formaddnhanvien input[type="number"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#formaddnhanvien input[type="submit"],
+#formaddnhanvien input[type="reset"] {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#formaddnhanvien input[type="submit"] {
+    background: #2ecc71;
+    color: white;
+}
+
+#formaddnhanvien input[type="reset"] {
+    background: #e74c3c;
+    color: white;
+    margin-left: 10px;
+}
+
+#formaddnhanvien input[type="submit"]:hover {
+    background: #27ae60;
+}
+
+#formaddnhanvien input[type="reset"]:hover {
+    background: #c0392b;
+}
+
+/* Style cho bảng hiển thị nhân viên */
+.content_nhanvien .content-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content_nhanvien th,
+.content_nhanvien td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.content_nhanvien tr:hover {
+    background-color: #f5f8fa;
+}
+
+.content_nhanvien .iconimg {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.content_nhanvien .iconimg:hover {
+    transform: scale(1.1);
 }
 
 

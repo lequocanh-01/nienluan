@@ -47,18 +47,28 @@ if (isset($_GET['reqact'])) {
             break;
 
         case 'setlock':
-                $iduser = $_REQUEST['iduser'];
-                $setlock = $_REQUEST['setlock'];
-                $userObj = new user();
-                $newStatus = $setlock == 1 ? 0 : 1; 
-                $kq = $userObj->UserSetACtive($iduser, $newStatus);
-                if($kq){
-                    header('location: ../../index.php?req=userview&result=ok');
+            $iduser = $_REQUEST['iduser'];
+            $setlock = $_REQUEST['setlock'];
+            $userObj = new user();
+            $user = $userObj->UserGetbyId($iduser);
+            
+            // Kiểm tra nếu là tài khoản admin
+            if ($user->username === 'admin') {
+                $admin_password = isset($_REQUEST['admin_password']) ? $_REQUEST['admin_password'] : '';
+                if ($admin_password !== 'lequocanh') {
+                    header('location: ../../index.php?req=userview&result=invalid_admin_pass');
+                    exit();
                 }
-                else{
-                    header('location: ../../index.php?req=userview&result=notok');
-                }
-                break;
+            }
+            
+            $newStatus = $setlock == 1 ? 0 : 1;
+            $kq = $userObj->UserSetACtive($iduser, $newStatus);
+            if($kq){
+                header('location: ../../index.php?req=userview&result=ok');
+            } else {
+                header('location: ../../index.php?req=userview&result=notok');
+            }
+            break;
         case 'updateuser':
             $username = $_REQUEST['username'];
             $password = $_REQUEST['password'];

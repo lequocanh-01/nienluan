@@ -41,3 +41,33 @@ $getLhUpdate = $lhobj->LoaihangGetbyId($idloaihang);
         </table>
     </form>
 </div>
+
+<script>
+$(document).ready(function() {
+    $("#formupdatelh").submit(function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if(response.includes('ok')) {
+                    $("#noteForm").html("Cập nhật thành công!");
+                    // Reload trang sau 1 giây
+                    setTimeout(function() {
+                        window.location.href = "index.php?req=loaihangview&result=ok";
+                    }, 1000);
+                } else {
+                    $("#noteForm").html("Có lỗi xảy ra!");
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+});
+</script>

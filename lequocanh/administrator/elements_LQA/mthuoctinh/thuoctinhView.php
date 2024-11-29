@@ -1,6 +1,5 @@
-<div align="center">Quản lý thuộc tính</div>
+<div class="admin-title">Quản lý thuộc tính</div>
 <hr>
-<div>Thêm thuộc tính</div>
 <?php
 require './elements_LQA/mod/thuoctinhCls.php';
 
@@ -9,12 +8,13 @@ $list_lh = $lhobj->thuoctinhGetAll();
 $l = count($list_lh);
 ?>
 
-<div>
+<div class="admin-form">
+    <h3>Thêm thuộc tính mới</h3>
     <form name="newthuoctinh" id="formaddthuoctinh" method="post" action='./elements_LQA/mthuoctinh/thuoctinhAct.php?reqact=addnew' enctype="multipart/form-data">
         <table>
             <tr>
                 <td>Tên thuộc tính</td>
-                <td><input type="text" name="tenThuocTinh" id="tenThuocTinh" /></td>
+                <td><input type="text" name="tenThuocTinh" id="tenThuocTinh" required /></td>
             </tr>
             <tr>
                 <td>Ghi Chú</td>
@@ -22,7 +22,7 @@ $l = count($list_lh);
             </tr>
             <tr>
                 <td>Hình ảnh</td>
-                <td><input type="file" name="fileimage"></td>
+                <td><input type="file" name="fileimage" required></td>
             </tr>
             <tr>
                 <td><input type="submit" id="btnsubmit" value="Tạo mới" /></td>
@@ -30,53 +30,56 @@ $l = count($list_lh);
             </tr>
         </table>
     </form>
-    <hr />
-    <div class="title_thuoctinh">Danh sách thuộc tính</div>
-    <div class="content_thuoctinh">
-        Trong bảng có: <b><?php echo $l; ?></b>
+</div>
 
-        <table border="1">
-            <thead>
+<hr />
+<div class="content_thuoctinh">
+    <div class="admin-info">
+        Tổng số thuộc tính: <b><?php echo $l; ?></b>
+    </div>
+
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên thuộc tính</th>
+                <th>Ghi chú</th>
+                <th>Hình ảnh</th>
+                <th>Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        if ($l > 0) {
+            foreach ($list_lh as $u) {
+        ?>
                 <tr>
-                    <th>ID</th>
-                    <th>Tên thuộc tính</th>
-                    <th>Ghi Chú</th>
-                    <th>Hình ảnh</th>
-                    <th>Thao tác</th>
+                    <td><?php echo htmlspecialchars($u->idThuocTinh); ?></td>
+                    <td><?php echo htmlspecialchars($u->tenThuocTinh); ?></td>
+                    <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
+                    <td align="center">
+                        <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
+                    </td>
+                    <td align="center">
+                        <?php if (isset($_SESSION['ADMIN'])) { ?>
+                            <a href="./elements_LQA/mthuoctinh/thuoctinhAct.php?reqact=deletethuoctinh&idThuocTinh=<?php echo $u->idThuocTinh; ?>">
+                                <img src="./img_LQA/delete.png" class="iconimg">
+                            </a>
+                        <?php } else { ?>
+                            <img src="./img_LQA/delete.png" class="iconimg">
+                        <?php } ?>
+                        <img src="./img_LQA/Update.png" class="w_update_btn_open_tt" value="<?php echo $u->idThuocTinh; ?>">
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($l > 0) {
-                    foreach ($list_lh as $u) {
-                ?>
-                        <tr>
-                            <td><?php echo $u->idThuocTinh; ?></td>
-                            <td><?php echo htmlspecialchars($u->tenThuocTinh); ?></td>
-                            <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
-                            <td align="center">
+        <?php
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
 
-                            <img class="iconbutton" src="data:image/png;base64,<?php echo $u->hinhanh; ?>">
-                        </td>
-                            <td style="text-align: center;">
-                                <?php if (isset($_SESSION['ADMIN'])) { ?>
-                                    <a href="./elements_LQA/mthuoctinh/thuoctinhAct.php?reqact=deletethuoctinh&idThuocTinh=<?php echo $u->idThuocTinh; ?>">
-                                        <img src="./img_LQA/delete.png" class="iconimg">
-                                    </a>
-                                <?php } ?>
-                                <img src="./img_LQA/Update.png" class="w_update_btn_open_tt" value="<?php echo $u->idThuocTinh; ?>">
-                            </td>
-                        </tr>
-                <?php
-                    }
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
-
-    <div id="w_update_tt" style="display:none;">
-        <div id="w_update_form_tt"></div>
-        <input type="button" value="Đóng" class="close-btn" id="w_close_btn_tt">
-    </div>
+<div id="w_update_tt">
+    <div id="w_update_form_tt"></div>
+    <input type="button" value="close" id="w_close_btn_tt">
 </div>

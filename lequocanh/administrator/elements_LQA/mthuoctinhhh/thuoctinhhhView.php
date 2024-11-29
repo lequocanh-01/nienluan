@@ -1,6 +1,5 @@
-<div>Quản lý thuộc tính hàng hóa</div>
+<div class="admin-title">Quản lý thuộc tính hàng hóa</div>
 <hr>
-<div>Thêm thuộc tính hàng hóa</div>
 <?php
 require_once './elements_LQA/mod/hanghoaCls.php';
 require_once './elements_LQA/mod/thuoctinhCls.php';
@@ -19,7 +18,8 @@ $thuocTinhHHObj = new ThuocTinhHH();
 $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
 ?>
 
-<div>
+<div class="admin-form">
+    <h3>Thêm thuộc tính hàng hóa mới</h3>
     <form name="newthuoctinhhh" id="formaddthuoctinhhh" method="post" action='./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=addnew'>
         <table>
             <tr>
@@ -31,9 +31,7 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
                             foreach ($list_hh as $h) { ?>
                                 <option value="<?php echo htmlspecialchars($h->idhanghoa); ?>"><?php echo htmlspecialchars($h->tenhanghoa); ?></option>
                             <?php }
-                        } else { ?>
-                            <option value="">Không có hàng hóa nào</option>
-                        <?php } ?>
+                        } ?>
                     </select>
                 </td>
             </tr>
@@ -45,9 +43,7 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
                             foreach ($list_lh_thuoctinh as $l) { ?>
                                 <option value="<?php echo htmlspecialchars($l->idThuocTinh); ?>"><?php echo htmlspecialchars($l->tenThuocTinh); ?></option>
                             <?php }
-                        } else { ?>
-                            <option value="">Không có thuộc tính nào</option>
-                        <?php } ?>
+                        } ?>
                     </select>
                 </td>
             </tr>
@@ -61,52 +57,58 @@ $list_lh_thuoctinhhh = $thuocTinhHHObj->thuoctinhhhGetAll();
             </tr>
             <tr>
                 <td><input type="submit" value="Tạo mới" /></td>
+                <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
             </tr>
         </table>
     </form>
 </div>
 
 <hr />
-<div>Danh sách thuộc tính hàng hóa</div>
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>ID Hàng Hóa</th>
-            <th>ID Thuộc Tính</th>
-            <th>Tên Thuộc Tính HH</th>
-            <th>Ghi Chú</th>
-            <th>Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($list_lh_thuoctinhhh)) {
-            foreach ($list_lh_thuoctinhhh as $u) { ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($u->idThuocTinhHH); ?></td>
-                    <td><?php echo htmlspecialchars($u->idhanghoa); ?></td>
-                    <td><?php echo htmlspecialchars($u->idThuocTinh); ?></td>
-                    <td class="tenthuoctinhhh"><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
-                    <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
-                    <td>
-                        <a href="./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=deletethuoctinhhh&idThuocTinhHH=<?php echo htmlspecialchars($u->idThuocTinhHH); ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">
-                            <img src="./img_LQA/delete.png" class="iconimg">
-                        </a>
-                        <img src="./img_LQA/Update.png" class="w_update_btn_open_tthh" data-id="<?php echo htmlspecialchars($u->idThuocTinhHH); ?>">
-                    </td>
-                </tr>
-            <?php }
-        } else { ?>
-            <tr>
-                <td colspan="7">Không có thuộc tính hàng hóa nào.</td>
-            </tr>
-        <?php } ?>
-    </tbody>
-</table>
+<div class="content_thuoctinhhh">
+    <div class="admin-info">
+        Tổng số thuộc tính hàng hóa: <b><?php echo count($list_lh_thuoctinhhh); ?></b>
+    </div>
 
-<div id="w_update_tthh" style="display:none;">
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID Hàng Hóa</th>
+                <th>ID Thuộc Tính</th>
+                <th>Tên Thuộc Tính HH</th>
+                <th>Ghi Chú</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($list_lh_thuoctinhhh)) {
+                foreach ($list_lh_thuoctinhhh as $u) { ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($u->idThuocTinhHH); ?></td>
+                        <td><?php echo htmlspecialchars($u->idhanghoa); ?></td>
+                        <td><?php echo htmlspecialchars($u->idThuocTinh); ?></td>
+                        <td class="tenthuoctinhhh"><?php echo htmlspecialchars($u->tenThuocTinhHH); ?></td>
+                        <td><?php echo htmlspecialchars($u->ghiChu); ?></td>
+                        <td align="center">
+                            <?php if (isset($_SESSION['ADMIN'])) { ?>
+                                <a href="./elements_LQA/mthuoctinhhh/thuoctinhhhAct.php?reqact=deletethuoctinhhh&idThuocTinhHH=<?php echo htmlspecialchars($u->idThuocTinhHH); ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">
+                                    <img src="./img_LQA/delete.png" class="iconimg">
+                                </a>
+                            <?php } else { ?>
+                                <img src="./img_LQA/delete.png" class="iconimg">
+                            <?php } ?>
+                            <img src="./img_LQA/Update.png" class="w_update_btn_open_tthh" data-id="<?php echo htmlspecialchars($u->idThuocTinhHH); ?>">
+                        </td>
+                    </tr>
+                <?php }
+            } ?>
+        </tbody>
+    </table>
+</div>
+
+<div id="w_update_tthh">
     <div id="w_update_form_tthh"></div>
-    <button class="close-btn" id="w_close_btn_tthh">Đóng</button>
+    <input type="button" value="close" id="w_close_btn_tthh">
 </div>
 
 <script>
