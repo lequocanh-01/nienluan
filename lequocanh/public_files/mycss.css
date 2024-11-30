@@ -1016,3 +1016,40 @@ body {
         margin: 2px;
     }
 }
+
+/* Style cho bảng so sánh sản phẩm */
+.comparison-table {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.comparison-table th {
+    background-color: #f8f9fa;
+    vertical-align: middle;
+}
+
+.comparison-table td {
+    vertical-align: middle;
+}
+
+.comparison-table .product-image {
+    max-height: 150px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.comparison-table .product-image:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .comparison-table {
+        font-size: 14px;
+    }
+    
+    .comparison-table .product-image {
+        max-width: 100px;
+    }
+}

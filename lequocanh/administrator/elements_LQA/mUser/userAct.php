@@ -3,8 +3,9 @@ session_start();
 require '../../elements_LQA/mod/userCls.php';
 require '../../elements_LQA/mod/giohangCls.php';
 
-if (isset($_GET['reqact'])) {
-    $requestAction = $_GET['reqact'];
+$requestAction = isset($_REQUEST['reqact']) ? $_REQUEST['reqact'] : '';
+
+if ($requestAction) {
     switch ($requestAction) {
         case 'addnew':
             // xử lý thêm
@@ -28,6 +29,12 @@ if (isset($_GET['reqact'])) {
             $iduser = $_REQUEST['iduser'];
             $userObj = new user();
             $user = $userObj->UserGetByid($iduser);
+            
+            // Kiểm tra quyền admin
+            if (!isset($_SESSION['ADMIN'])) {
+                header('location: ../../index.php?req=userview&result=not_authorized');
+                exit();
+            }
             
             // Kiểm tra nếu là tài khoản admin
             if ($user->username === 'admin') {
@@ -70,34 +77,19 @@ if (isset($_GET['reqact'])) {
             }
             break;
         case 'updateuser':
-            $username = $_REQUEST['username'];
+            $iduser = $_REQUEST['iduser'];
+            $username = $_REQUEST['username']; 
             $password = $_REQUEST['password'];
             $hoten = $_REQUEST['hoten'];
             $gioitinh = $_REQUEST['gioitinh'];
             $ngaysinh = $_REQUEST['ngaysinh'];
             $diachi = $_REQUEST['diachi'];
             $dienthoai = $_REQUEST['dienthoai'];
-            $iduser = $_REQUEST['iduser'];
-            
-            // Kiểm tra nếu là admin và yêu cầu mật khẩu admin
-            if ($username === 'admin') {
-                $admin_password = isset($_REQUEST['admin_password']) ? $_REQUEST['admin_password'] : '';
-                if ($admin_password !== 'lequocanh') {
-                    header('location: ../../index.php?req=userview&result=invalid_admin_pass');
-                    exit();
-                }
-            }
-            
-            $userObj = new user();
-            // Kiểm tra xem có thay đổi mật khẩu không
-            if (empty($password)) {
-                // Nếu không có mật khẩu mới, lấy mật khẩu cũ
-                $oldUserData = $userObj->UserGetbyId($iduser);
-                $password = $oldUserData->password;
-            }
-            
-            $kq = $userObj->UserUpdate($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser);
-            if($kq) {
+
+            $user = new user();
+            $result = $user->UserUpdate($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser);
+
+            if ($result) {
                 header('location: ../../index.php?req=userview&result=ok');
             } else {
                 header('location: ../../index.php?req=userview&result=notok');

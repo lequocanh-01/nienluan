@@ -57,9 +57,7 @@ $carousel_items = array_slice($list_hanghoa, 0, 5);
 <script src="administrator/elements_LQA/js_LQA/jscript.js"></script>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    <?php
-    foreach ($list_hanghoa as $v) {
-    ?>
+    <?php foreach ($list_hanghoa as $v): ?>
         <div class="col">
             <div class="card h-100">
                 <img src="data:image/png;base64,<?php echo $v->hinhanh; ?>" class="card-img-top" alt="<?php echo $v->tenhanghoa; ?>">
@@ -68,11 +66,77 @@ $carousel_items = array_slice($list_hanghoa, 0, 5);
                     <p class="card-text text-danger fw-bold">
                         <?php echo number_format($v->giathamkhao, 0, ',', '.') . ' VNĐ'; ?>
                     </p>
-                    <a href="./index.php?reqHanghoa=<?php echo $v->idhanghoa; ?>" class="btn btn-outline-primary">Xem chi tiết</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="./index.php?reqHanghoa=<?php echo $v->idhanghoa; ?>" 
+                           class="btn btn-outline-primary">
+                            Xem chi tiết
+                        </a>
+                        <!-- Thêm checkbox để so sánh -->
+                        <div class="form-check">
+                            <input class="form-check-input compare-checkbox" 
+                                   type="checkbox" 
+                                   value="<?php echo $v->idhanghoa; ?>" 
+                                   id="compare_<?php echo $v->idhanghoa; ?>">
+                            <label class="form-check-label" for="compare_<?php echo $v->idhanghoa; ?>">
+                                So sánh
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    <?php
-    }
-    ?>
+    <?php endforeach; ?>
 </div>
+
+<!-- Thêm nút so sánh cố định ở góc màn hình -->
+<div id="compareButton" class="position-fixed bottom-0 end-0 mb-4 me-4" style="display: none;">
+    <button class="btn btn-primary" onclick="compareProducts()">
+        So sánh (<span id="compareCount">0</span>)
+    </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const compareCheckboxes = document.querySelectorAll('.compare-checkbox');
+    const compareButton = document.getElementById('compareButton');
+    const compareCount = document.getElementById('compareCount');
+    let selectedProducts = [];
+
+    // Thêm đoạn code này để xóa trạng thái checked khi load trang
+    compareCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    compareButton.style.display = 'none';
+    compareCount.textContent = '0';
+
+    compareCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                if (selectedProducts.length >= 3) {
+                    alert('Chỉ có thể so sánh tối đa 3 sản phẩm!');
+                    this.checked = false;
+                    return;
+                }
+                selectedProducts.push(this.value);
+            } else {
+                selectedProducts = selectedProducts.filter(id => id !== this.value);
+            }
+            
+            compareCount.textContent = selectedProducts.length;
+            compareButton.style.display = selectedProducts.length > 1 ? 'block' : 'none';
+        });
+    });
+});
+
+function compareProducts() {
+    const selectedProducts = Array.from(document.querySelectorAll('.compare-checkbox:checked'))
+                                .map(checkbox => checkbox.value);
+    
+    if (selectedProducts.length < 2) {
+        alert('Vui lòng chọn ít nhất 2 sản phẩm để so sánh!');
+        return;
+    }
+    
+    window.location.href = `sosanh.php?products=${selectedProducts.join(',')}`;
+}
+</script>

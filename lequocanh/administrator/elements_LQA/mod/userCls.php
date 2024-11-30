@@ -74,12 +74,24 @@ class user extends Database
     }
     public function UserUpdate($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser)
     {
-        $sql = "UPDATE user set username = ?, password = ?, hoten =?, gioitinh=?, ngaysinh=?, diachi=?, dienthoai=? WHERE iduser =? ";
-        $data = array($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser);
-
-        $update = $this->connect->prepare($sql);
-        $update->execute($data);
-        return $update->rowCount();
+        try {
+            $sql = "UPDATE user SET 
+                    username=?, 
+                    password=?, 
+                    hoten=?,
+                    gioitinh=?,
+                    ngaysinh=?,
+                    diachi=?,
+                    dienthoai=?
+                    WHERE iduser=?";
+                    
+            $data = array($username, $password, $hoten, $gioitinh, $ngaysinh, $diachi, $dienthoai, $iduser);
+            $update = $this->connect->prepare($sql);
+            $update->execute($data);
+            return $update->rowCount();
+        } catch (PDOException $e) {
+            return false;
+        }
     }
     public function UserGetbyId($iduser)
     {

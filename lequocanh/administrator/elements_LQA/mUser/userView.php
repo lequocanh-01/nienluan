@@ -171,13 +171,13 @@
                                 <td><?php echo $u->iduser; ?></td>
                                 <td><?php echo $u->username; ?></td>
                                 <td>
-                                    <span class="password-field">
+                                    <div class="password-field">
                                         <span class="password-dots">••••••••</span>
                                         <span class="password-text" style="display: none;">
-                                            <?php echo $u->password; ?>
+                                            <?php echo htmlspecialchars($u->password); ?>
                                         </span>
                                         <i class="fas fa-eye toggle-password" style="cursor: pointer; margin-left: 5px;"></i>
-                                    </span>
+                                    </div>
                                 </td>
                                 <td><?php echo $u->hoten; ?></td>
                                 <td><?php echo $u->gioitinh; ?></td>
@@ -197,26 +197,26 @@
                                     <?php } ?>
                                 </td>
                                 <td class="action-buttons">
-                                    <?php if ($isAdmin) { ?>
+                                    <?php if (isset($_SESSION['ADMIN'])) { ?>
                                         <a href='./elements_LQA/mUser/userAct.php?reqact=deleteuser&iduser=<?php echo $u->iduser; ?>' 
                                            class="admin-action"
                                            data-username="<?php echo $u->username; ?>"
-                                           data-action="delete">
-                                            <img src="./img_LQA/Delete.png" class="iconimg" alt="">
+                                           onclick="return confirmDelete('<?php echo $u->username; ?>');">
+                                            <img src="./img_LQA/Delete.png" class="iconimg" alt="Delete">
                                         </a>
                                     <?php } else { ?>
-                                        <img src="./img_LQA/Delete.png" class="iconimg" alt="">
+                                        <img src="./img_LQA/Delete.png" class="iconimg disabled" alt="Delete">
                                     <?php } ?>
                                     
-                                    <?php if ($isAdmin || (isset($_SESSION['USER']) && $_SESSION['USER'] == $u->username)) { ?>
-                                        <a href='index.php?req=updateuser&iduser=<?php echo $u->iduser; ?>'
-                                           class="admin-action"
+                                    <?php if (isset($_SESSION['ADMIN']) || (isset($_SESSION['USER']) && $_SESSION['USER'] == $u->username)) { ?>
+                                        <a href='javascript:void(0);' 
+                                           class="admin-action update-user"
                                            data-username="<?php echo $u->username; ?>"
-                                           data-action="update">
-                                            <img src="./img_LQA/Update.png" class="iconimg" alt="">
+                                           data-userid="<?php echo $u->iduser; ?>">
+                                            <img src="./img_LQA/Update.png" class="iconimg" alt="Update">
                                         </a>
                                     <?php } else { ?>
-                                        <img src="./img_LQA/Update.png" class="iconimg" alt="">
+                                        <img src="./img_LQA/Update.png" class="iconimg disabled" alt="Update">
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -410,24 +410,94 @@
         integrity="sha384-1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1" crossorigin="anonymous"></script>
     <script>
     $(document).ready(function() {
-        // Xử lý khi click vào nút xóa hoặc cập nhật cho tài khoản admin
-        $('.admin-action').click(function(e) {
-            e.preventDefault();
+        // Xử lý xác nhận xóa người dùng
+        function confirmDelete(username) {
+            if (username === 'admin') {
+                const adminPass = prompt('Vui lòng nhập mật khẩu admin để xóa tài khoản admin:');
+                if (adminPass) {
+                    return true;
+                }
+                return false;
+            }
+            return confirm('Bạn có chắc muốn xóa người dùng này không?');
+        }
+
+        // Xử lý cập nhật người dùng
+        $('.update-user').click(function() {
             const username = $(this).data('username');
-            const action = $(this).data('action');
-            const href = $(this).attr('href');
+            const userId = $(this).data('userid');
             
             if (username === 'admin') {
-                const adminPass = prompt('Vui lòng nhập mật khẩu admin để thực hiện thao tác này:');
+                const adminPass = prompt('Vui lòng nhập mật khẩu admin để cập nhật tài khoản admin:');
                 if (adminPass) {
-                    // Thêm mật khẩu vào URL
-                    window.location.href = href + '&admin_password=' + encodeURIComponent(adminPass);
+                    window.location.href = `index.php?req=updateuser&iduser=${userId}&admin_password=${encodeURIComponent(adminPass)}`;
                 }
             } else {
-                window.location.href = href;
+                window.location.href = `index.php?req=updateuser&iduser=${userId}`;
             }
         });
 
+        // Thêm style cho nút disabled
+        $('.iconimg.disabled').css({
+            'opacity': '0.5',
+            'cursor': 'not-allowed'
+        });
+    });
+    </script>
+
+    <?php if (isset($_GET['result'])): ?>
+        <div class="alert <?php echo $_GET['result'] == 'ok' ? 'alert-success' : 'alert-danger'; ?> alert-dismissible fade show" role="alert">
+            <?php echo $_GET['result'] == 'ok' ? 'Cập nhật thành công!' : 'Có lỗi xảy ra!'; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <script>
+    $(document).ready(function() {
+        // Xử lý submit form
+        $('#formreg').on('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            let isValid = true;
+            $(this).find('input[required]').each(function() {
+                if (!$(this).val()) {
+                    isValid = false;
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+
+            // Submit form nếu validate ok
+            this.submit();
+        });
+
+        // Remove invalid class on input
+        $('input').on('input', function() {
+            $(this).removeClass('is-invalid');
+        });
+    });
+    </script>
+
+    <style>
+    /* Thêm style cho form validation */
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+
+    .alert {
+        margin-bottom: 1rem;
+    }
+    </style>
+
+    <script>
+    $(document).ready(function() {
         // Xử lý toggle password
         $('.toggle-password').click(function() {
             const passwordField = $(this).closest('.password-field');
@@ -446,4 +516,26 @@
         });
     });
     </script>
+
+    <style>
+    .password-field {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .toggle-password {
+        color: #666;
+        transition: color 0.3s;
+        padding: 5px;
+    }
+
+    .toggle-password:hover {
+        color: #333;
+    }
+
+    .password-text, .password-dots {
+        margin-right: 5px;
+    }
+    </style>
 </body>
