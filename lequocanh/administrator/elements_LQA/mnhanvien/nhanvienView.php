@@ -80,10 +80,10 @@ $l = count($list_lh);
                         <td align="center">
                             <?php if (isset($_SESSION['ADMIN'])) { ?>
                                 <a href="./elements_LQA/mnhanvien/nhanvienAct.php?reqact=deletenhanvien&idNhanVien=<?php echo htmlspecialchars($u->idNhanVien); ?>" onclick="return confirm('Bạn có chắc muốn xóa không?');">
-                                    <img src="./img_LQA/delete.png" class="iconimg">
+                                    <img src="./img_LQA/delete.png" class=""
                                 </a>
                             <?php } else { ?>
-                                <img src="./img_LQA/delete.png" class="iconimg">
+                                <img src="./img_LQA/delete.png" class="">
                             <?php } ?>
                             <img src="./img_LQA/Update.png" class="w_update_btn_open_nv" value="<?php echo htmlspecialchars($u->idNhanVien); ?>">
                         </td>

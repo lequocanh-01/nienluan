@@ -166,4 +166,38 @@ class hanghoa extends Database
         $stmt->execute([$idThuongHieu]);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function HanghoaAddWithImage($tenhanghoa, $mota, $giathamkhao, $image_path, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien) {
+        if (file_exists($image_path)) {
+            $hinhanh = base64_encode(file_get_contents($image_path));
+        } else {
+            throw new Exception("File ảnh không tồn tại");
+        }
+
+        $query = "INSERT INTO hanghoa (tenhanghoa, mota, giathamkhao, hinhanh, idloaihang, idThuongHieu, idDonViTinh, idNhanVien) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                  
+        $stmt = $this->connect->prepare($query);
+        return $stmt->execute([$tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien]);
+    }
+
+    public function UpdateHanghoaImage($idhanghoa, $image_path) {
+        if (file_exists($image_path)) {
+            $hinhanh = base64_encode(file_get_contents($image_path));
+        } else {
+            throw new Exception("File ảnh không tồn tại");
+        }
+
+        $query = "UPDATE hanghoa SET hinhanh = ? WHERE idhanghoa = ?";
+        $stmt = $this->connect->prepare($query);
+        return $stmt->execute([$hinhanh, $idhanghoa]);
+    }
+
+    public function AddImageFromBinary($idhanghoa, $binary_data) {
+        $hinhanh = base64_encode($binary_data);
+        $query = "UPDATE hanghoa SET hinhanh = ? WHERE idhanghoa = ?";
+        
+        $stmt = $this->connect->prepare($query);
+        return $stmt->execute([$hinhanh, $idhanghoa]);
+    }
 }

@@ -35,15 +35,19 @@ $list_thuonghieu = $lhobj->GetAllThuongHieu();
                 <td><input type="text" size="50" name="mota" value="<?php echo $getLhUpdate->mota; ?>" /></td>
             </tr>
             <tr>
-                <td>Chọn loại hàng:</td>
+                <td>Chọn loại hàng: <span style="color: red;">*</span></td>
                 <td>
                     <?php
-                    foreach ($list_lh as $l) {
+                    if (!empty($list_lh)) {
+                        foreach ($list_lh as $l) {
                     ?>
-                        <input type="radio" name="idloaihang" value="<?php echo $l->idloaihang; ?>"<?php if($l->idloaihang == $getLhUpdate->idloaihang){echo ' checked';} ?>>
-                        <img class="iconbutton" src="data:image/png;base64,<?php echo $l->hinhanh; ?>">
-                        <br>
+                            <input type="radio" name="idloaihang" value="<?php echo $l->idloaihang; ?>" 
+                                   <?php if($l->idloaihang == $getLhUpdate->idloaihang) echo 'checked'; ?> 
+                                   required>
+                            <img class="iconbutton" src="data:image/png;base64,<?php echo $l->hinhanh; ?>">
+                            <br>
                     <?php
+                        }
                     }
                     ?>
                 </td>
@@ -94,9 +98,17 @@ $list_thuonghieu = $lhobj->GetAllThuongHieu();
                 </td>
             </tr>
             <tr>
+                <td>Hình ảnh</td>
+                <td>
+                    <img width="150px" src="data:image/png;base64,<?php echo $getLhUpdate->hinhanh ?>"><br>
+                    <input type="file" name="fileimage">
+                </td>
+            </tr>
+            <tr>
                 <td><input type="submit" id="btnsubmit" value="Cập nhật" /></td>
                 <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
             </tr>
         </table>
     </form>
 </div>
+

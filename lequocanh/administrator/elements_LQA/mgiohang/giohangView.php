@@ -118,7 +118,8 @@ if (!empty($cart)) {
             border: 1px solid #dee2e6;
         }
 
-        .price, .total-price {
+        .price,
+        .total-price {
             font-weight: 500;
             color: #ee4d2d;
         }
@@ -140,7 +141,7 @@ if (!empty($cart)) {
             background: white;
             padding: 15px;
             border-top: 1px solid #dee2e6;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .right-actions {
@@ -240,8 +241,8 @@ if (!empty($cart)) {
         <?php if (empty($cartDetails)): ?>
             <div class="text-center py-5">
                 <h3 class="mb-4">Giỏ hàng của bạn đang trống</h3>
-                <a href="<?php echo isset($_SESSION['ADMIN']) ? '../../index.php' : '../../../index.php'; ?>" 
-                   class="btn btn-primary btn-lg">
+                <a href="<?php echo isset($_SESSION['ADMIN']) ? '../../index.php' : '../../../index.php'; ?>"
+                    class="btn btn-primary btn-lg">
                     Tiếp tục mua hàng
                 </a>
             </div>
@@ -261,31 +262,31 @@ if (!empty($cart)) {
                 </thead>
                 <tbody>
                     <?php foreach ($cartDetails as $item): ?>
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="form-check-input product-select">
-                        </td>
-                        <td class="product-info">
-                            <img src="data:image/jpeg;base64,<?php echo $item['hinhanh']; ?>" 
-                                 alt="<?php echo htmlspecialchars($item['name']); ?>" 
-                                 class="product-image">
-                            <span class="product-name"><?php echo htmlspecialchars($item['name']); ?></span>
-                        </td>
-                        <td class="price" data-price="<?php echo $item['price']; ?>">
-                            <?php echo number_format($item['price'], 0, ',', '.'); ?> ₫
-                        </td>
-                        <td>
-                            <div class="quantity-controls">
-                                <button class="btn btn-outline-secondary decrease-quantity" type="button">−</button>
-                                <input type="number" class="quantity-input" value="<?php echo $item['quantity']; ?>" 
-                                       min="1" data-product-id="<?php echo $item['id']; ?>">
-                                <button class="btn btn-outline-secondary increase-quantity" type="button">+</button>
-                            </div>
-                        </td>
-                        <td class="subtotal">
-                            <?php echo number_format($item['subtotal'], 0, ',', '.'); ?> ₫
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-check-input product-select">
+                            </td>
+                            <td class="product-info">
+                                <img src="data:image/jpeg;base64,<?php echo $item['hinhanh']; ?>"
+                                    alt="<?php echo htmlspecialchars($item['name']); ?>"
+                                    class="product-image">
+                                <span class="product-name"><?php echo htmlspecialchars($item['name']); ?></span>
+                            </td>
+                            <td class="price" data-price="<?php echo $item['price']; ?>">
+                                <?php echo number_format($item['price'], 0, ',', '.'); ?> ₫
+                            </td>
+                            <td>
+                                <div class="quantity-controls">
+                                    <button class="btn btn-outline-secondary decrease-quantity" type="button">−</button>
+                                    <input type="number" class="quantity-input" value="<?php echo $item['quantity']; ?>"
+                                        min="1" data-product-id="<?php echo $item['id']; ?>">
+                                    <button class="btn btn-outline-secondary increase-quantity" type="button">+</button>
+                                </div>
+                            </td>
+                            <td class="subtotal">
+                                <?php echo number_format($item['subtotal'], 0, ',', '.'); ?> ₫
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -297,12 +298,12 @@ if (!empty($cart)) {
                         <button onclick="deleteSelectedItems()" class="btn btn-outline-danger ms-3">
                             Xóa đã chọn
                         </button>
-                        <a href="<?php echo isset($_SESSION['ADMIN']) ? '../../index.php' : '../../../index.php'; ?>" 
-                           class="btn btn-outline-primary ms-3">
+                        <a href="<?php echo isset($_SESSION['ADMIN']) ? '../../index.php' : '../../../index.php'; ?>"
+                            class="btn btn-outline-primary ms-3">
                             <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua hàng
                         </a>
                     </div>
-                    
+
                     <div class="right-actions d-flex align-items-center">
                         <div class="total-section me-4">
                             <span class="me-2">Tổng tiền:</span>
@@ -364,7 +365,7 @@ if (!empty($cart)) {
                     total += subtotal;
                 }
             });
-            document.querySelector('.total-amount').textContent = 
+            document.querySelector('.total-amount').textContent =
                 new Intl.NumberFormat('vi-VN').format(total) + ' ₫';
         }
 
@@ -382,7 +383,7 @@ if (!empty($cart)) {
 
             decreaseBtn.addEventListener('click', () => updateQuantity(productId, -1, input));
             increaseBtn.addEventListener('click', () => updateQuantity(productId, 1, input));
-            
+
             input.addEventListener('change', () => {
                 let value = parseInt(input.value);
                 if (value < 1) value = 1;
@@ -396,11 +397,13 @@ if (!empty($cart)) {
             const currentValue = parseInt(input.value);
             let newValue = change === 0 ? currentValue : currentValue + change;
             if (newValue < 1) newValue = 1;
-            
+
             try {
                 const response = await fetch('giohangUpdate.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         productId: productId,
                         quantity: newValue
@@ -413,7 +416,7 @@ if (!empty($cart)) {
                     const row = input.closest('tr');
                     const price = parseInt(row.querySelector('.price').dataset.price);
                     const subtotal = price * newValue;
-                    row.querySelector('.subtotal').textContent = 
+                    row.querySelector('.subtotal').textContent =
                         new Intl.NumberFormat('vi-VN').format(subtotal) + ' ₫';
                     updateTotalPrice();
                 }

@@ -7,45 +7,46 @@ if (isset($_GET['reqact'])) {
     echo $requestAction;
     switch ($requestAction) {
         case 'addnew': //them moi
-            //xu lys them moi 
-            //nhabn du lieu
-            $tenhanghoa = $_REQUEST['tenhanghoa'];
-            $giathamkhao = $_REQUEST['giathamkhao'];
-            $mota = $_REQUEST['mota'];
-            $idloaihang = $_REQUEST['idloaihang'];
-            $idThuongHieu = $_REQUEST['idThuongHieu'] ?? null;
-            $idDonViTinh = $_REQUEST['idDonViTinh'] ?? null;
-            $idNhanVien = $_REQUEST['idNhanVien'] ?? null;
+            try {
+                $tenhanghoa = $_REQUEST['tenhanghoa'];
+                $giathamkhao = $_REQUEST['giathamkhao'];
+                $mota = $_REQUEST['mota'];
+                $idloaihang = $_REQUEST['idloaihang'];
+                $idThuongHieu = $_REQUEST['idThuongHieu'] ?? null;
+                $idDonViTinh = $_REQUEST['idDonViTinh'] ?? null;
+                $idNhanVien = $_REQUEST['idNhanVien'] ?? null;
 
-            // Kiểm tra xem người dùng đã chọn loại hàng hay chưa
-            if (empty($idloaihang)) {
-                // Nếu không có loại hàng, hiển thị alert và quay lại trang thêm hàng hóa
-                echo "<script>alert('Vui lòng chọn loại hàng trước khi thêm hàng hóa.'); window.history.back();</script>";
-                exit; // Dừng thực thi mã
-            }
+                // Đường dẫn đến file ảnh mặc định nếu không có ảnh upload
+                $default_image = "../../assets/images/default-product.png";
+                
+                $lh = new hanghoa();
+                
+                if (!empty($_FILES['fileimage']['tmp_name'])) {
+                    // Sử dụng ảnh được upload
+                    $image_path = $_FILES['fileimage']['tmp_name'];
+                } else {
+                    // Sử dụng ảnh mặc định
+                    $image_path = $default_image;
+                }
 
-            // Kiểm tra xem người dùng đã chọn ảnh hay chưa
-            if (empty($_FILES['fileimage']['tmp_name'])) {
-                // Nếu không có ảnh, hiển thị alert và quay lại trang thêm hàng hóa
-                echo "<script>alert('Vui lòng nhập hình ảnh trước khi thêm hàng hóa.'); window.history.back();</script>";
-                exit; // Dừng thực thi mã
-            }
+                $kq = $lh->HanghoaAddWithImage(
+                    $tenhanghoa, 
+                    $mota, 
+                    $giathamkhao, 
+                    $image_path,
+                    $idloaihang, 
+                    $idThuongHieu, 
+                    $idDonViTinh, 
+                    $idNhanVien
+                );
 
-            $hinhanh_file = $_FILES['fileimage']['tmp_name'];
-            $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
-            //kiem thu lieu da nhan du khong
-            // echo $tenhanghoa . '<br/>';
-            // echo $mota . '<br/>';
-            // echo $giathamkhao . '<br/>';
-            // echo $idloaihang . '<br/>';
-            // echo $hinhanh . '<br/>';
-
-            $lh = new hanghoa();
-            $kq = $lh->HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien);
-            if ($kq) {
-                header('location: ../../index.php?req=hanghoaview&result=ok');
-            } else {
-                header('location: ../../index.php?req=hanghoaView&result=notok');
+                if ($kq) {
+                    header('location: ../../index.php?req=hanghoaview&result=ok');
+                }else {
+                    header('location: ../../index.php?req=hanghoaview&result=notok');
+                }
+            } catch (Exception $e) {
+                header('location: ../../index.php?req=hanghoaview&result=error&message=' . urlencode($e->getMessage()));
             }
             break;
 
@@ -74,32 +75,55 @@ if (isset($_GET['reqact'])) {
             break;
 
         case 'updatehanghoa':
-
-            $idhanghoa = $_REQUEST['idhanghoa'];
-            $tenhanghoa = $_REQUEST['tenhanghoa'];
-            $giathamkhao = $_REQUEST['giathamkhao'];
-            $idloaihang = $_REQUEST['idloaihang'];
-            $mota = $_REQUEST['mota'];
-            $idThuongHieu = $_REQUEST['idThuongHieu'] ?? null;
-            $idDonViTinh = $_REQUEST['idDonViTinh'] ?? null;
-            $idNhanVien = $_REQUEST['idNhanVien'] ?? null;
+            $idhanghoa = $_REQUEST['idhanghoa'] ?? '';
+            $tenhanghoa = $_REQUEST['tenhanghoa'] ?? '';
+            $giathamkhao = $_REQUEST['giathamkhao'] ?? 0;
+            $idloaihang = $_REQUEST['idloaihang'] ?? '';
+            $mota = $_REQUEST['mota'] ?? '';
             
-            if (file_exists($_FILES['fileimage']['tmp_name'])) {
+            // Xử lý các trường có thể NULL
+            $idThuongHieu = !empty($_REQUEST['idThuongHieu']) ? $_REQUEST['idThuongHieu'] : null;
+            $idDonViTinh = !empty($_REQUEST['idDonViTinh']) ? $_REQUEST['idDonViTinh'] : null;
+            $idNhanVien = !empty($_REQUEST['idNhanVien']) ? $_REQUEST['idNhanVien'] : null;
+
+            // Kiểm tra các trường bắt buộc
+            if (empty($idhanghoa) || empty($tenhanghoa) || empty($idloaihang)) {
+                echo "<script>
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+                    window.history.back();
+                </script>";
+                exit;
+            }
+            
+            // Xử lý hình ảnh
+            if (!empty($_FILES['fileimage']['tmp_name'])) {
                 $hinhanh_file = $_FILES['fileimage']['tmp_name'];
                 $hinhanh = base64_encode(file_get_contents(addslashes($hinhanh_file)));
             } else {
-                $hinhanh = $_REQUEST['hinhanh'];
+                $hinhanh = $_REQUEST['hinhanh'] ?? '';
             }
-            // echo $idhanghoa . '<br/>';
-            // echo $tenhanghoa . '<br/>';
-            // echo $mota . '<br/>';
-            // echo $hinhanh . '<br/>';
-            $lh = new hanghoa();
-            $kq = $lh->HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa);
-            if ($kq) {
-                header('location: ../../index.php?req=hanghoaview&result=ok');
-            } else {
-                header('location: ../../index.php?req=hanghoaview&result=notok');
+
+            try {
+                $lh = new hanghoa();
+                $kq = $lh->HanghoaUpdate(
+                    $tenhanghoa, 
+                    $hinhanh, 
+                    $mota, 
+                    $giathamkhao, 
+                    $idloaihang, 
+                    $idThuongHieu, 
+                    $idDonViTinh, 
+                    $idNhanVien, 
+                    $idhanghoa
+                );
+                
+                if ($kq) {
+                    header('location: ../../index.php?req=hanghoaview&result=ok');
+                } else {
+                    header('location: ../../index.php?req=hanghoaview&result=notok');
+                }
+            } catch (PDOException $e) {
+                header('location: ../../index.php?req=hanghoaview&result=error&message=' . urlencode($e->getMessage()));
             }
             break;
         default:

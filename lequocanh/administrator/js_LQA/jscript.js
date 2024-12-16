@@ -84,7 +84,7 @@ $(document).ready(function () {
 
     $("#w_update_dg").css("top", e.pageY + 5);
     $("#w_update_dg").css("left", e.pageX + 5);
-    var $idDonGia = $(this).data("id"); 
+    var $idDonGia = $(this).data("id");
     $("#w_update_form_dg").load(
       "./elements_LQA/mdongia/dongiaUpdate.php",
       { idDonGia: $idDonGia },
@@ -180,7 +180,11 @@ $(document).ready(function () {
       { idThuocTinh: $idThuocTinh },
       function (response, status, request) {
         if (status === "error") {
-          console.error("Error loading update form:", request.status, request.statusText);
+          console.error(
+            "Error loading update form:",
+            request.status,
+            request.statusText
+          );
         }
       }
     );
@@ -213,24 +217,22 @@ $(document).ready(function () {
   });
   //
   let searchTimeout;
-  const searchInput = $('#searchInput');
-  const searchResults = $('#searchResults');
+  const searchInput = $("#searchInput");
+  const searchResults = $("#searchResults");
 
   // Xử lý sự kiện nhập vào ô tìm kiếm
   searchInput.on('input', function() {
     clearTimeout(searchTimeout);
     const query = $(this).val().trim();
-    console.log('Search query:', query); // Debug log
     
     if (query.length >= 2) {
         searchTimeout = setTimeout(() => {
             $.ajax({
-                url: window.location.origin + '/search_suggestions.php', // Ensure this path is correct
+                url: window.location.origin + '/search_suggestions.php',
                 method: 'GET',
                 data: { term: query },
                 dataType: 'json',
                 success: function(data) {
-                    console.log('Search results:', data); // Debug log
                     if (data && data.length > 0) {
                         let html = '';
                         data.forEach(item => {
@@ -250,9 +252,8 @@ $(document).ready(function () {
                         searchResults.html('<div class="p-3">Không tìm thấy sản phẩm nào</div>').show();
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.error('Ajax error:', error);
-                    console.error('Status:', status);
+                error: function() {
+                    searchResults.html('<div class="p-3">Có lỗi xảy ra khi tìm kiếm</div>').show();
                 }
             });
         }, 300);
@@ -262,19 +263,27 @@ $(document).ready(function () {
   });
 
   // Ẩn kết quả khi click ra ngoài
-  $(document).on('click', function(e) {
-    if (!$(e.target).closest('.search-container').length) {
-        searchResults.hide();
+  $(document).on("click", function (e) {
+    if (!$(e.target).closest(".search-container").length) {
+      searchResults.hide();
     }
   });
 
   // Xử lý form submit
-  $('#searchForm').on('submit', function(e) {
+  $("#searchForm").on("submit", function (e) {
     const query = searchInput.val().trim();
     if (query.length < 2) {
-        e.preventDefault();
-        alert('Vui lòng nhập ít nhất 2 ký tự để tìm kiếm');
+      e.preventDefault();
+      alert("Vui lòng nhập ít nhất 2 ký tự để tìm kiếm");
     }
   });
-  
+  // Carousel initialization
+document.addEventListener('DOMContentLoaded', function() {
+  var carousel = new bootstrap.Carousel(document.getElementById('productCarousel'), {
+      interval: 3000,  // Thời gian chuyển slide (3 giây)
+      wrap: true,      // Cho phép quay vòng
+      keyboard: true,  // Cho phép điều khiển bằng bàn phím
+      pause: 'hover'   // Tạm dừng khi di chuột qua
+  });
+}); 
 });
