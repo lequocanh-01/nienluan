@@ -35,6 +35,9 @@ if (isset($_GET['req'])) {
         case 'giohangview':
             require './elements_LQA/mgiohang/adminGiohangView.php';
             break;
+        case 'hinhanhview':
+            require './elements_LQA/mhinhanh/hinhanhView.php';
+            break;
     }
 } else {
     require './elements_LQA/default.php';

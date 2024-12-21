@@ -22,7 +22,7 @@
                 'thuonghieuview' => ['icon' => 'fas fa-trademark', 'text' => 'Thương hiệu'],
                 'donvitinhview' => ['icon' => 'fas fa-balance-scale', 'text' => 'Đơn vị tính'],
                 'nhanvienview' => ['icon' => 'fas fa-user-tie', 'text' => 'Nhân viên'],
-                'giohangview' => ['icon' => 'fas fa-shopping-cart', 'text' => 'Giỏ hàng']
+                'hinhanhview' => ['icon' => 'fas fa-images', 'text' => 'Hình ảnh'],
             ];
 
             foreach ($menu_items as $req => $item) {

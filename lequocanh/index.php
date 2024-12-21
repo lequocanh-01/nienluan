@@ -1,5 +1,5 @@
 <?php
-session_start();
+ session_start();
 require_once './administrator/elements_LQA/mod/giohangCls.php';
 
 $giohang = new GioHang();
@@ -46,41 +46,44 @@ $cartItemCount = $giohang->getCartItemCount();
 
                 <div class="ms-auto d-flex align-items-center">
                     <?php if (isset($_SESSION['USER'])): ?>
-                        <div class="dropdown me-2">
-                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-2"></i>
-                                <?php echo $_SESSION['USER']; ?>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userProfile.php">
-                                        <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
-                                    </a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userAct.php?reqact=userlogout">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                                    </a></li>
-                            </ul>
-                        </div>
-                    <?php elseif (isset($_SESSION['ADMIN'])): ?>
-                        <a href="./administrator/index.php" class="btn btn-light me-2">
-                            <i class="fas fa-user-shield me-2"></i>
-                            Quản trị viên
-                        </a>
-                    <?php else: ?>
-                        <a href="./administrator/userLogin.php" class="btn btn-light me-2">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user me-2"></i>
-                            Đăng nhập
-                        </a>
+                            <?php echo $_SESSION['USER']; ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="./administrator/elements_LQA/mUser/userProfile.php">
+                                    <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
+                                </a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="./administrator/elements_LQA/mUser/userAct.php?reqact=userlogout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a></li>
+                        </ul>
+                    </div>
+                    <?php elseif (isset($_SESSION['ADMIN'])): ?>
+                    <a href="./administrator/index.php" class="btn btn-light me-2">
+                        <i class="fas fa-user-shield me-2"></i>
+                        Quản trị viên
+                    </a>
+                    <?php else: ?>
+                    <a href="./administrator/userLogin.php" class="btn btn-light me-2">
+                        <i class="fas fa-user me-2"></i>
+                        Đăng nhập
+                    </a>
                     <?php endif; ?>
 
-                    <a href="./administrator/elements_LQA/mgiohang/giohangView.php" class="btn btn-light position-relative">
+                    <a href="./administrator/elements_LQA/mgiohang/giohangView.php"
+                        class="btn btn-light position-relative">
                         <i class="fas fa-shopping-cart"></i>
                         <?php if (isset($_SESSION['USER']) || isset($_SESSION['ADMIN'])): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?php echo $cartItemCount; ?>
-                            </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo $cartItemCount; ?>
+                        </span>
                         <?php endif; ?>
                     </a>
                 </div>
@@ -117,7 +120,8 @@ $cartItemCount = $giohang->getCartItemCount();
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-white mb-3">Về chúng tôi</h5>
                     <p class="small text-muted">
-                        Cửa hàng điện thoại uy tín hàng đầu Việt Nam. Chuyên cung cấp các sản phẩm chính hãng với chất lượng tốt nhất và dịch vụ chăm sóc khách hàng 24/7.
+                        Cửa hàng điện thoại uy tín hàng đầu Việt Nam. Chuyên cung cấp các sản phẩm chính hãng với chất
+                        lượng tốt nhất và dịch vụ chăm sóc khách hàng 24/7.
                     </p>
                     <div class="social-icons mt-4">
                         <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
@@ -131,9 +135,11 @@ $cartItemCount = $giohang->getCartItemCount();
                     <h5 class="text-white mb-3">Thông tin hữu ích</h5>
                     <ul class="list-unstyled text-muted">
                         <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Hướng dẫn mua hàng</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Chính sách bảo hành</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Chính sách bảo hành</a>
+                        </li>
                         <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Chính sách đổi trả</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Chính sách vận chuyển</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Chính sách vận chuyển</a>
+                        </li>
                         <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Điều khoản dịch vụ</a></li>
                     </ul>
                 </div>
@@ -167,15 +173,14 @@ $cartItemCount = $giohang->getCartItemCount();
                         <div class="input-group">
                             <input class="form-control" type="email" placeholder="Email của bạn"
                                 style="border-radius: 20px 0 0 20px;">
-                            <button class="btn btn-primary" type="submit"
-                                style="border-radius: 0 20px 20px 0;">
+                            <button class="btn btn-primary" type="submit" style="border-radius: 0 20px 20px 0;">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
                         </div>
                     </form>
                     <div class="mt-4">
-                        <img src="path/to/payment-methods.png" alt="Phương thức thanh toán"
-                            class="img-fluid" style="max-height: 30px;">
+                        <img src="path/to/payment-methods.png" alt="Phương thức thanh toán" class="img-fluid"
+                            style="max-height: 30px;">
                     </div>
                 </div>
             </div>
@@ -189,8 +194,7 @@ $cartItemCount = $giohang->getCartItemCount();
                     </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
-                    <img src="path/to/verified-badge.png" alt="Chứng nhận" class="img-fluid"
-                        style="max-height: 40px;">
+                    <img src="path/to/verified-badge.png" alt="Chứng nhận" class="img-fluid" style="max-height: 40px;">
                 </div>
             </div>
         </div>
@@ -201,18 +205,18 @@ $cartItemCount = $giohang->getCartItemCount();
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Kiểm tra xem element carousel có tồn tại không trước khi khởi tạo
-        document.addEventListener('DOMContentLoaded', function() {
-            const carouselElement = document.getElementById('productCarousel');
-            if (carouselElement) {
-                new bootstrap.Carousel(carouselElement, {
-                    interval: 3000,
-                    wrap: true,
-                    keyboard: true,
-                    pause: 'hover'
-                });
-            }
-        });
+    // Kiểm tra xem element carousel có tồn tại không trước khi khởi tạo
+    document.addEventListener('DOMContentLoaded', function() {
+        const carouselElement = document.getElementById('productCarousel');
+        if (carouselElement) {
+            new bootstrap.Carousel(carouselElement, {
+                interval: 3000,
+                wrap: true,
+                keyboard: true,
+                pause: 'hover'
+            });
+        }
+    });
     </script>
     <script src="administrator/js_LQA/jscript.js"></script>
 </body>
