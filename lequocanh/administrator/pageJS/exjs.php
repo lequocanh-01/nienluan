@@ -1,1 +1,0 @@
-<h3>Thực hành JQ</h3>

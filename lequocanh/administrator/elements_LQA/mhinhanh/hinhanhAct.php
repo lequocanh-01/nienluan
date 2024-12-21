@@ -1,107 +1,231 @@
 <?php
-require_once '../mod/hinhanhCls.php';
+session_start();
+require_once("../mod/database.php");
+require_once("../mod/hanghoaCls.php");
 
-function convertToWebP($source, $quality = 80)
-{
-    $extension = pathinfo($source, PATHINFO_EXTENSION);
-    $webp_path = str_replace('.' . $extension, '.webp', $source);
+// Tắt báo lỗi để tránh output không mong muốn
+error_reporting(0);
+ini_set('display_errors', 0);
 
-    $info = getimagesize($source);
-    $isValid = true;
-
-    if ($info['mime'] == 'image/jpeg' || $info['mime'] == 'image/jpg')
-        $image = imagecreatefromjpeg($source);
-    elseif ($info['mime'] == 'image/gif')
-        $image = imagecreatefromgif($source);
-    elseif ($info['mime'] == 'image/png')
-        $image = imagecreatefrompng($source);
-    else
-        $isValid = false;
-
-    if ($isValid) {
-        // Lưu ảnh dưới định dạng WebP
-        imagewebp($image, $webp_path, $quality);
-        imagedestroy($image);
-
-        return $webp_path;
-    }
-
-    return $source;
+// Đảm bảo gửi header JSON cho các action không phải upload
+if (!isset($_REQUEST["reqact"]) || $_REQUEST["reqact"] !== "addnew") {
+    header('Content-Type: application/json; charset=utf-8');
 }
 
-if (isset($_REQUEST['reqact'])) {
-    $requestAction = $_REQUEST['reqact'];
+function deleteImageFile($imagePath)
+{
+    if ($imagePath) {
+        // Xây dựng đường dẫn đầy đủ đến file ảnh
+        $fullPath = dirname(dirname(dirname(__FILE__))) . '/' . $imagePath;
 
-    switch ($requestAction) {
-        case 'addnew':
-            $upload_dir = '../../uploads/';
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
+        // Xóa file ảnh nếu tồn tại
+        if (file_exists($fullPath)) {
+            return unlink($fullPath);
+        }
+    }
+    return true; // Trả về true nếu không có file để xóa
+}
 
-            $files = $_FILES['files'];
-            $hinhAnh = new HinhAnh();
-            $success = true;
+try {
+    if (isset($_REQUEST["reqact"])) {
+        $requestAction = $_REQUEST["reqact"];
+        $hanghoa = new hanghoa();
 
-            for ($i = 0; $i < count($files['name']); $i++) {
-                $file_name = $files['name'][$i];
-                $file_tmp = $files['tmp_name'][$i];
-                $file_type = $files['type'][$i];
-                $file_size = $files['size'][$i];
+        switch ($requestAction) {
+            case "addnew":
+                if (isset($_FILES['files']) && is_array($_FILES['files']['name'])) {
+                    $files = $_FILES['files'];
+                    $uploadDir = '../../uploads/';
 
-                $file_path = $upload_dir . time() . '_' . $file_name;
+                    // Đảm bảo thư mục uploads tồn tại
+                    if (!file_exists($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
 
-                if (move_uploaded_file($file_tmp, $file_path)) {
-                    // Chuyển đổi sang WebP nếu là ảnh PNG
-                    if ($file_type == 'image/png') {
-                        $webp_path = convertToWebP($file_path);
-                        // Xóa file gốc nếu chuyển đổi thành công
-                        if ($webp_path != $file_path) {
-                            unlink($file_path);
-                            $file_path = $webp_path;
-                            $file_type = 'image/webp';
-                            $file_name = pathinfo($webp_path, PATHINFO_BASENAME);
-                            $file_size = filesize($webp_path);
+                    $allSuccess = true;
+                    $uploadedFiles = [];
+
+                    for ($i = 0; $i < count($files['name']); $i++) {
+                        if ($files['error'][$i] === UPLOAD_ERR_OK) {
+                            $fileName = $files['name'][$i];
+                            $fileType = $files['type'][$i];
+                            $fileSize = $files['size'][$i];
+                            $fileTmp = $files['tmp_name'][$i];
+
+                            // Tạo tên file duy nhất
+                            $uniqueName = uniqid() . '_' . $fileName;
+                            $uploadPath = $uploadDir . $uniqueName;
+
+                            // Kiểm tra và tạo thư mục nếu chưa tồn tại
+                            if (!file_exists(dirname($uploadPath))) {
+                                mkdir(dirname($uploadPath), 0777, true);
+                            }
+
+                            if (move_uploaded_file($fileTmp, $uploadPath)) {
+                                // Format kích thước file
+                                $formattedSize = $fileSize < 1024 ? $fileSize . ' B' : ($fileSize < 1048576 ? round($fileSize / 1024, 2) . ' KB' :
+                                    round($fileSize / 1048576, 2) . ' MB');
+
+                                // Đường dẫn tương đối để lưu vào database
+                                $relativePath = 'uploads/' . $uniqueName;
+
+                                $result = $hanghoa->ThemHinhAnh($fileName, $fileType, $formattedSize, $relativePath);
+
+                                if (!$result) {
+                                    $allSuccess = false;
+                                    // Xóa file đã upload nếu không thể lưu vào database
+                                    if (file_exists($uploadPath)) {
+                                        unlink($uploadPath);
+                                    }
+                                } else {
+                                    $uploadedFiles[] = $uploadPath;
+                                }
+                            } else {
+                                $allSuccess = false;
+                            }
+                        } else {
+                            $allSuccess = false;
                         }
                     }
 
-                    if (!$hinhAnh->ThemHinhAnh(
-                        $file_name,
-                        $file_path,
-                        $file_type,
-                        $file_size,
-                        0, // id_tham_chieu
-                        'general', // loai_tham_chieu
-                        0 // thu_tu
-                    )) {
-                        $success = false;
+                    if ($allSuccess) {
+                        header("location: ../../index.php?req=hinhanhview&result=ok");
+                    } else {
+                        // Nếu có lỗi, xóa tất cả các file đã upload
+                        foreach ($uploadedFiles as $file) {
+                            if (file_exists($file)) {
+                                unlink($file);
+                            }
+                        }
+                        header("location: ../../index.php?req=hinhanhview&result=notok");
                     }
                 } else {
-                    $success = false;
+                    header("location: ../../index.php?req=hinhanhview&result=notok");
                 }
-            }
+                break;
 
-            if ($success) {
-                header('location: ../../index.php?req=hinhanhview&result=ok');
-            } else {
-                header('location: ../../index.php?req=hinhanhview&result=notok');
-            }
-            break;
+            case "deletemultiple":
+                $json = file_get_contents('php://input');
+                $data = json_decode($json);
 
-        case 'delete':
-            $json = file_get_contents('php://input');
-            $data = json_decode($json);
+                if (!$data || !isset($data->ids) || !is_array($data->ids)) {
+                    throw new Exception("Dữ liệu không hợp lệ");
+                }
 
-            if ($data && isset($data->ids) && is_array($data->ids)) {
-                $hinhAnh = new HinhAnh();
-                if ($hinhAnh->XoaNhieuHinhAnh($data->ids)) {
-                    echo json_encode(['success' => true]);
+                $success = true;
+                $failedIds = [];
+
+                foreach ($data->ids as $id) {
+                    // Kiểm tra xem hình ảnh có đang được sử dụng không
+                    $products = $hanghoa->GetProductsByImageId($id);
+                    if (!empty($products)) {
+                        $success = false;
+                        $failedIds[] = $id;
+                        continue;
+                    }
+
+                    // Lấy đường dẫn ảnh trước khi xóa
+                    $imagePath = $hanghoa->GetImagePath($id);
+
+                    // Xóa file ảnh
+                    if (!deleteImageFile($imagePath)) {
+                        $success = false;
+                        $failedIds[] = $id;
+                        continue;
+                    }
+
+                    // Xóa record trong database
+                    if (!$hanghoa->XoaHinhAnh($id)) {
+                        $success = false;
+                        $failedIds[] = $id;
+                    }
+                }
+
+                if ($success) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Xóa tất cả hình ảnh thành công'
+                    ]);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Không thể xóa hình ảnh']);
+                    if (count($failedIds) === count($data->ids)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Không thể xóa các hình ảnh đã chọn vì đang được sử dụng hoặc có lỗi xảy ra'
+                        ]);
+                    } else {
+                        echo json_encode([
+                            'success' => true,
+                            'message' => 'Một số hình ảnh không thể xóa vì đang được sử dụng hoặc có lỗi xảy ra'
+                        ]);
+                    }
                 }
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Dữ liệu không hợp lệ']);
-            }
-            break;
+                break;
+
+            case "deletehinhanh":
+                if (!isset($_REQUEST["id"])) {
+                    throw new Exception("Thiếu ID hình ảnh");
+                }
+
+                $id = intval($_REQUEST["id"]);
+
+                // Kiểm tra xem hình ảnh có đang được sử dụng không
+                $products = $hanghoa->GetProductsByImageId($id);
+
+                if (!empty($products)) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Hình ảnh này đang được sử dụng bởi một số sản phẩm. Không thể xóa.',
+                        'products' => $products
+                    ]);
+                    exit;
+                }
+
+                // Lấy đường dẫn ảnh trước khi xóa
+                $imagePath = $hanghoa->GetImagePath($id);
+
+                // Xóa file ảnh
+                if (!deleteImageFile($imagePath)) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Không thể xóa file ảnh'
+                    ]);
+                    exit;
+                }
+
+                // Xóa record trong database
+                $result = $hanghoa->XoaHinhAnh($id);
+
+                if ($result) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Xóa hình ảnh thành công'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Không thể xóa hình ảnh khỏi database'
+                    ]);
+                }
+                break;
+
+            default:
+                throw new Exception("Hành động không hợp lệ");
+        }
+    } else {
+        throw new Exception("Thiếu tham số hành động");
     }
+} catch (Exception $e) {
+    if ($requestAction === "addnew") {
+        header("location: ../../index.php?req=hinhanhview&result=notok");
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Lỗi: ' . $e->getMessage()
+        ]);
+    }
+}
+
+// Đảm bảo kết thúc thực thi sau khi gửi JSON
+if ($requestAction !== "addnew") {
+    exit();
 }

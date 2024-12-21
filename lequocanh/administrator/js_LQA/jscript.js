@@ -286,4 +286,83 @@ document.addEventListener('DOMContentLoaded', function() {
       pause: 'hover'   // Tạm dừng khi di chuột qua
   });
 }); 
+//jscript của hinhanhview
+document.getElementById('selectAll').addEventListener('change', function() {
+  const checkboxes = document.getElementsByClassName('image-checkbox');
+  for (let checkbox of checkboxes) {
+      checkbox.checked = this.checked;
+  }
+});
+
+document.getElementById('selectAllBtn').addEventListener('click', function() {
+  const selectAllCheckbox = document.getElementById('selectAll');
+  selectAllCheckbox.checked = !selectAllCheckbox.checked;
+  const event = new Event('change');
+  selectAllCheckbox.dispatchEvent(event);
+});
+
+document.getElementById('deleteSelectedBtn').addEventListener('click', function() {
+  const selectedImages = [];
+  const checkboxes = document.getElementsByClassName('image-checkbox');
+  for (let checkbox of checkboxes) {
+      if (checkbox.checked) {
+          selectedImages.push(checkbox.value);
+      }
+  }
+
+  if (selectedImages.length === 0) {
+      alert('Vui lòng chọn ít nhất một hình ảnh để xóa');
+      return;
+  }
+
+  if (confirm('Bạn có chắc chắn muốn xóa các hình ảnh đã chọn?')) {
+      deleteMultipleImages(selectedImages);
+  }
+});
+
+function deleteImage(id) {
+  if (confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
+      fetch('elements_LQA/mhinhanh/hinhanhAct.php?reqact=deleteimage', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: 'id=' + id
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  location.reload();
+              } else {
+                  alert('Có lỗi xảy ra khi xóa hình ảnh: ' + data.message);
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('Có lỗi xảy ra khi xóa hình ảnh');
+          });
+  }
+}
+
+function deleteMultipleImages(ids) {
+  fetch('elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: 'ids=' + JSON.stringify(ids)
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              location.reload();
+          } else {
+              alert('Có lỗi xảy ra khi xóa hình ảnh: ' + data.message);
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra khi xóa hình ảnh');
+      });
+}
 });

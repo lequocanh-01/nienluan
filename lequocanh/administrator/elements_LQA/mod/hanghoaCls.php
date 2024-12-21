@@ -33,10 +33,10 @@ class hanghoa extends Database
 
         return $getAll->fetchAll();
     }
-    public function HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien)
+    public function HanghoaAdd($tenhanghoa, $mota, $giathamkhao, $id_hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien)
     {
         $sql = "INSERT INTO hanghoa (tenhanghoa, mota, giathamkhao, hinhanh, idloaihang, idThuongHieu, idDonViTinh, idNhanVien) VALUES (?,?,?,?,?,?,?,?)";
-        $data = array($tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien);
+        $data = array($tenhanghoa, $mota, $giathamkhao, $id_hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien);
         $add = $this->connect->prepare($sql);
         $add->execute($data);
         return $add->rowCount();
@@ -50,10 +50,10 @@ class hanghoa extends Database
         $del->execute($data);
         return $del->rowCount();
     }
-    public function HanghoaUpdate($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa)
+    public function HanghoaUpdate($tenhanghoa, $id_hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa)
     {
         $sql = "UPDATE hanghoa SET tenhanghoa=?, hinhanh=?, mota=?, giathamkhao=?, idloaihang=?, idThuongHieu=?, idDonViTinh=?, idNhanVien=? WHERE idhanghoa =?";
-        $data = array($tenhanghoa, $hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa);
+        $data = array($tenhanghoa, $id_hinhanh, $mota, $giathamkhao, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien, $idhanghoa);
 
         $update = $this->connect->prepare($sql);
         $update->execute($data);
@@ -167,37 +167,135 @@ class hanghoa extends Database
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public function HanghoaAddWithImage($tenhanghoa, $mota, $giathamkhao, $image_path, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien) {
-        if (file_exists($image_path)) {
-            $hinhanh = base64_encode(file_get_contents($image_path));
-        } else {
-            throw new Exception("File ảnh không tồn tại");
-        }
+    public function GetAllHinhAnh()
+    {
+        try {
+            $sql = 'SELECT * FROM hinhanh ORDER BY ngay_tao DESC';
+            $getAll = $this->connect->prepare($sql);
+            $getAll->setFetchMode(PDO::FETCH_OBJ);
+            $getAll->execute();
+            $list = $getAll->fetchAll();
 
-        $query = "INSERT INTO hanghoa (tenhanghoa, mota, giathamkhao, hinhanh, idloaihang, idThuongHieu, idDonViTinh, idNhanVien) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                  
-        $stmt = $this->connect->prepare($query);
-        return $stmt->execute([$tenhanghoa, $mota, $giathamkhao, $hinhanh, $idloaihang, $idThuongHieu, $idDonViTinh, $idNhanVien]);
+            // Xử lý đường dẫn hình ảnh
+            foreach ($list as $item) {
+                // Nếu đường dẫn bắt đầu bằng http hoặc https, giữ nguyên
+                if (strpos($item->duong_dan, 'http') === 0) {
+                    continue;
+                }
+
+                // Nếu là đường dẫn tương đối, thêm đường dẫn base
+                if ($item->duong_dan && $item->duong_dan[0] === '/') {
+                    $item->duong_dan = substr($item->duong_dan, 1);
+                }
+            }
+
+            return $list;
+        } catch (Exception $e) {
+            error_log("Error in GetAllHinhAnh: " . $e->getMessage());
+            return array();
+        }
     }
 
-    public function UpdateHanghoaImage($idhanghoa, $image_path) {
-        if (file_exists($image_path)) {
-            $hinhanh = base64_encode(file_get_contents($image_path));
-        } else {
-            throw new Exception("File ảnh không tồn tại");
-        }
+    public function GetHinhAnhById($id)
+    {
+        if (!$id) return null;
 
-        $query = "UPDATE hanghoa SET hinhanh = ? WHERE idhanghoa = ?";
-        $stmt = $this->connect->prepare($query);
-        return $stmt->execute([$hinhanh, $idhanghoa]);
+        try {
+            // Nếu là ID số, truy vấn từ bảng hinhanh
+            $sql = 'SELECT * FROM hinhanh WHERE id = ?';
+            $stmt = $this->connect->prepare($sql);
+            $stmt->execute([$id]);
+            $hinhanh = $stmt->fetch(PDO::FETCH_OBJ);
+
+            if ($hinhanh) {
+                // Nếu đường dẫn bắt đầu bằng http hoặc https, giữ nguyên
+                if (strpos($hinhanh->duong_dan, 'http') === 0) {
+                    return $hinhanh;
+                }
+
+                // Nếu là base64 string
+                if (strlen($hinhanh->duong_dan) > 100 && strpos($hinhanh->duong_dan, ',') !== false) {
+                    return $hinhanh;
+                }
+
+                // Nếu là đường dẫn tương đối, thêm đường dẫn base
+                if ($hinhanh->duong_dan && $hinhanh->duong_dan[0] !== '/') {
+                    $hinhanh->duong_dan = './' . $hinhanh->duong_dan;
+                }
+
+                return $hinhanh;
+            }
+
+            return null;
+        } catch (Exception $e) {
+            error_log("Error in GetHinhAnhById: " . $e->getMessage());
+            return null;
+        }
     }
 
-    public function AddImageFromBinary($idhanghoa, $binary_data) {
-        $hinhanh = base64_encode($binary_data);
-        $query = "UPDATE hanghoa SET hinhanh = ? WHERE idhanghoa = ?";
-        
-        $stmt = $this->connect->prepare($query);
-        return $stmt->execute([$hinhanh, $idhanghoa]);
+    public function ThemHinhAnh($ten_file, $loai_file, $kich_thuoc, $duong_dan)
+    {
+        $sql = "INSERT INTO hinhanh (ten_file, loai_file, kich_thuoc, duong_dan) VALUES (?, ?, ?, ?)";
+        $stmt = $this->connect->prepare($sql);
+        return $stmt->execute([$ten_file, $loai_file, $kich_thuoc, $duong_dan]);
+    }
+
+    public function XoaHinhAnh($id)
+    {
+        try {
+            // Kiểm tra xem hình ảnh có đang được sử dụng không
+            $products = $this->GetProductsByImageId($id);
+            if (!empty($products)) {
+                return false;
+            }
+
+            // Xóa record trong database
+            $sql = "DELETE FROM hinhanh WHERE id = ?";
+            $stmt = $this->connect->prepare($sql);
+            return $stmt->execute([$id]);
+        } catch (PDOException $e) {
+            error_log("Error in XoaHinhAnh: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Thêm phương thức để cập nhật hình ảnh của sản phẩm
+    public function CapNhatHinhAnhSanPham($idhanghoa, $id_hinhanh_moi)
+    {
+        try {
+            $sql = "UPDATE hanghoa SET hinhanh = ? WHERE idhanghoa = ?";
+            $stmt = $this->connect->prepare($sql);
+            return $stmt->execute([$id_hinhanh_moi, $idhanghoa]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function GetProductsByImageId($imageId)
+    {
+        $sql = "SELECT idhanghoa, tenhanghoa FROM hanghoa WHERE hinhanh = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$imageId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function UpdateProductImages($oldImageId, $newImageId)
+    {
+        try {
+            $sql = "UPDATE hanghoa SET hinhanh = ? WHERE hinhanh = ?";
+            $stmt = $this->connect->prepare($sql);
+            return $stmt->execute([$newImageId, $oldImageId]);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function GetImagePath($id)
+    {
+        $sql = "SELECT duong_dan FROM hinhanh WHERE id = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['duong_dan'] : null;
     }
 }

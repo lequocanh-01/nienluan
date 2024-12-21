@@ -1,254 +1,293 @@
 <?php
-require_once './elements_LQA/mod/hinhanhCls.php';
-$hinhanh = new HinhAnh();
-$list_hinhanh = $hinhanh->LayTatCaHinhAnh();
-$l = count($list_hinhanh);
+require_once("./elements_LQA/mod/hanghoaCls.php");
+$hanghoa = new hanghoa();
+$list_hinhanh = $hanghoa->GetAllHinhAnh();
+$total = count($list_hinhanh);
 ?>
 
-<div class="content_hinhanh">
-    <div class="admin-info">
-        <h3>Quản lý hình ảnh</h3>
-        <div class="upload-form">
-            <form action="./elements_LQA/mhinhanh/hinhanhAct.php?reqact=addnew" method="post" enctype="multipart/form-data">
-                <table>
-                    <tr>
-                        <td>Chọn hình ảnh:</td>
-                        <td><input type="file" name="files[]" multiple required></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" id="btnsubmit" value="Tải lên" /></td>
-                        <td><input type="reset" value="Làm lại" /><b id="noteForm"></b></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
+<div class="admin-title">
+    <h1>Quản lý hình ảnh</h1>
+</div>
+
+<div class="admin-content">
+    <!-- Form upload hình ảnh -->
+    <div class="upload-form">
+        <h3>Thêm hình ảnh mới</h3>
+        <form action="./elements_LQA/mhinhanh/hinhanhAct.php?reqact=addnew" method="post" enctype="multipart/form-data">
+            <input type="file" name="files[]" multiple accept="image/*" required>
+            <input type="submit" value="Upload" class="btn btn-primary">
+        </form>
     </div>
 
-    <hr />
-
-    <div class="admin-info">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Tổng số hình ảnh: <b><?php echo $l; ?></b></span>
-            <?php if (isset($_SESSION['ADMIN']) && $l > 0) { ?>
-                <button onclick="deleteSelectedImages()" class="delete-selected-btn">Xóa đã chọn</button>
-            <?php } ?>
+    <!-- Hiển thị danh sách hình ảnh -->
+    <div class="image-list">
+        <div class="list-header">
+            <h3>Danh sách hình ảnh (<?php echo $total; ?> hình ảnh)</h3>
+            <button id="delete-selected" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>
         </div>
-    </div>
 
-    <table class="content-table">
-        <thead>
-            <tr>
-                <?php if (isset($_SESSION['ADMIN'])) { ?>
-                    <th><input type="checkbox" id="select-all" onclick="toggleAllCheckboxes()"></th>
-                <?php } ?>
-                <th>ID</th>
-                <th>Tên file</th>
-                <th>Hình ảnh</th>
-                <th>Loại file</th>
-                <th>Kích thước</th>
-                <th>Ngày tạo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($l > 0) {
-                foreach ($list_hinhanh as $item) {
-            ?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>ID</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên file</th>
+                    <th>Kích thước</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($list_hinhanh as $img): ?>
                     <tr>
-                        <?php if (isset($_SESSION['ADMIN'])) { ?>
-                            <td><input type="checkbox" class="image-checkbox" value="<?php echo $item->id; ?>"></td>
-                        <?php } ?>
-                        <td><?php echo htmlspecialchars($item->id); ?></td>
-                        <td><?php echo htmlspecialchars($item->ten_file); ?></td>
-                        <td align="center">
-                            <div class="product-img-wrapper">
-                                <?php
-                                $image_path = str_replace('../../', '', $item->duong_dan);
-                                ?>
-                                <img class="product-img" src="<?php echo $image_path; ?>"
-                                    alt="<?php echo htmlspecialchars($item->ten_file); ?>"
-                                    onerror="this.src='./img_LQA/no-image.png'">
-                            </div>
+                        <td><input type="checkbox" class="select-item" value="<?php echo $img->id; ?>"></td>
+                        <td><?php echo $img->id; ?></td>
+                        <td>
+                            <?php
+                            $image_src = $img->duong_dan;
+                            if (strlen($image_src) > 100 && strpos($image_src, ',') !== false) {
+                                $image_src = $image_src;
+                            } else if (file_exists($image_src)) {
+                                $image_src = $image_src;
+                            } else if (file_exists("./" . $image_src)) {
+                                $image_src = "./" . $image_src;
+                            } else {
+                                $image_src = "./img_LQA/no-image.png";
+                            }
+                            ?>
+                            <img src="<?php echo $image_src; ?>"
+                                alt="<?php echo htmlspecialchars($img->ten_file); ?>"
+                                class="thumbnail">
                         </td>
-                        <td><?php echo htmlspecialchars($item->loai_file); ?></td>
-                        <td><?php echo number_format($item->kich_thuoc / 1024, 2) . ' KB'; ?></td>
-                        <td><?php echo date('d/m/Y H:i', strtotime($item->ngay_tao)); ?></td>
+                        <td><?php echo htmlspecialchars($img->ten_file); ?></td>
+                        <td><?php echo $img->kich_thuoc; ?></td>
+                        <td>
+                            <button class="btn btn-danger delete-btn" data-id="<?php echo $img->id; ?>">Xóa</button>
+                        </td>
                     </tr>
-            <?php
-                }
-            }
-            ?>
-        </tbody>
-    </table>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style>
-    .content_hinhanh {
+    .admin-content {
         padding: 20px;
     }
 
     .upload-form {
-        margin: 20px 0;
+        margin-bottom: 30px;
         padding: 20px;
-        background: #f8f9fc;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: #f8f9fa;
+        border-radius: 5px;
     }
 
-    .content-table {
+    .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .table {
         width: 100%;
         border-collapse: collapse;
-        margin: 25px 0;
-        font-size: 0.9em;
-        border-radius: 5px 5px 0 0;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        margin-bottom: 1rem;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
-    .content-table thead tr {
-        background-color: #4e73df;
-        color: #ffffff;
+    .table th,
+    .table td {
+        padding: 12px;
         text-align: left;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
         font-weight: bold;
     }
 
-    .content-table th,
-    .content-table td {
-        padding: 12px 15px;
-    }
-
-    .content-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-
-    .content-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-    }
-
-    .content-table tbody tr:last-of-type {
-        border-bottom: 2px solid #4e73df;
-    }
-
-    .product-img {
-        width: 80px;
-        height: 80px;
+    .thumbnail {
+        width: 50px;
+        height: 50px;
         object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
+        border-radius: 4px;
     }
 
-    .product-img:hover {
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-
-    .delete-selected-btn {
-        background-color: #e74a3b;
-        color: white;
-        padding: 8px 16px;
+    .btn {
+        padding: 6px 12px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        font-size: 14px;
     }
 
-    .delete-selected-btn:hover {
-        background-color: #d52a1a;
-    }
-
-    #btnsubmit {
-        background-color: #4e73df;
+    .btn-primary {
+        background-color: #007bff;
         color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
     }
 
-    #btnsubmit:hover {
-        background-color: #2e59d9;
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
     }
 
-    input[type="reset"] {
-        padding: 8px 16px;
-        margin-left: 10px;
-        border: 1px solid #d1d3e2;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .btn-primary:hover {
+        background-color: #0056b3;
     }
 
-    input[type="reset"]:hover {
-        background-color: #f8f9fc;
-    }
-
-    .image-checkbox {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-
-    #select-all {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
+    .btn-danger:hover {
+        background-color: #c82333;
     }
 </style>
 
 <script>
-    function toggleAllCheckboxes() {
+    document.addEventListener('DOMContentLoaded', function() {
         const selectAll = document.getElementById('select-all');
-        const checkboxes = document.getElementsByClassName('image-checkbox');
-        for (let checkbox of checkboxes) {
-            checkbox.checked = selectAll.checked;
+        const selectItems = document.querySelectorAll('.select-item');
+        const deleteSelectedBtn = document.getElementById('delete-selected');
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        // Xử lý chọn tất cả
+        selectAll.addEventListener('change', function() {
+            selectItems.forEach(item => {
+                item.checked = this.checked;
+            });
+            updateDeleteSelectedButton();
+        });
+
+        // Xử lý chọn từng item
+        selectItems.forEach(item => {
+            item.addEventListener('change', function() {
+                updateDeleteSelectedButton();
+                // Kiểm tra nếu tất cả các item đều được chọn thì check selectAll
+                const allChecked = Array.from(selectItems).every(item => item.checked);
+                selectAll.checked = allChecked;
+            });
+        });
+
+        // Cập nhật trạng thái nút xóa đã chọn
+        function updateDeleteSelectedButton() {
+            const checkedItems = document.querySelectorAll('.select-item:checked');
+            deleteSelectedBtn.style.display = checkedItems.length > 0 ? 'inline-block' : 'none';
         }
-    }
 
-    function deleteSelectedImages() {
-        const checkboxes = document.getElementsByClassName('image-checkbox');
-        const selectedIds = [];
+        // Xử lý xóa nhiều ảnh
+        deleteSelectedBtn.addEventListener('click', function() {
+            const selectedIds = Array.from(document.querySelectorAll('.select-item:checked'))
+                .map(checkbox => checkbox.value);
 
-        for (let checkbox of checkboxes) {
-            if (checkbox.checked) {
-                selectedIds.push(parseInt(checkbox.value));
+            if (selectedIds.length === 0) {
+                alert('Vui lòng ch��n ít nhất một hình ảnh để xóa');
+                return;
             }
-        }
 
-        if (selectedIds.length === 0) {
-            alert('Vui lòng chọn ít nhất một hình ảnh để xóa!');
-            return;
-        }
+            if (confirm(`Bạn có chắc chắn muốn xóa ${selectedIds.length} hình ảnh đã chọn?`)) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', './elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Accept', 'application/json');
 
-        if (confirm('Bạn có chắc muốn xóa ' + selectedIds.length + ' hình ảnh đã chọn không?')) {
-            fetch('./elements_LQA/mhinhanh/hinhanhAct.php?reqact=delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
+                xhr.onload = function() {
+                    try {
+                        if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
+                            alert(response.message);
+
+                            if (response.success) {
+                                // Xóa các hàng đã chọn khỏi bảng
+                                selectedIds.forEach(id => {
+                                    const row = document.querySelector(`.select-item[value="${id}"]`).closest('tr');
+                                    if (row) {
+                                        row.remove();
+                                    }
+                                });
+
+                                // Reset checkbox chọn tất cả
+                                selectAll.checked = false;
+                                // Cập nhật nút xóa đã chọn
+                                updateDeleteSelectedButton();
+
+                                // Cập nhật số lượng hình ảnh
+                                const totalImages = document.querySelectorAll('.select-item').length;
+                                const headerTitle = document.querySelector('.list-header h3');
+                                if (headerTitle) {
+                                    headerTitle.textContent = `Danh sách hình ảnh (${totalImages} hình ảnh)`;
+                                }
+                            }
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi xử lý yêu cầu: ' + error.message);
+                    }
+                };
+
+                xhr.onerror = function() {
+                    alert('Có lỗi xảy ra khi kết nối đến server');
+                };
+
+                try {
+                    xhr.send(JSON.stringify({
                         ids: selectedIds
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        alert('Xóa hình ảnh thành công!');
-                        location.reload();
-                    } else {
-                        alert(data.message || 'Có lỗi xảy ra khi xóa hình ảnh!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Có lỗi xảy ra khi xóa hình ảnh: ' + error.message);
-                });
-        }
-    }
+                    }));
+                } catch (error) {
+                    console.error('Error sending request:', error);
+                    alert('Có lỗi xảy ra khi gửi yêu cầu: ' + error.message);
+                }
+            }
+        });
+
+        // Xử lý xóa một ảnh
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const imageId = this.getAttribute('data-id');
+                if (confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', `./elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletehinhanh&id=${imageId}`, true);
+                    xhr.setRequestHeader('Accept', 'application/json');
+
+                    xhr.onload = function() {
+                        try {
+                            if (xhr.status === 200) {
+                                const response = JSON.parse(xhr.responseText);
+                                alert(response.message);
+
+                                if (response.success) {
+                                    // Xóa hàng khỏi bảng
+                                    const row = button.closest('tr');
+                                    if (row) {
+                                        row.remove();
+                                    }
+
+                                    // Cập nhật s��� lượng hình ảnh
+                                    const totalImages = document.querySelectorAll('.select-item').length;
+                                    const headerTitle = document.querySelector('.list-header h3');
+                                    if (headerTitle) {
+                                        headerTitle.textContent = `Danh sách hình ảnh (${totalImages} hình ảnh)`;
+                                    }
+                                }
+                            } else {
+                                throw new Error('Network response was not ok');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi xử lý yêu cầu: ' + error.message);
+                        }
+                    };
+
+                    xhr.onerror = function() {
+                        alert('Có lỗi xảy ra khi kết nối đến server');
+                    };
+
+                    xhr.send();
+                }
+            });
+        });
+    });
 </script>
