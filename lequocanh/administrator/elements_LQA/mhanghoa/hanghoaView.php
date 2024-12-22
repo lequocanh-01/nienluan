@@ -13,7 +13,9 @@ $list_donvitinh = $hanghoaObj->GetAllDonViTinh();
 $list_nhanvien = $hanghoaObj->GetAllNhanVien();
 $list_hinhanh = $hanghoaObj->GetAllHinhAnh();
 ?>
-
+<head>
+    <link rel="stylesheet" type="text/css" href="../public_files/mycss.css">
+</head>
 <div class="admin-form">
     <h3>Thêm hàng hóa mới</h3>
     <form name="newhanghoa" id="formaddhanghoa" method="post" action='./elements_LQA/mhanghoa/hanghoaAct.php?reqact=addnew' enctype="multipart/form-data">
@@ -250,115 +252,4 @@ $l = count($list_hanghoa);
     </div>
 </div>
 
-<style>
-    .image-preview {
-        margin-top: 10px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 10px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .preview-item {
-        border: 1px solid #eee;
-        padding: 5px;
-        border-radius: 4px;
-        transition: all 0.2s;
-        cursor: pointer;
-        background: white;
-    }
-
-    .preview-item:hover {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .preview-img {
-        width: 100%;
-        height: 80px;
-        object-fit: contain;
-        border-radius: 4px;
-        background: #f8f9fa;
-    }
-
-    .preview-info {
-        margin-top: 5px;
-        font-size: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .preview-name {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-weight: bold;
-    }
-
-    .preview-size {
-        color: #666;
-        font-size: 11px;
-    }
-
-    .preview-item.selected {
-        border-color: #007bff;
-        background-color: #f0f7ff;
-    }
-
-    .iconbutton {
-        width: 50px;
-        height: 50px;
-        object-fit: contain;
-        background: #f8f9fa;
-        border-radius: 4px;
-        padding: 2px;
-    }
-
-    select[name="id_hinhanh"] {
-        padding: 8px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        width: 100%;
-        max-width: 300px;
-        margin-bottom: 10px;
-    }
-</style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle image preview click
-        const previewItems = document.querySelectorAll('.preview-item');
-        const imageSelect = document.querySelector('select[name="id_hinhanh"]');
-
-        previewItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const img = this.querySelector('.preview-img');
-                const imageId = img.getAttribute('data-id');
-                imageSelect.value = imageId;
-
-                // Remove selected class from all items
-                previewItems.forEach(item => item.classList.remove('selected'));
-                // Add selected class to clicked item
-                this.classList.add('selected');
-            });
-        });
-
-        // Handle select change
-        imageSelect.addEventListener('change', function() {
-            const selectedId = this.value;
-            previewItems.forEach(item => {
-                const img = item.querySelector('.preview-img');
-                if (img.getAttribute('data-id') === selectedId) {
-                    item.classList.add('selected');
-                } else {
-                    item.classList.remove('selected');
-                }
-            });
-        });
-    });
-</script>
+<script src="../../js_LQA/jscript.js"></script>

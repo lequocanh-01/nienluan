@@ -204,20 +204,6 @@ $cartItemCount = $giohang->getCartItemCount();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    // Kiểm tra xem element carousel có tồn tại không trước khi khởi tạo
-    document.addEventListener('DOMContentLoaded', function() {
-        const carouselElement = document.getElementById('productCarousel');
-        if (carouselElement) {
-            new bootstrap.Carousel(carouselElement, {
-                interval: 3000,
-                wrap: true,
-                keyboard: true,
-                pause: 'hover'
-            });
-        }
-    });
-    </script>
     <script src="administrator/js_LQA/jscript.js"></script>
 </body>
 

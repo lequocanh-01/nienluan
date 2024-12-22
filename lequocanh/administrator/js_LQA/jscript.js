@@ -194,7 +194,7 @@ $(document).ready(function () {
     e.preventDefault();
     $("#w_update_tt").hide();
   });
-  //thuoctinhhh
+  //update thuoctinhhh
   $("#w_update_tthh").hide();
   $(".w_update_btn_open_tthh").click(function (e) {
     e.preventDefault();
@@ -221,22 +221,22 @@ $(document).ready(function () {
   const searchResults = $("#searchResults");
 
   // Xử lý sự kiện nhập vào ô tìm kiếm
-  searchInput.on('input', function() {
+  searchInput.on("input", function () {
     clearTimeout(searchTimeout);
     const query = $(this).val().trim();
-    
+
     if (query.length >= 2) {
-        searchTimeout = setTimeout(() => {
-            $.ajax({
-                url: window.location.origin + '/search_suggestions.php',
-                method: 'GET',
-                data: { term: query },
-                dataType: 'json',
-                success: function(data) {
-                    if (data && data.length > 0) {
-                        let html = '';
-                        data.forEach(item => {
-                            html += `
+      searchTimeout = setTimeout(() => {
+        $.ajax({
+          url: window.location.origin + "/search_suggestions.php",
+          method: "GET",
+          data: { term: query },
+          dataType: "json",
+          success: function (data) {
+            if (data && data.length > 0) {
+              let html = "";
+              data.forEach((item) => {
+                html += `
                                 <a href="index.php?reqHanghoa=${item.id}" class="text-decoration-none text-dark">
                                     <div class="search-suggestion">
                                         <img src="data:image/png;base64,${item.image}" alt="${item.name}">
@@ -246,19 +246,23 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </a>`;
-                        });
-                        searchResults.html(html).show();
-                    } else {
-                        searchResults.html('<div class="p-3">Không tìm thấy sản phẩm nào</div>').show();
-                    }
-                },
-                error: function() {
-                    searchResults.html('<div class="p-3">Có lỗi xảy ra khi tìm kiếm</div>').show();
-                }
-            });
-        }, 300);
+              });
+              searchResults.html(html).show();
+            } else {
+              searchResults
+                .html('<div class="p-3">Không tìm thấy sản phẩm nào</div>')
+                .show();
+            }
+          },
+          error: function () {
+            searchResults
+              .html('<div class="p-3">Có lỗi xảy ra khi tìm kiếm</div>')
+              .show();
+          },
+        });
+      }, 300);
     } else {
-        searchResults.hide();
+      searchResults.hide();
     }
   });
 
@@ -278,91 +282,426 @@ $(document).ready(function () {
     }
   });
   // Carousel initialization
-document.addEventListener('DOMContentLoaded', function() {
-  var carousel = new bootstrap.Carousel(document.getElementById('productCarousel'), {
-      interval: 3000,  // Thời gian chuyển slide (3 giây)
-      wrap: true,      // Cho phép quay vòng
-      keyboard: true,  // Cho phép điều khiển bằng bàn phím
-      pause: 'hover'   // Tạm dừng khi di chuột qua
-  });
-}); 
-//jscript của hinhanhview
-document.getElementById('selectAll').addEventListener('change', function() {
-  const checkboxes = document.getElementsByClassName('image-checkbox');
-  for (let checkbox of checkboxes) {
-      checkbox.checked = this.checked;
-  }
-});
-
-document.getElementById('selectAllBtn').addEventListener('click', function() {
-  const selectAllCheckbox = document.getElementById('selectAll');
-  selectAllCheckbox.checked = !selectAllCheckbox.checked;
-  const event = new Event('change');
-  selectAllCheckbox.dispatchEvent(event);
-});
-
-document.getElementById('deleteSelectedBtn').addEventListener('click', function() {
-  const selectedImages = [];
-  const checkboxes = document.getElementsByClassName('image-checkbox');
-  for (let checkbox of checkboxes) {
-      if (checkbox.checked) {
-          selectedImages.push(checkbox.value);
+  document.addEventListener("DOMContentLoaded", function () {
+    var carousel = new bootstrap.Carousel(
+      document.getElementById("productCarousel"),
+      {
+        interval: 3000, // Thời gian chuyển slide (3 giây)
+        wrap: true, // Cho phép quay vòng
+        keyboard: true, // Cho phép điều khiển bằng bàn phím
+        pause: "hover", // Tạm dừng khi di chuột qua
       }
-  }
+    );
+  });
+  //jscript của hinhanhview
+  document.getElementById("selectAll").addEventListener("change", function () {
+    const checkboxes = document.getElementsByClassName("image-checkbox");
+    for (let checkbox of checkboxes) {
+      checkbox.checked = this.checked;
+    }
+  });
 
-  if (selectedImages.length === 0) {
-      alert('Vui lòng chọn ít nhất một hình ảnh để xóa');
-      return;
-  }
+  document
+    .getElementById("selectAllBtn")
+    .addEventListener("click", function () {
+      const selectAllCheckbox = document.getElementById("selectAll");
+      selectAllCheckbox.checked = !selectAllCheckbox.checked;
+      const event = new Event("change");
+      selectAllCheckbox.dispatchEvent(event);
+    });
 
-  if (confirm('Bạn có chắc chắn muốn xóa các hình ảnh đã chọn?')) {
-      deleteMultipleImages(selectedImages);
-  }
-});
+  document
+    .getElementById("deleteSelectedBtn")
+    .addEventListener("click", function () {
+      const selectedImages = [];
+      const checkboxes = document.getElementsByClassName("image-checkbox");
+      for (let checkbox of checkboxes) {
+        if (checkbox.checked) {
+          selectedImages.push(checkbox.value);
+        }
+      }
 
-function deleteImage(id) {
-  if (confirm('Bạn có chắc chắn muốn xóa hình ảnh này?')) {
-      fetch('elements_LQA/mhinhanh/hinhanhAct.php?reqact=deleteimage', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: 'id=' + id
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  location.reload();
-              } else {
-                  alert('Có lỗi xảy ra khi xóa hình ảnh: ' + data.message);
-              }
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              alert('Có lỗi xảy ra khi xóa hình ảnh');
-          });
-  }
-}
+      if (selectedImages.length === 0) {
+        alert("Vui lòng chọn ít nhất một hình ảnh để xóa");
+        return;
+      }
 
-function deleteMultipleImages(ids) {
-  fetch('elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: 'ids=' + JSON.stringify(ids)
+      if (confirm("Bạn có chắc chắn muốn xóa các hình ảnh đã chọn?")) {
+        deleteMultipleImages(selectedImages);
+      }
+    });
+
+  function deleteImage(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa hình ảnh này?")) {
+      fetch("elements_LQA/mhinhanh/hinhanhAct.php?reqact=deleteimage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "id=" + id,
       })
-      .then(response => response.json())
-      .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data.success) {
-              location.reload();
+            location.reload();
           } else {
-              alert('Có lỗi xảy ra khi xóa hình ảnh: ' + data.message);
+            alert("Có lỗi xảy ra khi xóa hình ảnh: " + data.message);
           }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Có lỗi xảy ra khi xóa hình ảnh");
+        });
+    }
+  }
+
+  function deleteMultipleImages(ids) {
+    fetch("elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "ids=" + JSON.stringify(ids),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert("Có lỗi xảy ra khi xóa hình ảnh: " + data.message);
+        }
       })
-      .catch(error => {
-          console.error('Error:', error);
-          alert('Có lỗi xảy ra khi xóa hình ảnh');
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Có lỗi xảy ra khi xóa hình ảnh");
       });
-}
+  }
+  // Kiểm tra xem element carousel có tồn tại không trước khi khởi tạo
+  document.addEventListener("DOMContentLoaded", function () {
+    const carouselElement = document.getElementById("productCarousel");
+    if (carouselElement) {
+      new bootstrap.Carousel(carouselElement, {
+        interval: 3000,
+        wrap: true,
+        keyboard: true,
+        pause: "hover",
+      });
+    }
+  });
+});
+// xử lý xóa checkbox bảng hình ảnh
+document.addEventListener("DOMContentLoaded", function () {
+  const selectAll = document.getElementById("select-all");
+  const selectItems = document.querySelectorAll(".select-item");
+  const deleteSelectedBtn = document.getElementById("delete-selected");
+  const deleteButtons = document.querySelectorAll(".delete-btn");
+
+  // Xử lý chọn tất cả
+  selectAll.addEventListener("change", function () {
+    selectItems.forEach((item) => {
+      item.checked = this.checked;
+    });
+    updateDeleteSelectedButton();
+  });
+
+  // Xử lý chọn từng item
+  selectItems.forEach((item) => {
+    item.addEventListener("change", function () {
+      updateDeleteSelectedButton();
+      // Kiểm tra nếu tất cả các item đều được chọn thì check selectAll
+      const allChecked = Array.from(selectItems).every((item) => item.checked);
+      selectAll.checked = allChecked;
+    });
+  });
+
+  // Cập nhật trạng thái nút xóa đã chọn
+  function updateDeleteSelectedButton() {
+    const checkedItems = document.querySelectorAll(".select-item:checked");
+    deleteSelectedBtn.style.display =
+      checkedItems.length > 0 ? "inline-block" : "none";
+  }
+
+  // Xử lý xóa nhiều ảnh
+  deleteSelectedBtn.addEventListener("click", function () {
+    const selectedIds = Array.from(
+      document.querySelectorAll(".select-item:checked")
+    ).map((checkbox) => checkbox.value);
+
+    if (selectedIds.length === 0) {
+      alert("Vui lòng chọn ít nhất một hình ảnh để xóa");
+      return;
+    }
+
+    if (confirm("Bạn có chắc chắn muốn xóa các hình ảnh đã chọn?")) {
+      fetch("elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ids: selectedIds,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert("Có lỗi xảy ra khi xóa hình ảnh: " + data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Có lỗi xảy ra khi xóa hình ảnh");
+        });
+    }
+  });
+
+  // Xử lý xóa một ảnh
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const imageId = this.getAttribute("data-id");
+      if (confirm("Bạn có chắc chắn muốn xóa hình ảnh này?")) {
+        fetch("elements_LQA/mhinhanh/hinhanhAct.php?reqact=deleteimage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "id=" + imageId,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert("Có lỗi xảy ra khi xóa hình ảnh: " + data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Có lỗi xảy ra khi xóa hình ảnh");
+          });
+      }
+    });
+  });
+});
+// jscript hanghoaView
+document.addEventListener("DOMContentLoaded", function () {
+  // Xử lý nhấp chuột xem trước hình ảnh
+  const previewItems = document.querySelectorAll(".preview-item");
+  const imageSelect = document.querySelector('select[name="id_hinhanh"]');
+
+  previewItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      const img = this.querySelector(".preview-img");
+      const imageId = img.getAttribute("data-id");
+      imageSelect.value = imageId;
+
+      // Xóa lớp đã chọn khỏi tất cả các mục
+      previewItems.forEach((item) => item.classList.remove("selected"));
+      // Thêm lớp đã chọn vào mục đã nhấp
+      this.classList.add("selected");
+    });
+  });
+
+  // Xử lý lựa chọn thay đổi
+  imageSelect.addEventListener("change", function () {
+    const selectedId = this.value;
+    previewItems.forEach((item) => {
+      const img = item.querySelector(".preview-img");
+      if (img.getAttribute("data-id") === selectedId) {
+        item.classList.add("selected");
+      } else {
+        item.classList.remove("selected");
+      }
+    });
+  });
+});
+// jscript userview
+$(document).ready(function () {
+  // Xử lý xác nhận xóa người dùng
+  function confirmDelete(username) {
+    if (username === "admin") {
+      const adminPass = prompt(
+        "Vui lòng nhập mật khẩu admin để xóa tài khoản admin:"
+      );
+      if (!adminPass) {
+        return false;
+      }
+      // Thêm mật khẩu vào URL
+      const currentUrl = window.location.href;
+      const separator = currentUrl.includes("?") ? "&" : "?";
+      window.location.href =
+        currentUrl +
+        separator +
+        "admin_password=" +
+        encodeURIComponent(adminPass);
+      return false;
+    }
+    return confirm("Bạn có chắc muốn xóa người dùng này không?");
+  }
+
+  // Xử lý cập nhật người dùng
+  $(".update-user").click(function (e) {
+    e.preventDefault();
+    const username = $(this).data("username");
+    const userId = $(this).data("userid");
+
+    if (username === "admin") {
+      const adminPass = prompt(
+        "Vui lòng nhập mật khẩu xác thực để cập nhật tài khoản admin:"
+      );
+      if (!adminPass) {
+        return;
+      }
+
+      // Kiểm tra mật khẩu xác thực
+      $.ajax({
+        url: "./elements_LQA/mUser/userAct.php",
+        method: "POST",
+        data: {
+          reqact: "checkadmin",
+          admin_password: adminPass,
+        },
+        success: function (response) {
+          if (response.success) {
+            window.location.href = `index.php?req=updateuser&iduser=${userId}`;
+          } else {
+            alert("Mật khẩu xác thực không chính xác!");
+          }
+        },
+        error: function () {
+          alert("Có lỗi xảy ra khi xác thực!");
+        },
+      });
+    } else {
+      window.location.href = `index.php?req=updateuser&iduser=${userId}`;
+    }
+  });
+
+  // Xử lý khóa/mở khóa tài khoản
+  $(".status-icon").click(function (e) {
+    const username = $(this).closest("tr").find("td:eq(1)").text();
+    if (username === "admin") {
+      e.preventDefault();
+      const adminPass = prompt(
+        "Vui lòng nhập mật khẩu admin để thay đổi trạng thái tài khoản admin:"
+      );
+      if (!adminPass) {
+        return;
+      }
+
+      // Kiểm tra mật khẩu admin bằng AJAX
+      $.ajax({
+        url: "./elements_LQA/mUser/userAct.php",
+        method: "POST",
+        data: {
+          reqact: "checkadmin",
+          admin_password: adminPass,
+        },
+        success: function (response) {
+          if (response.success) {
+            const currentHref = $(this).attr("href");
+            window.location.href =
+              currentHref + "&admin_password=" + encodeURIComponent(adminPass);
+          } else {
+            alert("Mật khẩu admin không chính xác!");
+          }
+        },
+        error: function () {
+          alert("Có lỗi xảy ra khi xác thực mật khẩu admin!");
+        },
+      });
+    }
+  });
+
+  // Xử lý form cập nhật
+  $("#formupdateuser").on("submit", function (e) {
+    const username = $(this).find('input[name="username"]').val();
+    if (username === "admin") {
+      const adminPass = $('input[name="admin_password"]').val();
+      if (!adminPass) {
+        e.preventDefault();
+       
+        return;
+      }
+    }
+  });
+
+  // Thêm style cho nút disabled
+  $(".iconimg.disabled").css({
+    opacity: "0.5",
+    cursor: "not-allowed",
+  });
+
+  // Xử lý submit form
+  $("#formreg, #formupdateuser").on("submit", function (e) {
+    e.preventDefault();
+
+    // Validate form
+    let isValid = true;
+    $(this)
+      .find("input[required]")
+      .each(function () {
+        if (!$(this).val()) {
+          isValid = false;
+          $(this).addClass("is-invalid");
+        } else {
+          $(this).removeClass("is-invalid");
+        }
+      });
+
+    if (!isValid) {
+      alert("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+
+    // Validate số điện thoại
+    const phone = $(this).find('input[name="dienthoai"]').val();
+    if (phone) {
+      // Chỉ kiểm tra nếu có nhập số điện thoại
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phone)) {
+        alert("Số điện thoại phải có 10 chữ số");
+        return;
+      }
+    }
+
+    // Nếu là form cập nhật admin
+    const username = $(this).find('input[name="username"]').val();
+    if (username === "admin") {
+      const verifyPassword = $(this)
+        .find('input[name="verify_password"]')
+        .val();
+      if (!verifyPassword) {
+        alert("Vui lòng nhập mật khẩu xác thực để hoàn tất cập nhật!");
+        return;
+      }
+    }
+
+    // Submit form nếu validate ok
+    this.submit();
+  });
+
+  // Remove invalid class on input
+  $("input").on("input", function () {
+    $(this).removeClass("is-invalid");
+  });
+
+  // Toggle password visibility
+  $(".toggle-password").click(function () {
+    const passwordField = $(this).closest(".password-field");
+    const dots = passwordField.find(".password-dots");
+    const text = passwordField.find(".password-text");
+
+    if (dots.is(":visible")) {
+      dots.hide();
+      text.show();
+      $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+    } else {
+      dots.show();
+      text.hide();
+      $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+    }
+  });
 });

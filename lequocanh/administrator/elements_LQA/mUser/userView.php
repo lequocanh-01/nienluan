@@ -1,5 +1,6 @@
 <head>
     <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../public_files/mycss.css">
 </head>
 
 <body>
@@ -21,7 +22,7 @@
 
     foreach ($list_user as $u) {
         if ($u->setlock == 1) $activeUsers++;
-        
+
         // Đếm người dùng đăng nhập trong 30 ngày
         if (isset($_COOKIE[$u->username])) {
             $lastLogin = strtotime($_COOKIE[$u->username]);
@@ -29,7 +30,7 @@
                 $last30DaysLogins++;
             }
         }
-        
+
         // Đếm người dùng mới trong tháng này
         if (isset($u->ngaydangki)) {
             $registerDate = strtotime($u->ngaydangki);
@@ -186,33 +187,34 @@
                                 <td><?php echo $u->dienthoai; ?></td>
                                 <td align="center">
                                     <?php if (isset($_SESSION['ADMIN'])) { ?>
-                                        <a href='./elements_LQA/mUser/userAct.php?reqact=setlock&iduser=<?php echo $u->iduser; ?>&setlock=<?php echo $u->setlock; ?>' 
-                                           class="status-icon">
-                                            <img src="<?php echo $u->setlock == 1 ? './img_LQA/Unlock.png' : './img_LQA/Lock.png'; ?>" 
-                                                 class="iconimg" alt="Trạng thái">
+                                        <a href='./elements_LQA/mUser/userAct.php?reqact=setlock&iduser=<?php echo $u->iduser; ?>&setlock=<?php echo $u->setlock; ?>'
+                                            class="status-icon">
+                                            <img src="<?php echo $u->setlock == 1 ? './img_LQA/Unlock.png' : './img_LQA/Lock.png'; ?>"
+                                                class="iconimg" alt="Trạng thái">
                                         </a>
                                     <?php } else { ?>
-                                        <img src="<?php echo $u->setlock == 1 ? './img_LQA/Unlock.png' : './img_LQA/Lock.png'; ?>" 
-                                             class="iconimg" alt="Trạng thái">
+                                        <img src="<?php echo $u->setlock == 1 ? './img_LQA/Unlock.png' : './img_LQA/Lock.png'; ?>"
+                                            class="iconimg" alt="Trạng thái">
                                     <?php } ?>
                                 </td>
                                 <td class="action-buttons">
                                     <?php if (isset($_SESSION['ADMIN'])) { ?>
-                                        <a href='./elements_LQA/mUser/userAct.php?reqact=deleteuser&iduser=<?php echo $u->iduser; ?>' 
-                                           class="admin-action"
-                                           data-username="<?php echo $u->username; ?>"
-                                           onclick="return confirmDelete('<?php echo $u->username; ?>');">
+                                        <a href='./elements_LQA/mUser/userAct.php?reqact=deleteuser&iduser=<?php echo $u->iduser; ?>'
+                                            class="admin-action"
+                                            data-username="<?php echo $u->username; ?>"
+                                            onclick="return confirmDelete('<?php echo $u->username; ?>');">
                                             <img src="./img_LQA/Delete.png" class="iconimg" alt="Delete">
                                         </a>
                                     <?php } else { ?>
                                         <img src="./img_LQA/Delete.png" class="iconimg disabled" alt="Delete">
                                     <?php } ?>
-                                    
+
                                     <?php if (isset($_SESSION['ADMIN']) || (isset($_SESSION['USER']) && $_SESSION['USER'] == $u->username)) { ?>
-                                        <a href='javascript:void(0);' 
-                                           class="admin-action update-user"
-                                           data-username="<?php echo $u->username; ?>"
-                                           data-userid="<?php echo $u->iduser; ?>">
+                                        <a href='javascript:void(0);'
+                                            class="admin-action update-user"
+                                            data-username="<?php echo $u->username; ?>"
+                                            data-userid="<?php echo $u->iduser; ?>"
+                                            data-admin-password="<?php echo isset($_GET['admin_password']) ? $_GET['admin_password'] : ''; ?>">
                                             <img src="./img_LQA/Update.png" class="iconimg" alt="Update">
                                         </a>
                                     <?php } else { ?>
@@ -229,313 +231,43 @@
         </div>
     </div>
 
-    <style>
-    /* Style cho form */
-    .form-table {
-        width: 100%;
-        max-width: 600px;
-        margin: 20px 0;
-    }
-
-    .form-table td {
-        padding: 10px;
-    }
-
-    .form-table input[type="text"],
-    .form-table input[type="password"],
-    .form-table input[type="date"],
-    .form-table input[type="tel"] {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        transition: border-color 0.3s;
-    }
-
-    .form-table input:focus {
-        border-color: #4e73df;
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(78, 115, 223, 0.25);
-    }
-
-    .form-actions {
-        text-align: center;
-        padding-top: 20px;
-    }
-
-    .btn {
-        padding: 8px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.3s;
-    }
-
-    .btn-primary {
-        background: #4e73df;
-        color: white;
-    }
-
-    .btn-secondary {
-        background: #858796;
-        color: white;
-        margin-left: 10px;
-    }
-
-    .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-primary:hover {
-        background: #2e59d9;
-    }
-
-    .btn-secondary:hover {
-        background: #717384;
-    }
-
-    /* Style cho radio buttons */
-    input[type="radio"] {
-        margin: 0 5px 0 15px;
-    }
-
-    /* Style cho bảng */
-    .content-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 20px 0;
-    }
-
-    .content-table th,
-    .content-table td {
-        padding: 12px 15px;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .content-table thead th {
-        background-color: #4e73df;
-        color: white;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 0.5px;
-        vertical-align: middle;
-        border-bottom: 2px solid #4668ce;
-        text-align: left;
-    }
-
-    .content-table tbody tr {
-        transition: all 0.3s ease;
-    }
-
-    .content-table tbody tr:nth-child(even) {
-        background-color: #f8f9fa;
-    }
-
-    .content-table tbody tr:hover {
-        background-color: #eef2ff;
-    }
-
-    .content-table tbody td {
-        color: #2c3e50;
-        font-weight: 500;
-        vertical-align: middle;
-    }
-
-    /* Style cho icons */
-    .iconimg {
-        width: 24px;
-        height: 24px;
-        transition: transform 0.2s;
-    }
-
-    .iconimg:hover {
-        transform: scale(1.2);
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-    }
-
-    /* Responsive */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    @media (max-width: 768px) {
-        .content-table {
-            font-size: 14px;
-        }
-        
-        .content-table th,
-        .content-table td {
-            padding: 10px 12px;
-        }
-        
-        .content-table thead th {
-            font-size: 0.8rem;
-        }
-    }
-
-    .password-field {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .toggle-password {
-        color: #666;
-        transition: color 0.3s;
-    }
-
-    .toggle-password:hover {
-        color: #333;
-    }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz4fnFO9gyb6g5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1" crossorigin="anonymous"></script>
-    <script>
-    $(document).ready(function() {
-        // Xử lý xác nhận xóa người dùng
-        function confirmDelete(username) {
-            if (username === 'admin') {
-                const adminPass = prompt('Vui lòng nhập mật khẩu admin để xóa tài khoản admin:');
-                if (adminPass) {
-                    return true;
-                }
-                return false;
-            }
-            return confirm('Bạn có chắc muốn xóa người dùng này không?');
-        }
-
-        // Xử lý cập nhật người dùng
-        $('.update-user').click(function() {
-            const username = $(this).data('username');
-            const userId = $(this).data('userid');
-            
-            if (username === 'admin') {
-                const adminPass = prompt('Vui lòng nhập mật khẩu admin để cập nhật tài khoản admin:');
-                if (adminPass) {
-                    window.location.href = `index.php?req=updateuser&iduser=${userId}&admin_password=${encodeURIComponent(adminPass)}`;
-                }
-            } else {
-                window.location.href = `index.php?req=updateuser&iduser=${userId}`;
-            }
-        });
-
-        // Thêm style cho nút disabled
-        $('.iconimg.disabled').css({
-            'opacity': '0.5',
-            'cursor': 'not-allowed'
-        });
-    });
-    </script>
-
     <?php if (isset($_GET['result'])): ?>
-        <div class="alert <?php echo $_GET['result'] == 'ok' ? 'alert-success' : 'alert-danger'; ?> alert-dismissible fade show" role="alert">
-            <?php echo $_GET['result'] == 'ok' ? 'Cập nhật thành công!' : 'Có lỗi xảy ra!'; ?>
+        <?php
+        $message = '';
+        $alertClass = 'alert-danger';
+
+        switch ($_GET['result']) {
+            case 'ok':
+                $message = 'Thao tác thành công!';
+                $alertClass = 'alert-success';
+                break;
+            case 'notok':
+                $message = 'Có lỗi xảy ra!';
+                break;
+            case 'not_authorized':
+                $message = 'Bạn không có quyền thực hiện thao tác này!';
+                break;
+            case 'invalid_verify_pass':
+                $message = 'Mật khẩu xác thực không chính xác!';
+                break;
+            case 'username_exists':
+                $message = 'Tên đăng nhập đã tồn tại!';
+                break;
+            case 'missing_data':
+                $message = 'Vui lòng điền đầy đủ thông tin!';
+                break;
+        }
+        ?>
+        <div class="alert <?php echo $alertClass; ?> alert-dismissible fade show" role="alert">
+            <?php echo $message; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
-
-    <script>
-    $(document).ready(function() {
-        // Xử lý submit form
-        $('#formreg').on('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate form
-            let isValid = true;
-            $(this).find('input[required]').each(function() {
-                if (!$(this).val()) {
-                    isValid = false;
-                    $(this).addClass('is-invalid');
-                } else {
-                    $(this).removeClass('is-invalid');
-                }
-            });
-
-            if (!isValid) {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-
-            // Submit form nếu validate ok
-            this.submit();
-        });
-
-        // Remove invalid class on input
-        $('input').on('input', function() {
-            $(this).removeClass('is-invalid');
-        });
-    });
-    </script>
-
-    <style>
-    /* Thêm style cho form validation */
-    .is-invalid {
-        border-color: #dc3545 !important;
-    }
-
-    .alert {
-        margin-bottom: 1rem;
-    }
-    </style>
-
-    <script>
-    $(document).ready(function() {
-        // Xử lý toggle password
-        $('.toggle-password').click(function() {
-            const passwordField = $(this).closest('.password-field');
-            const dots = passwordField.find('.password-dots');
-            const text = passwordField.find('.password-text');
-            
-            if (dots.is(':visible')) {
-                dots.hide();
-                text.show();
-                $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                dots.show();
-                text.hide();
-                $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
-    });
-    </script>
-
-    <style>
-    .password-field {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .toggle-password {
-        color: #666;
-        transition: color 0.3s;
-        padding: 5px;
-    }
-
-    .toggle-password:hover {
-        color: #333;
-    }
-
-    .password-text, .password-dots {
-        margin-right: 5px;
-    }
-    </style>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz4fnFO9gyb6g5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1n1" crossorigin="anonymous"></script>
+<script></script>
+<script src="../../js_LQA/jscript.js"></script>

@@ -104,78 +104,28 @@ try {
                 }
                 break;
 
-            case "deletemultiple":
-                $json = file_get_contents('php://input');
-                $data = json_decode($json);
-
-                if (!$data || !isset($data->ids) || !is_array($data->ids)) {
-                    throw new Exception("Dữ liệu không hợp lệ");
-                }
-
-                $success = true;
-                $failedIds = [];
-
-                foreach ($data->ids as $id) {
-                    // Kiểm tra xem hình ảnh có đang được sử dụng không
-                    $products = $hanghoa->GetProductsByImageId($id);
-                    if (!empty($products)) {
-                        $success = false;
-                        $failedIds[] = $id;
-                        continue;
-                    }
-
-                    // Lấy đường dẫn ảnh trước khi xóa
-                    $imagePath = $hanghoa->GetImagePath($id);
-
-                    // Xóa file ảnh
-                    if (!deleteImageFile($imagePath)) {
-                        $success = false;
-                        $failedIds[] = $id;
-                        continue;
-                    }
-
-                    // Xóa record trong database
-                    if (!$hanghoa->XoaHinhAnh($id)) {
-                        $success = false;
-                        $failedIds[] = $id;
-                    }
-                }
-
-                if ($success) {
+            case "deleteimage":
+                if (!isset($_POST["id"])) {
                     echo json_encode([
-                        'success' => true,
-                        'message' => 'Xóa tất cả hình ảnh thành công'
+                        'success' => false,
+                        'message' => 'Thiếu ID hình ảnh'
                     ]);
-                } else {
-                    if (count($failedIds) === count($data->ids)) {
-                        echo json_encode([
-                            'success' => false,
-                            'message' => 'Không thể xóa các hình ảnh đã chọn vì đang được sử dụng hoặc có lỗi xảy ra'
-                        ]);
-                    } else {
-                        echo json_encode([
-                            'success' => true,
-                            'message' => 'Một số hình ảnh không thể xóa vì đang được sử dụng hoặc có lỗi xảy ra'
-                        ]);
-                    }
-                }
-                break;
-
-            case "deletehinhanh":
-                if (!isset($_REQUEST["id"])) {
-                    throw new Exception("Thiếu ID hình ảnh");
+                    exit;
                 }
 
-                $id = intval($_REQUEST["id"]);
+                $id = intval($_POST["id"]);
 
                 // Kiểm tra xem hình ảnh có đang được sử dụng không
                 $products = $hanghoa->GetProductsByImageId($id);
 
                 if (!empty($products)) {
+                    $productNames = array_map(function ($product) {
+                        return $product['tenhanghoa'];
+                    }, $products);
+
                     echo json_encode([
                         'success' => false,
-                        'message' => 'Hình ảnh này đang được sử dụng bởi một số sản phẩm. Không thể xóa.',
-                        'products' => $products
+                        'message' => 'Hình ảnh đang được sử dụng bởi các sản phẩm: ' . implode(", ", $productNames)
                     ]);
                     exit;
                 }
@@ -204,6 +154,75 @@ try {
                     echo json_encode([
                         'success' => false,
                         'message' => 'Không thể xóa hình ảnh khỏi database'
+                    ]);
+                }
+                break;
+
+            case "deletemultiple":
+                $data = json_decode(file_get_contents('php://input'));
+
+                if (!$data || !isset($data->ids) || !is_array($data->ids)) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Dữ liệu không hợp lệ'
+                    ]);
+                    exit;
+                }
+
+                $success = true;
+                $failedIds = [];
+                $usedImages = [];
+
+                foreach ($data->ids as $id) {
+                    // Kiểm tra xem hình ảnh có đang được sử dụng không
+                    $products = $hanghoa->GetProductsByImageId($id);
+                    if (!empty($products)) {
+                        $usedImages[] = [
+                            'id' => $id,
+                            'products' => $products
+                        ];
+                        continue;
+                    }
+
+                    // Lấy đường dẫn ảnh trước khi xóa
+                    $imagePath = $hanghoa->GetImagePath($id);
+
+                    // Xóa file ảnh
+                    if (!deleteImageFile($imagePath)) {
+                        $failedIds[] = $id;
+                        continue;
+                    }
+
+                    // Xóa record trong database
+                    if (!$hanghoa->XoaHinhAnh($id)) {
+                        $failedIds[] = $id;
+                    }
+                }
+
+                if (!empty($usedImages)) {
+                    $message = "Một số hình ảnh không thể xóa vì đang được sử dụng:\n";
+                    foreach ($usedImages as $image) {
+                        $productNames = array_map(function ($product) {
+                            return $product['tenhanghoa'];
+                        }, $image['products']);
+                        $message .= "- Hình ảnh ID " . $image['id'] . " đang được sử dụng bởi: " . implode(", ", $productNames) . "\n";
+                    }
+                    echo json_encode([
+                        'success' => false,
+                        'message' => $message
+                    ]);
+                    exit;
+                }
+
+                if (empty($failedIds)) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Xóa tất cả hình ảnh thành công'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Không thể xóa một số hình ảnh: ' . implode(", ", $failedIds)
                     ]);
                 }
                 break;
