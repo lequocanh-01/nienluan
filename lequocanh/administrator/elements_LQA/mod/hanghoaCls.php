@@ -170,26 +170,14 @@ class hanghoa extends Database
     public function GetAllHinhAnh()
     {
         try {
-            $sql = 'SELECT * FROM hinhanh ORDER BY ngay_tao DESC';
+            $sql = 'SELECT h.*, 
+                    (SELECT COUNT(*) FROM hanghoa WHERE hinhanh = h.id) as usage_count 
+                    FROM hinhanh h 
+                    ORDER BY h.ngay_tao DESC';
             $getAll = $this->connect->prepare($sql);
             $getAll->setFetchMode(PDO::FETCH_OBJ);
             $getAll->execute();
-            $list = $getAll->fetchAll();
-
-            // Xử lý đường dẫn hình ảnh
-            foreach ($list as $item) {
-                // Nếu đường dẫn bắt đầu bằng http hoặc https, giữ nguyên
-                if (strpos($item->duong_dan, 'http') === 0) {
-                    continue;
-                }
-
-                // Nếu là đường dẫn tương đối, thêm đường dẫn base
-                if ($item->duong_dan && $item->duong_dan[0] === '/') {
-                    $item->duong_dan = substr($item->duong_dan, 1);
-                }
-            }
-
-            return $list;
+            return $getAll->fetchAll();
         } catch (Exception $e) {
             error_log("Error in GetAllHinhAnh: " . $e->getMessage());
             return array();
@@ -201,43 +189,40 @@ class hanghoa extends Database
         if (!$id) return null;
 
         try {
-            // Nếu là ID số, truy vấn từ bảng hinhanh
             $sql = 'SELECT * FROM hinhanh WHERE id = ?';
             $stmt = $this->connect->prepare($sql);
             $stmt->execute([$id]);
             $hinhanh = $stmt->fetch(PDO::FETCH_OBJ);
 
             if ($hinhanh) {
-                // Nếu đường dẫn bắt đầu bằng http hoặc https, giữ nguyên
-                if (strpos($hinhanh->duong_dan, 'http') === 0) {
+                // Xử lý đường dẫn hình ảnh
+                if (strpos($hinhanh->duong_dan, 'data:image') === 0) {
+                    // Nếu là base64, giữ nguyên
+                    return $hinhanh;
+                } else {
+                    // Trả về đối tượng với đường dẫn gốc
+                    // Việc xử lý đường dẫn sẽ được thực hiện ở view
                     return $hinhanh;
                 }
-
-                // Nếu là base64 string
-                if (strlen($hinhanh->duong_dan) > 100 && strpos($hinhanh->duong_dan, ',') !== false) {
-                    return $hinhanh;
-                }
-
-                // Nếu là đường dẫn tương đối, thêm đường dẫn base
-                if ($hinhanh->duong_dan && $hinhanh->duong_dan[0] !== '/') {
-                    $hinhanh->duong_dan = './' . $hinhanh->duong_dan;
-                }
-
-                return $hinhanh;
             }
-
             return null;
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             error_log("Error in GetHinhAnhById: " . $e->getMessage());
             return null;
         }
     }
 
-    public function ThemHinhAnh($ten_file, $loai_file, $kich_thuoc, $duong_dan)
+    public function ThemHinhAnh($ten_file, $loai_file, $duong_dan)
     {
-        $sql = "INSERT INTO hinhanh (ten_file, loai_file, kich_thuoc, duong_dan) VALUES (?, ?, ?, ?)";
-        $stmt = $this->connect->prepare($sql);
-        return $stmt->execute([$ten_file, $loai_file, $kich_thuoc, $duong_dan]);
+        try {
+            $sql = "INSERT INTO hinhanh (ten_file, loai_file, duong_dan, trang_thai, ngay_tao) 
+                    VALUES (?, ?, ?, 0, CURRENT_TIMESTAMP)";
+            $stmt = $this->connect->prepare($sql);
+            return $stmt->execute([$ten_file, $loai_file, $duong_dan]);
+        } catch (PDOException $e) {
+            error_log("Error in ThemHinhAnh: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function XoaHinhAnh($id)
@@ -297,5 +282,20 @@ class hanghoa extends Database
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['duong_dan'] : null;
+    }
+
+    public function UpdateImageStatus($id)
+    {
+        try {
+            $products = $this->GetProductsByImageId($id);
+            $status = !empty($products) ? 1 : 0;
+
+            $sql = "UPDATE hinhanh SET trang_thai = ? WHERE id = ?";
+            $stmt = $this->connect->prepare($sql);
+            return $stmt->execute([$status, $id]);
+        } catch (PDOException $e) {
+            error_log("Error updating image status: " . $e->getMessage());
+            return false;
+        }
     }
 }

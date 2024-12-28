@@ -13,6 +13,7 @@ $list_donvitinh = $hanghoaObj->GetAllDonViTinh();
 $list_nhanvien = $hanghoaObj->GetAllNhanVien();
 $list_hinhanh = $hanghoaObj->GetAllHinhAnh();
 ?>
+
 <head>
     <link rel="stylesheet" type="text/css" href="../public_files/mycss.css">
 </head>
@@ -70,7 +71,7 @@ $list_hinhanh = $hanghoaObj->GetAllHinhAnh();
                                     title="<?php echo htmlspecialchars($img->ten_file); ?>">
                                 <div class="preview-info">
                                     <span class="preview-name"><?php echo htmlspecialchars($img->ten_file); ?></span>
-                                    <span class="preview-size"><?php echo $img->kich_thuoc; ?></span>
+                                    
                                 </div>
                             </div>
                         <?php
@@ -187,19 +188,44 @@ $l = count($list_hanghoa);
                             $hinhanh = $hanghoaObj->GetHinhAnhById($u->hinhanh);
                             if ($hinhanh) {
                                 $image_src = $hinhanh->duong_dan;
-                                // Kiểm tra xem có phải l�� base64 không
-                                if (strlen($image_src) > 100 && strpos($image_src, ',') !== false) {
-                                    $image_src = $image_src; // Giữ nguyên nếu là base64
-                                } else if (file_exists($image_src)) {
-                                    $image_src = $image_src; // Giữ nguyên nếu file tồn tại
-                                } else if (file_exists("./" . $image_src)) {
-                                    $image_src = "./" . $image_src; // Thêm ./ nếu cần
+
+                                // Xác định đường dẫn tương đối từ thư mục gốc
+                                $base_path = dirname(dirname(dirname(__FILE__))); // Đường dẫn tới thư mục administrator
+
+                                // Kiểm tra các trường hợp đường dẫn
+                                if (strpos($image_src, 'data:image') === 0) {
+                                    // Nếu là base64, giữ nguyên
+                                    $display_src = $image_src;
                                 } else {
-                                    $image_src = "./img_LQA/no-image.png"; // Ảnh mặc định nếu không tìm thấy
+                                    // Thử các đường dẫn khác nhau
+                                    $possible_paths = [
+                                        $base_path . '/uploads/' . basename($image_src),
+                                        $base_path . '/img_LQA/' . basename($image_src),
+                                        './uploads/' . basename($image_src),
+                                        '../uploads/' . basename($image_src),
+                                        '../../uploads/' . basename($image_src),
+                                        $image_src
+                                    ];
+
+                                    $display_src = './img_LQA/no-image.png'; // Đường dẫn mặc định
+                                    foreach ($possible_paths as $path) {
+                                        if (file_exists($path)) {
+                                            // Chuyển đường dẫn tuyệt đối thành tương đối
+                                            $display_src = str_replace($base_path, '.', $path);
+                                            if (strpos($display_src, './') !== 0) {
+                                                $display_src = './' . $display_src;
+                                            }
+                                            break;
+                                        }
+                                    }
                                 }
-                                echo '<img class="iconbutton" src="' . $image_src . '" 
-                                          alt="' . htmlspecialchars($hinhanh->ten_file) . '"
-                                          title="' . htmlspecialchars($hinhanh->ten_file) . '">';
+                            ?>
+                                <img class="iconbutton"
+                                    src="<?php echo $display_src; ?>"
+                                    alt="<?php echo htmlspecialchars($hinhanh->ten_file); ?>"
+                                    title="<?php echo htmlspecialchars($hinhanh->ten_file); ?>"
+                                    onerror="this.src='./img_LQA/no-image.png'">
+                            <?php
                             } else {
                                 echo '<img class="iconbutton" src="./img_LQA/no-image.png" alt="No image">';
                             }

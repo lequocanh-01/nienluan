@@ -32,7 +32,7 @@ if (isset($_GET['req'])) {
         case 'thuoctinhhhview':
             require './elements_LQA/mthuoctinhhh/thuoctinhhhView.php';
             break;
-        case 'giohangview':
+        case 'adminGiohangView':
             require './elements_LQA/mgiohang/adminGiohangView.php';
             break;
         case 'hinhanhview':

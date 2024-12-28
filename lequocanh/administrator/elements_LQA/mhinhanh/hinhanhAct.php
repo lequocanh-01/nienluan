@@ -33,74 +33,54 @@ try {
 
         switch ($requestAction) {
             case "addnew":
-                if (isset($_FILES['files']) && is_array($_FILES['files']['name'])) {
+                if (isset($_FILES['files'])) {
                     $files = $_FILES['files'];
-                    $uploadDir = '../../uploads/';
+                    $success = true;
+                    $uploadDir = "../../uploads/"; // Đường dẫn thư mục upload
 
-                    // Đảm bảo thư mục uploads tồn tại
+                    // Tạo thư mục nếu chưa tồn tại
                     if (!file_exists($uploadDir)) {
                         mkdir($uploadDir, 0777, true);
                     }
 
-                    $allSuccess = true;
-                    $uploadedFiles = [];
+                    foreach ($files['tmp_name'] as $key => $tmp_name) {
+                        if ($files['error'][$key] === 0) {
+                            $fileName = $files['name'][$key];
+                            $fileType = $files['type'][$key];
+                            $fileTmpName = $files['tmp_name'][$key];
 
-                    for ($i = 0; $i < count($files['name']); $i++) {
-                        if ($files['error'][$i] === UPLOAD_ERR_OK) {
-                            $fileName = $files['name'][$i];
-                            $fileType = $files['type'][$i];
-                            $fileSize = $files['size'][$i];
-                            $fileTmp = $files['tmp_name'][$i];
+                            // Tạo tên file mới để tránh trùng lặp
+                            $newFileName = uniqid() . '_' . basename($fileName);
+                            $targetPath = $uploadDir . $newFileName;
 
-                            // Tạo tên file duy nhất
-                            $uniqueName = uniqid() . '_' . $fileName;
-                            $uploadPath = $uploadDir . $uniqueName;
+                            // Debug information
+                            error_log("Uploading file: " . $fileName);
+                            error_log("Target path: " . $targetPath);
 
-                            // Kiểm tra và tạo thư mục nếu chưa tồn tại
-                            if (!file_exists(dirname($uploadPath))) {
-                                mkdir(dirname($uploadPath), 0777, true);
-                            }
-
-                            if (move_uploaded_file($fileTmp, $uploadPath)) {
-                                // Format kích thước file
-                                $formattedSize = $fileSize < 1024 ? $fileSize . ' B' : ($fileSize < 1048576 ? round($fileSize / 1024, 2) . ' KB' :
-                                    round($fileSize / 1048576, 2) . ' MB');
-
-                                // Đường dẫn tương đối để lưu vào database
-                                $relativePath = 'uploads/' . $uniqueName;
-
-                                $result = $hanghoa->ThemHinhAnh($fileName, $fileType, $formattedSize, $relativePath);
-
-                                if (!$result) {
-                                    $allSuccess = false;
-                                    // Xóa file đã upload nếu không thể lưu vào database
-                                    if (file_exists($uploadPath)) {
-                                        unlink($uploadPath);
-                                    }
-                                } else {
-                                    $uploadedFiles[] = $uploadPath;
+                            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                                // Lưu thông tin vào database với đường dẫn tương đối
+                                $relativePath = "uploads/" . $newFileName;
+                                if (!$hanghoa->ThemHinhAnh($fileName, $fileType, $relativePath)) {
+                                    error_log("Failed to save to database: " . $fileName);
+                                    $success = false;
                                 }
                             } else {
-                                $allSuccess = false;
+                                error_log("Failed to move uploaded file: " . $fileName);
+                                error_log("PHP Upload error: " . error_get_last()['message']);
+                                $success = false;
                             }
                         } else {
-                            $allSuccess = false;
+                            error_log("File upload error code: " . $files['error'][$key]);
+                            $success = false;
                         }
                     }
 
-                    if ($allSuccess) {
-                        header("location: ../../index.php?req=hinhanhview&result=ok");
+                    if ($success) {
+                        header('location: ../../index.php?req=hinhanhview&result=ok');
                     } else {
-                        // Nếu có lỗi, xóa tất cả các file đã upload
-                        foreach ($uploadedFiles as $file) {
-                            if (file_exists($file)) {
-                                unlink($file);
-                            }
-                        }
-                        header("location: ../../index.php?req=hinhanhview&result=notok");
+                        header('location: ../../index.php?req=hinhanhview&result=notok');
                     }
-                } else {
-                    header("location: ../../index.php?req=hinhanhview&result=notok");
+                    exit();
                 }
                 break;
 

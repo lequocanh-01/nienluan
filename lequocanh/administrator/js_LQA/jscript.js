@@ -622,7 +622,7 @@ $(document).ready(function () {
       const adminPass = $('input[name="admin_password"]').val();
       if (!adminPass) {
         e.preventDefault();
-       
+
         return;
       }
     }
@@ -704,4 +704,83 @@ $(document).ready(function () {
       $(this).removeClass("fa-eye-slash").addClass("fa-eye");
     }
   });
+});
+
+// Xử lý checkbox và nút xóa nhiều hình ảnh
+document.addEventListener("DOMContentLoaded", function () {
+  const selectAllCheckbox = document.getElementById("select-all");
+  const imageCheckboxes = document.querySelectorAll(".image-checkbox");
+  const deleteSelectedButton = document.getElementById("delete-selected");
+
+  // Xử lý checkbox "Chọn tất cả"
+  if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener("change", function () {
+      imageCheckboxes.forEach((checkbox) => {
+        if (!checkbox.closest("tr").querySelector(".delete-btn").disabled) {
+          checkbox.checked = selectAllCheckbox.checked;
+        }
+      });
+      updateDeleteButtonVisibility();
+    });
+  }
+
+  // Xử lý các checkbox riêng lẻ
+  imageCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+      updateDeleteButtonVisibility();
+      // Cập nhật trạng thái của checkbox "Chọn tất cả"
+      if (selectAllCheckbox) {
+        selectAllCheckbox.checked = Array.from(imageCheckboxes).every(
+          (cb) =>
+            cb.checked || cb.closest("tr").querySelector(".delete-btn").disabled
+        );
+      }
+    });
+  });
+
+  // Cập nhật hiển thị nút xóa
+  function updateDeleteButtonVisibility() {
+    const checkedBoxes = document.querySelectorAll(".image-checkbox:checked");
+    if (deleteSelectedButton) {
+      deleteSelectedButton.style.display =
+        checkedBoxes.length > 0 ? "block" : "none";
+    }
+  }
+
+  // Xử lý sự kiện click nút xóa nhiều
+  if (deleteSelectedButton) {
+    deleteSelectedButton.addEventListener("click", function () {
+      const checkedBoxes = document.querySelectorAll(".image-checkbox:checked");
+      const imageIds = Array.from(checkedBoxes).map((cb) => cb.dataset.id);
+
+      if (imageIds.length === 0) {
+        alert("Vui lòng chọn ít nhất một hình ảnh để xóa");
+        return;
+      }
+
+      if (confirm("Bạn có chắc chắn muốn xóa các hình ảnh đã chọn?")) {
+        fetch("./elements_LQA/mhinhanh/hinhanhAct.php?reqact=deletemultiple", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: imageIds }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert(data.message);
+              // Reload trang sau khi xóa thành công
+              window.location.reload();
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Có lỗi xảy ra khi xóa hình ảnh");
+          });
+      }
+    });
+  }
 });
